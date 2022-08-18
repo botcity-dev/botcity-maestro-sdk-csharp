@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotCity.ClassLib", "BotCity.ClassLib\BotCity.ClassLib.csproj", "{082FD91D-C844-44A2-B055-D5B7AD94BB85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotCity.ConsoleApp", "BotCity.ConsoleApp\BotCity.ConsoleApp.csproj", "{2C6CCDBE-A186-41C0-876A-B31E42A0EB6D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotCity.Tests", "BotCity.Tests\BotCity.Tests.csproj", "{1C368E3F-2905-4EA5-A985-8FDC023AE1A1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{082FD91D-C844-44A2-B055-D5B7AD94BB85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{082FD91D-C844-44A2-B055-D5B7AD94BB85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{082FD91D-C844-44A2-B055-D5B7AD94BB85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{082FD91D-C844-44A2-B055-D5B7AD94BB85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C6CCDBE-A186-41C0-876A-B31E42A0EB6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C6CCDBE-A186-41C0-876A-B31E42A0EB6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C6CCDBE-A186-41C0-876A-B31E42A0EB6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C6CCDBE-A186-41C0-876A-B31E42A0EB6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C368E3F-2905-4EA5-A985-8FDC023AE1A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C368E3F-2905-4EA5-A985-8FDC023AE1A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C368E3F-2905-4EA5-A985-8FDC023AE1A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C368E3F-2905-4EA5-A985-8FDC023AE1A1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
