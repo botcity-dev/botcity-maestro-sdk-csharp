@@ -3,7 +3,7 @@ using System.Net.Http.Formatting;
 
 var url = "https://developers.botcity.dev/api/v2/";
 var user = "edson.marcio7@gmail.com";
-var senha = "boyFodase1!";
+var senha = "suasenhaqui!";
 
 
 //CREATE Library Instance
