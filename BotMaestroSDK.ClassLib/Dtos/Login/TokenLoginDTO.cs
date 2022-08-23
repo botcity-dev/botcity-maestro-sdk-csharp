@@ -1,6 +1,7 @@
-namespace NsBotMaestroSDK.ClassLib.Dtos;
+namespace NsBotCityMaestroSDK.ClassLib.Dtos.Login;
 
-public class TokenLoginDTO{
+public class TokenLoginDTO
+{
 
     public string userName { get; set; }
     public int IdUser { get; set; }

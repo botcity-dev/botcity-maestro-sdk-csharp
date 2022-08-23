@@ -1,4 +1,4 @@
-namespace NsBotMaestroSDK.ClassLib.Dtos;
+namespace NsBotCityMaestroSDK.ClassLib.Dtos.Login;
 
 public class TokenLoginCliDTO
 {
@@ -10,7 +10,7 @@ public class TokenLoginCliDTO
     public string OrganizationLabel { get; set; }
     public string New_Cookie { get; set; }
     public string Access_Token { get; set; }
-    
+
     public List<string> Organizations { get; set; }
 
     public TokenLoginCliDTO()

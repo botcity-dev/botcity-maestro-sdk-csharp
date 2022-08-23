@@ -1,5 +1,6 @@
-namespace NsBotMaestroSDK.ClassLib.Dtos;
-public class OrganizationDTO{
+namespace NsBotCityMaestroSDK.ClassLib.Dtos.Login;
+public class OrganizationDTO
+{
     public int Id { get; set; }
     public string Label { get; set; }
     public string Name { get; set; }
@@ -8,7 +9,7 @@ public class OrganizationDTO{
     public string key { get; set; }
     public string googleDataStudioToken { get; set; }
     public List<Activitie> Activities { get; set; }
-    
+
     public OrganizationDTO()
     {
         Activities = new List<Activitie>();

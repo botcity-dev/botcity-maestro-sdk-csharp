@@ -2,10 +2,9 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using NsBotMaestroSDK.ClassLib.Dtos;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-
+using NsBotCityMaestroSDK.ClassLib.Dtos.Login;
 
 namespace NsBotMaestroSDK.ClassLib;
 
@@ -19,11 +18,21 @@ public partial class BotMaestroSDK
         return byteContent;
     }
 
+    private ByteArrayContent ToContent()
+    {
+
+        var buffer = System.Text.Encoding.UTF8.GetBytes("");
+        var byteContent = new ByteArrayContent(buffer);
+        return byteContent;
+    }
+
     private string ToStrUri(string JsonString){
 
         return URL_BOT_SERVER_API_HOTS + JsonString;
         
     }
+
+   
 
     public StringContent ToContent<T>(string userName, string pwd)
     {

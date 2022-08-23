@@ -4,8 +4,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
 using System;
+using NsBotCityMaestroSDK.ClassLib.Dtos.Login;
 
-using NsBotMaestroSDK.ClassLib.Dtos;
 namespace NsBotMaestroSDK.ClassLib;
 
 public partial class BotMaestroSDK
@@ -17,7 +17,7 @@ public partial class BotMaestroSDK
        
         var content = ToContent<SendLoginDTO>(UserName, Password);
 
-        await ToPostResponse(content, URIs_Login.LOGIN_POST);
+        await ToPostResponse(content, URIs.LOGIN_POST);
 
         return ToObject<TokenLoginDTO>();
         
@@ -28,7 +28,7 @@ public partial class BotMaestroSDK
 
         var content = ToContent<SendLoginStudioDTO>(UserName, Password);
 
-        await ToPostResponse(content, URIs_Login.LOGIN_STUDIO_POST);
+        await ToPostResponse(content, URIs.LOGIN_STUDIO_POST);
 
         return ToObject<TokenLoginStudioDTO>();
 
@@ -44,7 +44,7 @@ public partial class BotMaestroSDK
 
         var content = new StringContent(JsonConvert.SerializeObject(cont), Encoding.UTF8, "application/json");
 
-        await ToPostResponse(content, URIs_Login.LOGIN_COOKIE_POST);
+        await ToPostResponse(content, URIs.LOGIN_COOKIE_POST);
 
         return ToObject<TokenLoginStudioDTO>();
 
@@ -66,7 +66,7 @@ public partial class BotMaestroSDK
 
         var content = new StringContent(JsonConvert.SerializeObject(cont), Encoding.UTF8, "application/json");
 
-        await ToPostResponse(content, URIs_Login.LOGIN_COOKIE_POST);
+        await ToPostResponse(content, URIs.LOGIN_COOKIE_POST);
 
         return ToObject<TokenLoginStudioDTO>();
        
@@ -79,7 +79,7 @@ public partial class BotMaestroSDK
 
         var content = ToContent<SendLoginCliDTO>(UserName, Password);
 
-        await ToPostResponse(content, URIs_Login.LOGIN_CLI_POST);
+        await ToPostResponse(content, URIs.LOGIN_CLI_POST);
 
         return ToObject<TokenLoginCliDTO>();
 
@@ -97,7 +97,7 @@ public partial class BotMaestroSDK
 
         var content = new StringContent(JsonConvert.SerializeObject(cont), Encoding.UTF8, "application/json");
 
-        await ToPostResponse(content, URIs_Login.LOGIN_COOKIE_CLI_POST);
+        await ToPostResponse(content, URIs.LOGIN_COOKIE_CLI_POST);
 
         return ToObject<TokenLoginCliDTO>();
 
@@ -122,7 +122,7 @@ public partial class BotMaestroSDK
 
         var content = new StringContent(JsonConvert.SerializeObject(cont), Encoding.UTF8, "application/json");
 
-        await ToPostResponse(content, URIs_Login.LOGIN_COOKIE_CLI_POST);
+        await ToPostResponse(content, URIs.LOGIN_COOKIE_CLI_POST);
 
         return ToObject<TokenLoginCliDTO>();
 

@@ -48,6 +48,8 @@ Console.WriteLine("LoginCliToken:" + loginCookieCli.Access_Token);
 loginCookieCli = await BotApi.LoginCookieCli(loginCookieCli.New_Cookie);
 Console.WriteLine("LoginCliToken COM PARAMETRO:" + loginCookieCli.Access_Token);
 
+var Version = await BotApi.MaestroVersion();
+Console.WriteLine("MaestroVersion:" + Version.Version);
 
 var b = Console.ReadKey();
 

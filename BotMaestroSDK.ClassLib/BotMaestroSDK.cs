@@ -1,8 +1,8 @@
 ﻿
 using System.Net.Http;
 using System.Net.Http.Headers;
-
-using NsBotMaestroSDK.ClassLib.Dtos;
+using NsBotCityMaestroSDK.ClassLib.Dtos.Login;
+using NsBotCityMaestroSDK.ClassLib.Dtos.Maestro;
 
 namespace NsBotMaestroSDK.ClassLib;
 
@@ -16,6 +16,7 @@ public partial class BotMaestroSDK
     public TokenLoginDTO TokenLoginDTO { get; set; }
     public TokenLoginStudioDTO TokenLoginStudioDTO {get; set;}
     public TokenLoginCliDTO TokenLoginCliDTO { get; set; }
+    public TokenMaestroVersion TokenMaestroVersion { get; set; }
     public static string URL_BOT_SERVER_API_HOTS { get; set; }
     public static void InitializeClient(){
 
