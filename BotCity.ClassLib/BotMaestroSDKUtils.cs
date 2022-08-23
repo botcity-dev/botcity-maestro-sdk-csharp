@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace BotCity.ClassLib;
 
-public partial class BotCitySDK
+public partial class BotMaestroSDK
 {
 
     private ByteArrayContent ToContent(string JsonString){
@@ -69,7 +69,7 @@ public partial class BotCitySDK
 
     public async Task<HttpResponseMessage> ToPostResponse(StringContent content, string URI)
     {
-        var response = BotCitySDK.ApiClient.PostAsync(
+        var response = BotMaestroSDK.ApiClient.PostAsync(
                 ToStrUri(URI),
                 content).Result;
 

@@ -7,7 +7,7 @@ var senha = "suasenhaqui!";
 
 
 //CREATE Library Instance
-var BotApi = new BotCitySDK(url);
+var BotApi = new BotMaestroSDK(url);
 
 
  

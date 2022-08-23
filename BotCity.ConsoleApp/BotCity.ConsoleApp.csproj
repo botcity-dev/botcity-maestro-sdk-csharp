@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\BotCity.ClassLib\BotCity.ClassLib.csproj" />
+    <ProjectReference Include="..\BotCity.ClassLib\BotMaestroSDK.ClassLib.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

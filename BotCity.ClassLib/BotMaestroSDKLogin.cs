@@ -8,7 +8,7 @@ using System;
 using BotCity.ClassLib.Dtos;
 namespace BotCity.ClassLib;
 
-public partial class BotCitySDK
+public partial class BotMaestroSDK
 {
 
 

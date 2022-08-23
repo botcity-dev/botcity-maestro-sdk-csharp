@@ -6,7 +6,7 @@ using BotCity.ClassLib.Dtos;
 
 namespace BotCity.ClassLib;
 
-public partial class BotCitySDK
+public partial class BotMaestroSDK
 {
  
     public static HttpClient ApiClient { get; set; }
@@ -29,7 +29,7 @@ public partial class BotCitySDK
 
     }
 
-    public BotCitySDK(string url){
+    public BotMaestroSDK(string url){
         URL_BOT_SERVER_API_HOTS = url;
         InitializeClient();
     }
