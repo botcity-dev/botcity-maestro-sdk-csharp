@@ -2,12 +2,12 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
-using BotCity.ClassLib.Dtos;
+using NsBotMaestroSDK.ClassLib.Dtos;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 
-namespace BotCity.ClassLib;
+namespace NsBotMaestroSDK.ClassLib;
 
 public partial class BotMaestroSDK
 {

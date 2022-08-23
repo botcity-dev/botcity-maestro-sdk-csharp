@@ -1,9 +1,9 @@
-﻿ using BotCity.ClassLib;
+﻿using NsBotMaestroSDK.ClassLib;
 using System.Net.Http.Formatting;
 
 var url = "https://developers.botcity.dev/api/v2/";
 var user = "edson.marcio7@gmail.com";
-var senha = "suasenhaqui!";
+var senha = "suasenhaaqui!";
 
 
 //CREATE Library Instance

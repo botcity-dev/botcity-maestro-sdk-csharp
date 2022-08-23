@@ -2,9 +2,9 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-using BotCity.ClassLib.Dtos;
+using NsBotMaestroSDK.ClassLib.Dtos;
 
-namespace BotCity.ClassLib;
+namespace NsBotMaestroSDK.ClassLib;
 
 public partial class BotMaestroSDK
 {

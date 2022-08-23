@@ -1,7 +1,6 @@
-namespace BotCity.ClassLib.Dtos;
+namespace NsBotMaestroSDK.ClassLib.Dtos;
 
-public class TokenLoginCliDTO
-{
+public class TokenLoginStudioDTO{
 
     public string userName { get; set; }
     public int IdUser { get; set; }
@@ -11,11 +10,11 @@ public class TokenLoginCliDTO
     public string New_Cookie { get; set; }
     public string Access_Token { get; set; }
     
-    public List<string> Organizations { get; set; }
+    public List<OrganizationDTO> Organizations { get; set; }
 
-    public TokenLoginCliDTO()
+    public TokenLoginStudioDTO()
     {
-        Organizations = new List<string>();
+        Organizations = new List<OrganizationDTO>();
     }
 
 }

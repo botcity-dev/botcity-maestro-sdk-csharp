@@ -5,8 +5,8 @@ using System.Text;
 using Newtonsoft.Json;
 using System;
 
-using BotCity.ClassLib.Dtos;
-namespace BotCity.ClassLib;
+using NsBotMaestroSDK.ClassLib.Dtos;
+namespace NsBotMaestroSDK.ClassLib;
 
 public partial class BotMaestroSDK
 {

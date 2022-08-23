@@ -1,4 +1,4 @@
-namespace BotCity.ClassLib.Dtos;
+namespace NsBotMaestroSDK.ClassLib.Dtos;
 
 public class TokenLoginDTO{
 
