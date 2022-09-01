@@ -12,30 +12,30 @@ public partial class BotMaestroSDK
 {
 
 
-    public async Task<TokenLoginDTO> Login(string UserName, string Password){
+    public async Task<ResultLoginDTO> Login(string UserName, string Password){
 
        
         var content = ToContent<SendLoginDTO>(UserName, Password);
 
         await ToPostResponse(content, URIs.LOGIN_POST);
 
-        return ToObject<TokenLoginDTO>();
+        return ToObject<ResultLoginDTO>();
         
     }
 
-    public async Task<TokenLoginStudioDTO> LoginStudio(string UserName, string Password){
+    public async Task<ResultLoginStudioDTO> LoginStudio(string UserName, string Password){
 
 
         var content = ToContent<SendLoginStudioDTO>(UserName, Password);
 
         await ToPostResponse(content, URIs.LOGIN_STUDIO_POST);
 
-        return ToObject<TokenLoginStudioDTO>();
+        return ToObject<ResultLoginStudioDTO>();
 
 
     }
 
-    public async Task<TokenLoginStudioDTO> LoginCookie(string Cookie){
+    public async Task<ResultLoginStudioDTO> LoginCookie(string Cookie){
 
 
         var cont = new {
@@ -46,11 +46,11 @@ public partial class BotMaestroSDK
 
         await ToPostResponse(content, URIs.LOGIN_COOKIE_POST);
 
-        return ToObject<TokenLoginStudioDTO>();
+        return ToObject<ResultLoginStudioDTO>();
 
     }
 
-    public async Task<TokenLoginStudioDTO> LoginCookie(){
+    public async Task<ResultLoginStudioDTO> LoginCookie(){
 
         
         string Cookie = this.TokenLoginStudioDTO.New_Cookie;
@@ -68,25 +68,25 @@ public partial class BotMaestroSDK
 
         await ToPostResponse(content, URIs.LOGIN_COOKIE_POST);
 
-        return ToObject<TokenLoginStudioDTO>();
+        return ToObject<ResultLoginStudioDTO>();
        
 
     }
 
 
-    public async Task<TokenLoginCliDTO> LoginCli(string UserName, string Password)
+    public async Task<ResultLoginCliDTO> LoginCli(string UserName, string Password)
     {
 
         var content = ToContent<SendLoginCliDTO>(UserName, Password);
 
         await ToPostResponse(content, URIs.LOGIN_CLI_POST);
 
-        return ToObject<TokenLoginCliDTO>();
+        return ToObject<ResultLoginCliDTO>();
 
     }
 
 
-    public async Task<TokenLoginCliDTO> LoginCookieCli(string Cookie)
+    public async Task<ResultLoginCliDTO> LoginCookieCli(string Cookie)
     {
 
 
@@ -99,11 +99,11 @@ public partial class BotMaestroSDK
 
         await ToPostResponse(content, URIs.LOGIN_COOKIE_CLI_POST);
 
-        return ToObject<TokenLoginCliDTO>();
+        return ToObject<ResultLoginCliDTO>();
 
     }
 
-    public async Task<TokenLoginCliDTO> LoginCookieCli()
+    public async Task<ResultLoginCliDTO> LoginCookieCli()
     {
 
         //Console.WriteLine("COOKIE:" + this.TokenLoginCliDTO.New_Cookie);
@@ -124,7 +124,7 @@ public partial class BotMaestroSDK
 
         await ToPostResponse(content, URIs.LOGIN_COOKIE_CLI_POST);
 
-        return ToObject<TokenLoginCliDTO>();
+        return ToObject<ResultLoginCliDTO>();
 
     }
 

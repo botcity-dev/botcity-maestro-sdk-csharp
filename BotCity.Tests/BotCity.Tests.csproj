@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BotCity.ClassLib\BotMaestroSDK.ClassLib.csproj" />
+    <ProjectReference Include="..\BotMaestroSDK.ClassLib\BotCityMaestroSDK.ClassLib.csproj" />
   </ItemGroup>
 
 </Project>

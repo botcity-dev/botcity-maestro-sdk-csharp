@@ -5,6 +5,8 @@ using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NsBotCityMaestroSDK.ClassLib.Dtos.Login;
+using NsBotCityMaestroSDK.ClassLib.Dtos.Task;
+using NsBotMaestroSDK.ClassLib.Dtos.Task;
 
 namespace NsBotMaestroSDK.ClassLib;
 
@@ -33,6 +35,45 @@ public partial class BotMaestroSDK
     }
 
    
+    public StringContent ToContent(string Token, string Organization, Activity activity ){
+
+        SendTaskDTO sendTask = new SendTaskDTO
+        {
+            activityLabel = activity.ActivityLabel,
+            test = activity.Test,
+            Parameters = activity.Parameters
+        };
+
+
+        StringContent content = new StringContent(JsonConvert.SerializeObject(sendTask), Encoding.UTF8, "application/json");
+
+        List<Param> listHeaderParams = new List<Param>();
+
+        var paramToken = new Param
+        {
+            Name = "token",
+            Value = Token
+        };
+
+        var paramOrg = new Param
+        {
+            Name = "organization",
+            Value = Organization
+        };
+
+        listHeaderParams.Add(paramToken);
+        listHeaderParams.Add(paramOrg);
+
+        foreach (Param param in listHeaderParams)
+        {
+            content.Headers.Add(
+                param.Name,
+                param.Value
+            );
+        }
+
+        return content;
+    }
 
     public StringContent ToContent<T>(string userName, string pwd)
     {
@@ -72,6 +113,7 @@ public partial class BotMaestroSDK
 
         }
 
+
         return content;
 
     }
@@ -98,7 +140,7 @@ public partial class BotMaestroSDK
 
         //var resultRaw = ResponseMessage.Content.ReadAsStringAsync();
 
-        TokenLoginDTO result1 = JsonConvert.DeserializeObject<TokenLoginDTO>(ResultRaw);
+        ResultLoginDTO result1 = JsonConvert.DeserializeObject<ResultLoginDTO>(ResultRaw);
         this.TokenLoginDTO = result1;
 
         var result = result1;
@@ -109,38 +151,49 @@ public partial class BotMaestroSDK
     {
 
         //var resultRaw = ResponseMessage.Content.ReadAsStringAsync();
-        if (typeof(TokenLoginDTO) == typeof(T))
+        if (typeof(ResultLoginDTO) == typeof(T))
         {
-            TokenLoginDTO result1 = JsonConvert.DeserializeObject<TokenLoginDTO>(ResultRaw);
+            ResultLoginDTO result1 = JsonConvert.DeserializeObject<ResultLoginDTO>(ResultRaw);
             this.TokenLoginDTO = result1;
 
             return (T)Convert.ChangeType(result1, typeof(T));
 
         }
 
-        if (typeof(TokenLoginStudioDTO) == typeof(T))
+        if (typeof(ResultLoginStudioDTO) == typeof(T))
         {
-            TokenLoginStudioDTO result1 = JsonConvert.DeserializeObject<TokenLoginStudioDTO>(ResultRaw);
+            ResultLoginStudioDTO result1 = JsonConvert.DeserializeObject<ResultLoginStudioDTO>(ResultRaw);
             this.TokenLoginStudioDTO = result1;
 
             return (T)Convert.ChangeType(result1, typeof(T));
 
         }
 
-        if (typeof(TokenLoginCliDTO) == typeof(T))
+        if (typeof(ResultLoginCliDTO) == typeof(T))
         {
-            TokenLoginCliDTO result1 = JsonConvert.DeserializeObject<TokenLoginCliDTO>(ResultRaw);
+            ResultLoginCliDTO result1 = JsonConvert.DeserializeObject<ResultLoginCliDTO>(ResultRaw);
             this.TokenLoginCliDTO = result1;
 
             return (T)Convert.ChangeType(result1, typeof(T));
 
         }
-
         
+        if (typeof(ResultTaskDTO) == typeof(T))
+        {
+
+            Console.WriteLine(ResultRaw);
+            ResultTaskDTO result1 = JsonConvert.DeserializeObject<ResultTaskDTO>(ResultRaw);
+            this.ResultTaskDTO = result1;
+
+            return (T)Convert.ChangeType(result1, typeof(T));
+
+        }
 
         string resultNull = null;
 
         return (T)Convert.ChangeType(resultNull, typeof(T));
     }
+
+
 
 }

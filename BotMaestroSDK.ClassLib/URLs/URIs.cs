@@ -11,3 +11,12 @@ public static class URIs_Maestro
 {
     public static string MAESTRO_VERSION = "maestro/version";
 }
+
+public static class URIs_Task
+{
+    public static string TASK_POST = "task";
+    public static string TASK_GET = "task";
+    public static string TASK_POSTID = "task/";
+    public static string TASK_GETID = "task/";
+    public static string TASK_DELETE = "task/";
+}

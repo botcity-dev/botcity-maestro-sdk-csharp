@@ -3,7 +3,7 @@ using System.Net.Http.Formatting;
 
 var url = "https://developers.botcity.dev/api/v2/";
 var user = "edson.marcio7@gmail.com";
-var senha = "suasenhaaqui!";
+var senha = "boyFodase1!";
 
 
 //CREATE Library Instance
@@ -51,6 +51,24 @@ Console.WriteLine("LoginCliToken COM PARAMETRO:" + loginCookieCli.Access_Token);
 var Version = await BotApi.MaestroVersion();
 Console.WriteLine("MaestroVersion:" + Version.Version);
 
-var b = Console.ReadKey();
+
+//TASK
+var activity = new Activity();
+activity.ActivityLabel = "LabelAutomacao01";
+activity.Test = true;
+
+
+activity.ParamAdd("ParametroAutomacao01","");
+
+Console.WriteLine("ORGANIZATION LABEL:" + loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label );
+Console.WriteLine("loginUser.Token:" + loginUser.Token);
+var task = await BotApi.Task(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, activity); ;
+Console.WriteLine("TASK:" + task.ToString());
+Console.WriteLine("TASK:" + task.Id);
+Console.WriteLine("TASK:" + task.State);
+Console.WriteLine("TASK:" + task.ActivityLabel);
+
+
+Console.ReadKey();
 
 

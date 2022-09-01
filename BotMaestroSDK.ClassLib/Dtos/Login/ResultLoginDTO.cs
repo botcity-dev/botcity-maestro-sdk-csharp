@@ -1,6 +1,6 @@
 namespace NsBotCityMaestroSDK.ClassLib.Dtos.Login;
 
-public class TokenLoginDTO
+public class ResultLoginDTO
 {
 
     public string userName { get; set; }
@@ -12,7 +12,7 @@ public class TokenLoginDTO
     public string Language { get; set; }
     public List<OrganizationDTO> Organizations { get; set; }
 
-    public TokenLoginDTO()
+    public ResultLoginDTO()
     {
         Organizations = new List<OrganizationDTO>();
     }
