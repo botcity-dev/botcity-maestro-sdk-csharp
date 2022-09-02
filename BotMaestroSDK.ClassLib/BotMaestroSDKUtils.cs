@@ -35,78 +35,7 @@ public partial class BotMaestroSDK
     }
 
    
-    public StringContent ToContent(string Token, string Organization, Activity activity ){
-
-        SendTaskDTO sendTask = new SendTaskDTO
-        {
-            activityLabel = activity.ActivityLabel,
-            test = activity.Test,
-            Parameters = activity.Parameters
-        };
-
-
-        StringContent content = new StringContent(JsonConvert.SerializeObject(sendTask), Encoding.UTF8, "application/json");
-
-        List<Param> listHeaderParams = new List<Param>();
-
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        listHeaderParams.Add(paramToken);
-        listHeaderParams.Add(paramOrg);
-
-        foreach (Param param in listHeaderParams)
-        {
-            content.Headers.Add(
-                param.Name,
-                param.Value
-            );
-        }
-
-        return content;
-    }
-
-    public StringContent ToContentTask(string Token, string Organization, SendTaskStateDTO sendTaskStateDTO)
-    {
-
-        StringContent content = new StringContent(JsonConvert.SerializeObject(sendTaskStateDTO), Encoding.UTF8, "application/json");
-
-        List<Param> listHeaderParams = new List<Param>();
-
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        listHeaderParams.Add(paramToken);
-        listHeaderParams.Add(paramOrg);
-
-        foreach (Param param in listHeaderParams)
-        {
-            content.Headers.Add(
-                param.Name,
-                param.Value
-            );
-        }
-
-        return content;
-    }
+   
 
     public StringContent ToContent<T>(string userName, string pwd)
     {
@@ -228,12 +157,17 @@ public partial class BotMaestroSDK
         
         if (typeof(ResultTaskDTO) == typeof(T))
         {
+            
+       
+               //Console.WriteLine(ResultRaw);
 
-            Console.WriteLine(ResultRaw);
-            ResultTaskDTO result1 = JsonConvert.DeserializeObject<ResultTaskDTO>(ResultRaw);
-            this.ResultTaskDTO = result1;
+               ResultTaskDTO result1 = JsonConvert.DeserializeObject<ResultTaskDTO>(ResultRaw);
+               this.ResultTaskDTO = result1;
+               return (T)Convert.ChangeType(result1, typeof(T));
+           
+           
 
-            return (T)Convert.ChangeType(result1, typeof(T));
+           
 
         }
 

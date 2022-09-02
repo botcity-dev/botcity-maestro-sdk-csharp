@@ -1,14 +1,20 @@
 ﻿using NsBotMaestroSDK.ClassLib;
 using NsBotMaestroSDK.ClassLib.Dtos.Task;
+using System;
 using System.Net.Http.Formatting;
 
 var url = "https://developers.botcity.dev/api/v2/";
-var user = "edson.marcio7@gmail.com";
-var senha = "boyFodase1!";
-
 
 //CREATE Library Instance
 var BotApi = new BotMaestroSDK(url);
+
+/*
+var url = "https://developers.botcity.dev/api/v2/";
+var user = "edson.marcio7@gmail.com";
+var senha = "suasenhaaqui!";
+
+
+
 
 
  
@@ -76,17 +82,25 @@ Console.WriteLine(":");
 //TASK FINISH
 var sendTaskState = new SendTaskStateDTO();
 sendTaskState.state = "FINISHED";
-sendTaskState.finishStatus = "SUCCESS";
+sendTaskState.SendStatus = FinishedStatus.SUCCESS;
 sendTaskState.finishMessage = "MINHA MENSAGEM SUPER MANEIRA";
 
 
 activity.ParamAdd("ParametroAutomacao01", "");
 
-var taskId = await BotApi.TaskState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, sendTaskState, task.Id); ;
-Console.WriteLine("TASK2:" + taskId.ToString());
-Console.WriteLine("TASK2:" + taskId.Id);
-Console.WriteLine("TASK2:" + taskId.State);
-Console.WriteLine("TASK2:" + taskId.ActivityLabel);
+var taskId2 = await BotApi.TaskSetState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, sendTaskState, task.Id); ;
+Console.WriteLine("TASK2:" + taskId2.ToString());
+Console.WriteLine("TASK2:" + taskId2.Id);
+Console.WriteLine("TASK2:" + taskId2.State);
+Console.WriteLine("TASK2:" + taskId2.ActivityLabel);
+*/
+
+//var taskId3 = await BotApi.TaskGetState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, task.Id); ;
+var taskId3 = await BotApi.TaskGetState("ertM3mGqw1", "79af9981-8d3c-4ea9-ae81-d33c525fba73", 129984);
+Console.WriteLine("TASK3:" + taskId3.ToString());
+Console.WriteLine("TASK3:" + taskId3.Id);
+Console.WriteLine("TASK3:" + taskId3.State);
+Console.WriteLine("TASK3:" + taskId3.ActivityLabel);
 
 
 Console.ReadKey();

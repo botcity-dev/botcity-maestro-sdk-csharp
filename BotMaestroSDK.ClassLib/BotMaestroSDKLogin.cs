@@ -25,13 +25,11 @@ public partial class BotMaestroSDK
 
     public async Task<ResultLoginStudioDTO> LoginStudio(string UserName, string Password){
 
-
         var content = ToContent<SendLoginStudioDTO>(UserName, Password);
 
         await ToPostResponse(content, URIs.LOGIN_STUDIO_POST);
 
         return ToObject<ResultLoginStudioDTO>();
-
 
     }
 
