@@ -75,6 +75,39 @@ public partial class BotMaestroSDK
         return content;
     }
 
+    public StringContent ToContentTask(string Token, string Organization, SendTaskStateDTO sendTaskStateDTO)
+    {
+
+        StringContent content = new StringContent(JsonConvert.SerializeObject(sendTaskStateDTO), Encoding.UTF8, "application/json");
+
+        List<Param> listHeaderParams = new List<Param>();
+
+        var paramToken = new Param
+        {
+            Name = "token",
+            Value = Token
+        };
+
+        var paramOrg = new Param
+        {
+            Name = "organization",
+            Value = Organization
+        };
+
+        listHeaderParams.Add(paramToken);
+        listHeaderParams.Add(paramOrg);
+
+        foreach (Param param in listHeaderParams)
+        {
+            content.Headers.Add(
+                param.Name,
+                param.Value
+            );
+        }
+
+        return content;
+    }
+
     public StringContent ToContent<T>(string userName, string pwd)
     {
 
@@ -130,6 +163,21 @@ public partial class BotMaestroSDK
         ResultRaw = await response.Content.ReadAsStringAsync();
         if ((int)statusCode != 200) return null;
 
+        return response;
+
+    }
+
+    public async Task<HttpResponseMessage> ToPostResponseURL(StringContent content, string URI )
+    {
+        var response = BotMaestroSDK.ApiClient.PostAsync(
+                ToStrUri(URI),
+                content).Result;
+
+        ResponseMessage = response;
+        //Console.WriteLine("response:" + response);
+        var statusCode = response.StatusCode;
+        ResultRaw = await response.Content.ReadAsStringAsync();
+        if ((int)statusCode != 200) return null;
 
         return response;
 

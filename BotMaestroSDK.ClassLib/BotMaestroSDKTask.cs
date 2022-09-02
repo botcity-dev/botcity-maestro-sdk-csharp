@@ -42,6 +42,38 @@ public partial class BotMaestroSDK
         
     }
 
-  
+    public async Task<ResultTaskDTO> TaskState(string Token, string Organization, SendTaskStateDTO SendTaskStateDTO,  int? TaskId)
+    {
+
+        List<Param> list = new List<Param>();
+
+        var paramToken = new Param
+        {
+            Name = "token",
+            Value = Token
+        };
+
+        var paramOrg = new Param
+        {
+            Name = "organization",
+            Value = Organization
+        };
+
+        list.Add(paramToken);
+        list.Add(paramOrg);
+
+        InitializeClient();
+
+        var content = ToContentTask(Token, Organization, SendTaskStateDTO);
+
+        await ToPostResponseURL(content, URIs_Task.TASK_POSTID + "/" + TaskId.ToString());
+
+        return ToObject<ResultTaskDTO>();
+
+    }
+
+    
+
+
 
 }
