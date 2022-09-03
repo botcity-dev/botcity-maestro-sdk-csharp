@@ -6,6 +6,7 @@ using BotCityMaestroSDK.Dtos.Login;
 using BotCityMaestroSDK.Dtos.Task;
 using System.Linq;
 using System;
+using static NUnit.Framework.Constraints.Tolerance;
 
 namespace BotCity.TestsNUnit;
 
@@ -15,9 +16,9 @@ public class UnitTestTask
     string user = "edson.marcio7@gmail.com";
     string senha = ClassSenha.Password;
     //private BotMaestroSDK BotApi;
-    //private Activity activity = new Activity();
+    private Activity activity = new Activity();
     //private ResultLoginDTO loginUser;
-    //private SendTaskStateDTO sendTaskState;
+    private SendTaskStateDTO sendTaskState;
     private int? TaskId;
 
     [SetUp]
@@ -49,19 +50,9 @@ public class UnitTestTask
     }
 
     //ARRANGE
-    private void ArrangeSendDTO()
+    private void Arrange()
     {
-       
-    }
-
-    [Test, Order(1)]
-    public async Task CreateTaskTest()
-    {
-        //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
-        var loginUser = await BotApi.Login(user, senha);
-
-        var activity = new Activity();
+        activity = new Activity();
         activity.ActivityLabel = "LabelAutomacao01";
         activity.Test = true;
         activity.ParamAdd("ParametroAutomacao01", "");
@@ -70,6 +61,18 @@ public class UnitTestTask
         sendTaskState.state = "FINISHED";
         sendTaskState.SendStatus = FinishedStatus.SUCCESS;
         sendTaskState.finishMessage = "MINHA MENSAGEM SUPER MANEIRA : " + DateTime.Now.ToString();
+    }
+
+    [Test, Order(1)]
+    public async Task CreateTaskTest()
+    {
+        //ARRANGE
+        var BotApi = new BotMaestroSDK(url);
+        var loginUser = await BotApi.Login(user, senha);
+        Arrange();
+
+
+        
 
         //Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
         var task = await BotApi.Task(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, activity);
@@ -91,16 +94,7 @@ public class UnitTestTask
         //ARRANGE
         var BotApi = new BotMaestroSDK(url);
         var loginUser = await BotApi.Login(user, senha);
-
-        var activity = new Activity();
-        activity.ActivityLabel = "LabelAutomacao01";
-        activity.Test = true;
-        activity.ParamAdd("ParametroAutomacao01", "");
-
-        var sendTaskState = new SendTaskStateDTO();
-        sendTaskState.state = "FINISHED";
-        sendTaskState.SendStatus = FinishedStatus.SUCCESS;
-        sendTaskState.finishMessage = "MINHA MENSAGEM SUPER MANEIRA : " + DateTime.Now.ToString();
+        Arrange();
 
 
         //var task = await BotApi.Task(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, activity);
@@ -124,16 +118,7 @@ public class UnitTestTask
         //ARRANGE
         var BotApi = new BotMaestroSDK(url);
         var loginUser = await BotApi.Login(user, senha);
-
-        var activity = new Activity();
-        activity.ActivityLabel = "LabelAutomacao01";
-        activity.Test = true;
-        activity.ParamAdd("ParametroAutomacao01", "");
-
-        var sendTaskState = new SendTaskStateDTO();
-        sendTaskState.state = "FINISHED";
-        sendTaskState.SendStatus = FinishedStatus.SUCCESS;
-        sendTaskState.finishMessage = "MINHA MENSAGEM SUPER MANEIRA : " + DateTime.Now.ToString();
+        Arrange();
 
         var taskId3 = await BotApi.TaskGetState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, TaskId); 
 
