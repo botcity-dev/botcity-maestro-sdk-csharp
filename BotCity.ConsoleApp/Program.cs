@@ -1,17 +1,17 @@
-﻿using NsBotMaestroSDK.ClassLib;
-using NsBotMaestroSDK.ClassLib.Dtos.Task;
+﻿
 using System;
 using System.Net.Http.Formatting;
+using BotCityMaestroSDK.Lib;
 
 var url = "https://developers.botcity.dev/api/v2/";
 
 //CREATE Library Instance
 var BotApi = new BotMaestroSDK(url);
 
-/*
-var url = "https://developers.botcity.dev/api/v2/";
+
+
 var user = "edson.marcio7@gmail.com";
-var senha = "suasenhaaqui!";
+var senha = "boyFodase1!";
 
 
 
@@ -22,7 +22,7 @@ var senha = "suasenhaaqui!";
 var loginUser = await BotApi.Login(user,senha);
 Console.WriteLine("LoginToken:" + loginUser.Token);
 
-
+/*
 //After called any API endpoint, the developer can use ResponseMessage 
 Console.WriteLine(BotApi.ResponseMessage.StatusCode + " " + (int)BotApi.ResponseMessage.StatusCode);
 
@@ -96,7 +96,7 @@ Console.WriteLine("TASK2:" + taskId2.ActivityLabel);
 */
 
 //var taskId3 = await BotApi.TaskGetState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, task.Id); ;
-var taskId3 = await BotApi.TaskGetState("ertM3mGqw1", "79af9981-8d3c-4ea9-ae81-d33c525fba73", 129984);
+var taskId3 = await BotApi.TaskGetState(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", 129984);
 Console.WriteLine("TASK3:" + taskId3.ToString());
 Console.WriteLine("TASK3:" + taskId3.Id);
 Console.WriteLine("TASK3:" + taskId3.State);

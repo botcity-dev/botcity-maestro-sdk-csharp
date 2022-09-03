@@ -1,4 +1,4 @@
-﻿using NsBotCityMaestroSDK.ClassLib.Dtos.Task;
+﻿using BotCityMaestroSDK.Dtos.Task;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NsBotMaestroSDK.ClassLib.Dtos.Task
+namespace BotCityMaestroSDK.Dtos.Task
 {
     public class SendTaskStateDTO
     {

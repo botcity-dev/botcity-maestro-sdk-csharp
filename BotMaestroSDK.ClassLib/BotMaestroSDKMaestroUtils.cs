@@ -4,16 +4,14 @@ using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NsBotCityMaestroSDK.ClassLib.Dtos.Login;
-using NsBotCityMaestroSDK.ClassLib.Dtos.Maestro;
 
-namespace NsBotMaestroSDK.ClassLib;
+using BotCityMaestroSDK.Dtos.Login;
+using BotCityMaestroSDK.Dtos.Maestro;
+
+namespace BotCityMaestroSDK.Lib;
 
 public partial class BotMaestroSDK
 {
-
-
-
 
     public async Task<HttpResponseMessage> ToGetMaestroResponse( string URI)
     {

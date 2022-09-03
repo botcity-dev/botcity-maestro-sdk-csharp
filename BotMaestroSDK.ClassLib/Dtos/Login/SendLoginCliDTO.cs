@@ -1,4 +1,4 @@
-namespace NsBotCityMaestroSDK.ClassLib.Dtos.Login;
+namespace BotCityMaestroSDK.Dtos.Login;
 public class SendLoginCliDTO
 {
     public string email { get; set; }

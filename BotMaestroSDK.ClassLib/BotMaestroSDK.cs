@@ -1,13 +1,12 @@
 ﻿
 using System.Net.Http;
 using System.Net.Http.Headers;
-using NsBotCityMaestroSDK.ClassLib.Dtos;
-using NsBotCityMaestroSDK.ClassLib.Dtos.Login;
-using NsBotCityMaestroSDK.ClassLib.Dtos.Maestro;
-using NsBotCityMaestroSDK.ClassLib.Dtos.Task;
-using NsBotMaestroSDK.ClassLib.Dtos.Task;
+using BotCityMaestroSDK.Dtos;
+using BotCityMaestroSDK.Dtos.Login;
+using BotCityMaestroSDK.Dtos.Maestro;
+using BotCityMaestroSDK.Dtos.Task;
 
-namespace NsBotMaestroSDK.ClassLib;
+namespace BotCityMaestroSDK.Lib;
 
 public partial class BotMaestroSDK
 {

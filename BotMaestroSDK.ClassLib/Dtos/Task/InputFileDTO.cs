@@ -1,4 +1,4 @@
-namespace NsBotCityMaestroSDK.ClassLib.Dtos.Task;
+namespace BotCityMaestroSDK.Dtos.Task;
 public class InputFileDTO
 {
     public int Id { get; set; }

@@ -4,12 +4,12 @@ using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
 using System;
-using NsBotCityMaestroSDK.ClassLib.Dtos.Task;
-using NsBotMaestroSDK.ClassLib.Dtos.Task;
+
+using BotCityMaestroSDK.Dtos.Task;
+using BotCityMaestroSDK.Dtos;
 
 
-
-namespace NsBotMaestroSDK.ClassLib;
+namespace BotCityMaestroSDK.Lib;
 
 public partial class BotMaestroSDK
 {

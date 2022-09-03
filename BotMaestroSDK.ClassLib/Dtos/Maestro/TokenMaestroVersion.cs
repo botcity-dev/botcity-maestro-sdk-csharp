@@ -1,4 +1,4 @@
-namespace NsBotCityMaestroSDK.ClassLib.Dtos.Maestro;
+namespace BotCityMaestroSDK.Dtos.Maestro;
 
 public class TokenMaestroVersion
 {

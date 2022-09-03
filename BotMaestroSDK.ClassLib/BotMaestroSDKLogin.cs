@@ -4,9 +4,10 @@ using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
 using System;
-using NsBotCityMaestroSDK.ClassLib.Dtos.Login;
 
-namespace NsBotMaestroSDK.ClassLib;
+using BotCityMaestroSDK.Dtos.Login;
+
+namespace BotCityMaestroSDK.Lib;
 
 public partial class BotMaestroSDK
 {

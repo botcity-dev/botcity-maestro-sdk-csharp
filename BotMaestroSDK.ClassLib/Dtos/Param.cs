@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace NsBotCityMaestroSDK.ClassLib.Dtos.Task;
+namespace BotCityMaestroSDK.Dtos;
 public class Param
 {
     [JsonProperty("name")]

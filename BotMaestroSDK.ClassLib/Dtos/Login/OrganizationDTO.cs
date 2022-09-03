@@ -1,4 +1,4 @@
-namespace NsBotCityMaestroSDK.ClassLib.Dtos.Login;
+namespace BotCityMaestroSDK.Dtos.Login;
 public class OrganizationDTO
 {
     public int Id { get; set; }

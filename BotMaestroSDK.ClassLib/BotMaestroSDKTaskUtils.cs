@@ -5,11 +5,12 @@ using System.Net.Http.Json;
 using System.Text;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using NsBotCityMaestroSDK.ClassLib.Dtos.Login;
-using NsBotCityMaestroSDK.ClassLib.Dtos.Task;
-using NsBotMaestroSDK.ClassLib.Dtos.Task;
 
-namespace NsBotMaestroSDK.ClassLib;
+using BotCityMaestroSDK.Dtos.Login;
+using BotCityMaestroSDK.Dtos.Task;
+using BotCityMaestroSDK.Dtos;
+
+namespace BotCityMaestroSDK.Lib;
 
 public partial class BotMaestroSDK
 {

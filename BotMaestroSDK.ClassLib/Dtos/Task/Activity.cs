@@ -1,7 +1,5 @@
-using NsBotCityMaestroSDK.ClassLib.Dtos;
-using NsBotCityMaestroSDK.ClassLib.Dtos.Task;
 
-namespace NsBotMaestroSDK.ClassLib;
+namespace BotCityMaestroSDK.Dtos.Task;
 public class Activity
 {
     public int Id { get; set; }

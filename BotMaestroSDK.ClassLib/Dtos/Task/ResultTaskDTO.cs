@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using NsBotCityMaestroSDK.ClassLib.Dtos.Task;
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NsBotMaestroSDK.ClassLib.Dtos.Task
+namespace BotCityMaestroSDK.Dtos.Task
 {
     public class ResultTaskDTO
     {
