@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /BotCity.Tests/ClassSenha.cs
+/BotCity.TestsNUnit/ClassSenha.cs
