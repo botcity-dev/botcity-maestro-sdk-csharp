@@ -11,7 +11,7 @@ var BotApi = new BotMaestroSDK(url);
 
 
 var user = "edson.marcio7@gmail.com";
-var senha = "boyFodase1!";
+var senha = "!";
 
 
 
