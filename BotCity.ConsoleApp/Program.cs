@@ -2,6 +2,8 @@
 using System;
 using System.Net.Http.Formatting;
 using BotCityMaestroSDK.Lib;
+using BotCityMaestroSDK.Dtos;
+using BotCityMaestroSDK.Dtos.Task;
 
 var url = "https://developers.botcity.dev/api/v2/";
 
@@ -22,7 +24,7 @@ var senha = "!";
 var loginUser = await BotApi.Login(user,senha);
 Console.WriteLine("LoginToken:" + loginUser.Token);
 
-/*
+
 //After called any API endpoint, the developer can use ResponseMessage 
 Console.WriteLine(BotApi.ResponseMessage.StatusCode + " " + (int)BotApi.ResponseMessage.StatusCode);
 
@@ -93,7 +95,7 @@ Console.WriteLine("TASK2:" + taskId2.ToString());
 Console.WriteLine("TASK2:" + taskId2.Id);
 Console.WriteLine("TASK2:" + taskId2.State);
 Console.WriteLine("TASK2:" + taskId2.ActivityLabel);
-*/
+
 
 //var taskId3 = await BotApi.TaskGetState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, task.Id); ;
 var taskId3 = await BotApi.TaskGetState(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", 129984);
