@@ -8,7 +8,7 @@ namespace BotCity.TestsNUnit
 {
     public static class ClassSenha
     {
-        public static string Password = "boyFodase1!";
+        public static string Password = "!";
         public static string UserName = "Edson Márcio Oliveira"; 
     }
 }
