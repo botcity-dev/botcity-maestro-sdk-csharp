@@ -7,86 +7,90 @@ using BotCityMaestroSDK.Dtos.Task;
 using System.Linq;
 using System;
 using static NUnit.Framework.Constraints.Tolerance;
+using BotCityMaestroSDK.Dtos;
 
 namespace BotCity.TestsNUnit;
 
-public class UnitTestTask
+public class UnitTestLog
 {
     string url = "https://developers.botcity.dev/api/v2/";
     string user = "edson.marcio7@gmail.com";
     string senha = ClassSenha.Password;
-    //private BotMaestroSDK BotApi;
-    private Activity activity = new Activity();
-    //private ResultLoginDTO loginUser;
-    private SendTaskStateDTO sendTaskState;
-    private int? TaskId;
+
+    
+    private SendLogDTO sendLogDTO;
+    private int? LogId;
 
     [SetUp]
     public void Setup()
     {
-        /*
-        activity = new Activity();
-        activity.ActivityLabel = "LabelAutomacao01";
-        activity.Test = true;
-        activity.ParamAdd("ParametroAutomacao01", "");
-
-        Login();
-
-        sendTaskState = new SendTaskStateDTO();
-        sendTaskState.state = "FINISHED";
-        sendTaskState.SendStatus = FinishedStatus.SUCCESS;
-        sendTaskState.finishMessage = "MINHA MENSAGEM SUPER MANEIRA : " + DateTime.Now.ToString();
-        */
 
 
     }
 
-    //ARRANGE
-
-    private async void Login()
-    {
-        //BotApi = new BotMaestroSDK(url);
-        //var loginUser = await BotApi.Login(user, senha);
-    }
 
     //ARRANGE
     private void Arrange()
     {
-        activity = new Activity();
-        activity.ActivityLabel = "LabelAutomacao01";
-        activity.Test = true;
-        activity.ParamAdd("ParametroAutomacao01", "");
+        Random random = new Random();
 
-        sendTaskState = new SendTaskStateDTO();
-        sendTaskState.state = "FINISHED";
-        sendTaskState.SendStatus = FinishedStatus.SUCCESS;
-        sendTaskState.finishMessage = "MINHA MENSAGEM SUPER MANEIRA : " + DateTime.Now.ToString();
+        sendLogDTO = new SendLogDTO();
+
+        sendLogDTO.Id = random.Next(0, 9999).ToString();
+        sendLogDTO.activityLabel = "LabelLogName" + sendLogDTO.Id;
+
+        Column column1 = new Column
+        {
+            Name = "Column1",
+            Label = "Label 1",
+            Width = 100
+        };
+
+        Column column2 = new Column
+        {
+            Name = "Column1",
+            Label = "Label 1",
+            Width = 100
+        };
+
+        Column column3 = new Column
+        {
+            Name = "Column1",
+            Label = "Label 1",
+            Width = 100
+        };
+
+        sendLogDTO.Columns.Add(column1);
+        sendLogDTO.Columns.Add(column2);
+        sendLogDTO.Columns.Add(column3);
+
     }
 
     [Test, Order(1)]
-    public async Task CreateTaskTest()
+    public async Task CreateLogTest()
     {
         //ARRANGE
         var BotApi = new BotMaestroSDK(url);
         var loginUser = await BotApi.Login(user, senha);
+
         Arrange();
 
 
         
 
-        //Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
-        var task = await BotApi.TaskCreate(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, activity);
+        Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
+        var log = await BotApi.LogCreate(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, sendLogDTO);
 
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
         Assert.AreEqual(result.ToString(),"200");
-        Assert.AreEqual(task.ActivityLabel, activity.ActivityLabel);
-        TaskId = task.Id;
-        Console.WriteLine("TaskId:" + TaskId + " - Date:" + DateTime.Now.ToString());
+        Assert.AreEqual(log.organizationLabel, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
+      
+      
 
     }
 
-    
+    /*
     [Test, Order(2)]
     public async Task TaskSetStateTest()
     {
@@ -129,5 +133,5 @@ public class UnitTestTask
 
     }
 
-    
+    */
 }

@@ -7,6 +7,7 @@ using System;
 
 using BotCityMaestroSDK.Dtos.Task;
 using BotCityMaestroSDK.Dtos;
+using Newtonsoft.Json.Linq;
 
 
 namespace BotCityMaestroSDK.Lib;
@@ -15,28 +16,13 @@ public partial class BotMaestroSDK
 {
 
 
-    public async Task<ResultTaskDTO> Task(string Token, string Organization, Activity Activity){
-
-        List<Param> list = new List<Param>();
-        
-        var paramToken = new Param{
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param{
-            Name = "organization",
-            Value = Organization
-        };
-
-        list.Add(paramToken);
-        list.Add(paramOrg);
-
+    public async Task<ResultTaskDTO> TaskCreate(string Token, string Organization, Activity Activity){
+       
         InitializeClient();
 
         var content = ToContentTask(Token,Organization, Activity);
 
-        await ToPostResponse(content, URIs_Task.TASK_POST);
+        await ToPostResponse(content, URIs_Task.TASK_POST_CREATE);
 
         return ToObject<ResultTaskDTO>();
         
@@ -47,28 +33,9 @@ public partial class BotMaestroSDK
         if (SendTaskStateDTO.FinishStatus == "")
             SendTaskStateDTO.FinishStatus = Enum.GetName(typeof(FinishedStatus), SendTaskStateDTO.SendStatus);
 
-        List<Param> list = new List<Param>();
-
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        list.Add(paramToken);
-        list.Add(paramOrg);
-
-        InitializeClient();
-
         var content = ToContentTask(Token, Organization, SendTaskStateDTO);
 
-        await ToPostResponseURL(content, URIs_Task.TASK_POSTID +  TaskId.ToString());
+        await ToPostResponseURL(content, URL_ID( URIs_Task.TASK_POST_SET_STATE, TaskId.ToString()));
 
         return ToObject<ResultTaskDTO>();
 
@@ -93,10 +60,9 @@ public partial class BotMaestroSDK
 
         list.Add(paramToken);
         list.Add(paramOrg);
-
         InitializeClient(list);
 
-        var result = await ToGetTaskResponseURL( URIs_Task.TASK_GETID  + TaskId.ToString());
+        var result = await ToGetTaskResponseURL( URL_ID(URIs_Task.TASK_GETID, TaskId.ToString()));
 
         
         if (result == null)

@@ -14,11 +14,27 @@ public static class URIs_Maestro
 
 public static class URIs_Task
 {
-    public static string TASK_POST = "task";
+    public static string TASK_POST_CREATE = "task";
     public static string TASK_GET = "task";
-    public static string TASK_POSTID = "task/";
-    public static string TASK_GETID = "task/";
+    public static string TASK_POST_SET_STATE = "task/{id}";
+    public static string TASK_GETID = "task/{id}";
     public static string TASK_DELETE = "task/";
+}
+
+
+public static class URIs_Log
+{
+    public static string LOG_POST_CREATE = "log";
+    public static string LOG_GET = "log";
+
+    public static string LOG_POST_ID_ENTRY = "log/{id}/entry";
+    public static string LOG_GET_ID_ENTRY = "log/{id}/entry";
+
+    public static string LOG_GET_ID = "log/{id}";
+    public static string LOG_DELETE = "log/{id}";
+
+    public static string LOG_GET_ID_ENTRY_LIST = "log/{id}/entry-list";
+    public static string LOG_GET_ID_CSV = "log/{id}/csv";
 }
 
 

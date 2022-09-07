@@ -15,11 +15,13 @@ public partial class BotMaestroSDK
 
     private string ResultRaw { get; set; }
     public HttpResponseMessage ResponseMessage { get; set; }
+    public static GetError GetError { get; set; }
     public ResultLoginDTO TokenLoginDTO { get; set; }
     public ResultLoginStudioDTO TokenLoginStudioDTO {get; set;}
     public ResultLoginCliDTO TokenLoginCliDTO { get; set; }
     public TokenMaestroVersion TokenMaestroVersion { get; set; }
     public ResultTaskDTO ResultTaskDTO { get; set; }
+    public ResultLogDTO ResultLogDTO { get; set; }
     public List<Activity> Activities {get; set;}
     public static string URL_BOT_SERVER_API_HOTS { get; set; }
     public static void InitializeClient(){
@@ -30,6 +32,8 @@ public partial class BotMaestroSDK
         ApiClient.DefaultRequestHeaders.Accept.Add(
             new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json")
         );
+
+        GetError = new GetError();
   
 
     }

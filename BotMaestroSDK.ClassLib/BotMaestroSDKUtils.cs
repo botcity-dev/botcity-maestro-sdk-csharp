@@ -88,11 +88,23 @@ public partial class BotMaestroSDK
                 content).Result;
 
         ResponseMessage = response;
-        //Console.WriteLine("response:" + response);
+        
         var statusCode = response.StatusCode;
         ResultRaw = await response.Content.ReadAsStringAsync();
-        if ((int)statusCode != 200) return null;
 
+        
+
+        
+
+        if ((int)statusCode != 200)
+        {
+            GetError.ErrorNumber = (int)statusCode;
+            GetError.Message = ResultRaw;
+            GetError.ErroDetail = response.ToString();
+            Console.WriteLine("ERROR:" + GetError.Message);
+            //Console.WriteLine("ErroDetail:" + GetError.ErroDetail);
+            return null;
+        }
         return response;
 
     }
@@ -158,18 +170,16 @@ public partial class BotMaestroSDK
         
         if (typeof(ResultTaskDTO) == typeof(T))
         {
-            
-       
-               //Console.WriteLine(ResultRaw);
-
                ResultTaskDTO result1 = JsonConvert.DeserializeObject<ResultTaskDTO>(ResultRaw);
                this.ResultTaskDTO = result1;
                return (T)Convert.ChangeType(result1, typeof(T));
-           
-           
+        }
 
-           
-
+        if (typeof(ResultLogDTO) == typeof(T))
+        {
+            ResultLogDTO result1 = JsonConvert.DeserializeObject<ResultLogDTO>(ResultRaw);
+            this.ResultLogDTO = result1;
+            return (T)Convert.ChangeType(result1, typeof(T));
         }
 
         string resultNull = null;
@@ -177,6 +187,9 @@ public partial class BotMaestroSDK
         return (T)Convert.ChangeType(resultNull, typeof(T));
     }
 
-
+    private string URL_ID(string value, string id)
+    {
+        return value.Replace("{id}", id);
+    }
 
 }

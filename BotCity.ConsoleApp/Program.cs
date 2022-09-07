@@ -4,6 +4,7 @@ using System.Net.Http.Formatting;
 using BotCityMaestroSDK.Lib;
 using BotCityMaestroSDK.Dtos;
 using BotCityMaestroSDK.Dtos.Task;
+using BotCityMaestroSDK.Dtos.Login;
 
 var url = "https://developers.botcity.dev/api/v2/";
 
@@ -23,7 +24,7 @@ var senha = "!";
 //CALL LOGIN
 var loginUser = await BotApi.Login(user,senha);
 Console.WriteLine("LoginToken:" + loginUser.Token);
-
+/*
 
 //After called any API endpoint, the developer can use ResponseMessage 
 Console.WriteLine(BotApi.ResponseMessage.StatusCode + " " + (int)BotApi.ResponseMessage.StatusCode);
@@ -71,7 +72,7 @@ activity.ParamAdd("ParametroAutomacao01","");
 
 Console.WriteLine("ORGANIZATION LABEL:" + loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label );
 Console.WriteLine("loginUser.Token:" + loginUser.Token);
-var task = await BotApi.Task(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, activity); ;
+var task = await BotApi.TaskCreate(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, activity); ;
 Console.WriteLine("TASK:" + task.ToString());
 Console.WriteLine("TASK:" + task.Id);
 Console.WriteLine("TASK STATE:" + task.State);
@@ -106,5 +107,41 @@ Console.WriteLine("TASK3:" + taskId3.ActivityLabel);
 
 
 Console.ReadKey();
+*/
+
+SendLogDTO sendLogDTO = new SendLogDTO();
+
+sendLogDTO.activityLabel = "log3";
+
+Column column1 = new Column
+{
+    Name = "Column1",
+    Label = "Label 1",
+    Width = 100
+};
+
+Column column2 = new Column
+{
+    Name = "Column1",
+    Label = "Label 1",
+    Width = 100
+};
+
+Column column3 = new Column
+{
+    Name = "Column1",
+    Label = "Label 1",
+    Width = 100
+};
+
+sendLogDTO.Columns.Add(column1);
+sendLogDTO.Columns.Add(column2);
+sendLogDTO.Columns.Add(column3);
+
+var Log = await BotApi.LogCreate(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73" ,sendLogDTO);
+Console.WriteLine("LOG:" + Log.ToString());
+Console.WriteLine("LOG:" + Log.activityLabel);
+Console.WriteLine("LOG:" + Log.organizationLabel);
+
 
 
