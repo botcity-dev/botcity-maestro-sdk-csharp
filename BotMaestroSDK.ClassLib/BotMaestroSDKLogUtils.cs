@@ -14,166 +14,136 @@ namespace BotCityMaestroSDK.Lib;
 
 public partial class BotMaestroSDK
 {
-    public StringContent ToPostCreateLog(string Token, string Organization, SendLogDTO sendLogDTO)
-    {
-
-        StringContent content = new StringContent(JsonConvert.SerializeObject(sendLogDTO), Encoding.UTF8, "application/json");
-
-        List<Param> listHeaderParams = new List<Param>();
-
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        listHeaderParams.Add(paramToken);
-        listHeaderParams.Add(paramOrg);
-
-        foreach (Param param in listHeaderParams)
-        {
-            content.Headers.Add(
-                param.Name,
-                param.Value
-            );
-        }
-
-        return content;
-    }
     
-    public StringContent ToContentLog(string Token, string Organization, SendLogDTO sendLogDTO)
-    {
 
-        StringContent content = new StringContent(JsonConvert.SerializeObject(sendLogDTO), Encoding.UTF8, "application/json");
-
-        List<Param> listHeaderParams = new List<Param>();
-
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        listHeaderParams.Add(paramToken);
-        listHeaderParams.Add(paramOrg);
-
-        foreach (Param param in listHeaderParams)
-        {
-            content.Headers.Add(
-                param.Name,
-                param.Value
-            );
-        }
-
-        return content;
-    }
     /*
-    public StringContent ToContentTask(string Token, string Organization, Activity activity)
-    {
+   public StringContent ToContentLog(string Token, string Organization, SendLogDTO sendLogDTO)
+   {
 
-        SendTaskDTO sendTask = new SendTaskDTO
-        {
-            activityLabel = activity.ActivityLabel,
-            test = activity.Test,
-            Parameters = activity.Parameters
-        };
+       StringContent content = new StringContent(JsonConvert.SerializeObject(sendLogDTO), Encoding.UTF8, "application/json");
 
+       List<Param> listHeaderParams = new List<Param>();
 
-        StringContent content = new StringContent(JsonConvert.SerializeObject(sendTask), Encoding.UTF8, "application/json");
+       var paramToken = new Param
+       {
+           Name = "token",
+           Value = Token
+       };
 
-        List<Param> listHeaderParams = new List<Param>();
+       var paramOrg = new Param
+       {
+           Name = "organization",
+           Value = Organization
+       };
 
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
+       listHeaderParams.Add(paramToken);
+       listHeaderParams.Add(paramOrg);
 
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
+       foreach (Param param in listHeaderParams)
+       {
+           content.Headers.Add(
+               param.Name,
+               param.Value
+           );
+       }
 
-        listHeaderParams.Add(paramToken);
-        listHeaderParams.Add(paramOrg);
+       return content;
+   }
 
-        foreach (Param param in listHeaderParams)
-        {
-            content.Headers.Add(
-                param.Name,
-                param.Value
-            );
-        }
+   public StringContent ToContentTask(string Token, string Organization, Activity activity)
+   {
 
-        return content;
-    }
-
-
-    public StringContent ToContentTask(string Token, string Organization)
-    {
-
-        StringContent content = new StringContent(JsonConvert.SerializeObject(""), Encoding.UTF8, "application/json");
-
-        List<Param> listHeaderParams = new List<Param>();
-
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        listHeaderParams.Add(paramToken);
-        listHeaderParams.Add(paramOrg);
-
-        foreach (Param param in listHeaderParams)
-        {
-            content.Headers.Add(
-                param.Name,
-                param.Value
-            );
-        }
-
-        return content;
-    }
+       SendTaskDTO sendTask = new SendTaskDTO
+       {
+           activityLabel = activity.ActivityLabel,
+           test = activity.Test,
+           Parameters = activity.Parameters
+       };
 
 
-    public async Task<HttpResponseMessage> ToGetTaskResponseURL( string URI)
-    {
-        var b = ToStrUri(URI);
-        
-        var response = BotMaestroSDK.ApiClient.GetAsync(
-                ToStrUri(URI)).Result;
+       StringContent content = new StringContent(JsonConvert.SerializeObject(sendTask), Encoding.UTF8, "application/json");
 
-        ResponseMessage = response;
-        //Console.WriteLine("response:" + response);
-        var statusCode = response.StatusCode;
-        ResultRaw = await response.Content.ReadAsStringAsync();
-        if ((int)statusCode != 200) return null;
+       List<Param> listHeaderParams = new List<Param>();
+
+       var paramToken = new Param
+       {
+           Name = "token",
+           Value = Token
+       };
+
+       var paramOrg = new Param
+       {
+           Name = "organization",
+           Value = Organization
+       };
+
+       listHeaderParams.Add(paramToken);
+       listHeaderParams.Add(paramOrg);
+
+       foreach (Param param in listHeaderParams)
+       {
+           content.Headers.Add(
+               param.Name,
+               param.Value
+           );
+       }
+
+       return content;
+   }
 
 
-        return response;
+   public StringContent ToContentTask(string Token, string Organization)
+   {
 
-    }
-    */
+       StringContent content = new StringContent(JsonConvert.SerializeObject(""), Encoding.UTF8, "application/json");
+
+       List<Param> listHeaderParams = new List<Param>();
+
+       var paramToken = new Param
+       {
+           Name = "token",
+           Value = Token
+       };
+
+       var paramOrg = new Param
+       {
+           Name = "organization",
+           Value = Organization
+       };
+
+       listHeaderParams.Add(paramToken);
+       listHeaderParams.Add(paramOrg);
+
+       foreach (Param param in listHeaderParams)
+       {
+           content.Headers.Add(
+               param.Name,
+               param.Value
+           );
+       }
+
+       return content;
+   }
+
+
+   public async Task<HttpResponseMessage> ToGetTaskResponseURL( string URI)
+   {
+       var b = ToStrUri(URI);
+
+       var response = BotMaestroSDK.ApiClient.GetAsync(
+               ToStrUri(URI)).Result;
+
+       ResponseMessage = response;
+       //Console.WriteLine("response:" + response);
+       var statusCode = response.StatusCode;
+       ResultRaw = await response.Content.ReadAsStringAsync();
+       if ((int)statusCode != 200) return null;
+
+
+       return response;
+
+   }
+   */
 
 
 }

@@ -111,7 +111,7 @@ Console.ReadKey();
 
 SendLogDTO sendLogDTO = new SendLogDTO();
 
-sendLogDTO.activityLabel = "log3";
+sendLogDTO.activityLabel = "log3" + DateTime.Now.ToString("yyyymmddss");
 
 Column column1 = new Column
 {
@@ -142,6 +142,11 @@ var Log = await BotApi.LogCreate(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c5
 Console.WriteLine("LOG:" + Log.ToString());
 Console.WriteLine("LOG:" + Log.activityLabel);
 Console.WriteLine("LOG:" + Log.organizationLabel);
+Console.WriteLine("LOG:" + Log.id);
 
+var Log2 = await BotApi.LogById(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", Log.id);
+Console.WriteLine("LOG2:" + Log2.ToString());
+Console.WriteLine("LOG2:" + Log2.activityLabel);
+Console.WriteLine("LOG2:" + Log2.organizationLabel);
 
 

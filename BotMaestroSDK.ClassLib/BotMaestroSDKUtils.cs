@@ -7,7 +7,8 @@ using Newtonsoft.Json.Linq;
 
 using BotCityMaestroSDK.Dtos.Login;
 using BotCityMaestroSDK.Dtos.Task;
-using BotCityMaestroSDK.Dtos.Task;
+using BotCityMaestroSDK.Dtos;
+using System.Reflection;
 
 namespace BotCityMaestroSDK.Lib;
 
@@ -29,16 +30,76 @@ public partial class BotMaestroSDK
         return byteContent;
     }
 
-    private string ToStrUri(string JsonString){
+   
 
-        return URL_BOT_SERVER_API_HOTS + JsonString;
-        
+
+    public StringContent ToContentOnlyParams(string Token, string Organization)
+    {
+
+        StringContent content = new StringContent(JsonConvert.SerializeObject(""), Encoding.UTF8, "application/json");
+
+        List<Param> listHeaderParams = new List<Param>();
+
+        var paramToken = new Param
+        {
+            Name = "token",
+            Value = Token
+        };
+
+        var paramOrg = new Param
+        {
+            Name = "organization",
+            Value = Organization
+        };
+
+        listHeaderParams.Add(paramToken);
+        listHeaderParams.Add(paramOrg);
+
+        foreach (Param param in listHeaderParams)
+        {
+            content.Headers.Add(
+                param.Name,
+                param.Value
+            );
+        }
+
+        return content;
     }
 
-   
-   
+    public StringContent ToContentParamAndObj<T>(string Token, string Organization, T item)
+    {
+     
+        StringContent content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
 
-    public StringContent ToContent<T>(string userName, string pwd)
+        List<Param> listHeaderParams = new List<Param>();
+
+        var paramToken = new Param
+        {
+            Name = "token",
+            Value = Token
+        };
+
+        var paramOrg = new Param
+        {
+            Name = "organization",
+            Value = Organization
+        };
+
+        listHeaderParams.Add(paramToken);
+        listHeaderParams.Add(paramOrg);
+
+        foreach (Param param in listHeaderParams)
+        {
+            content.Headers.Add(
+                param.Name,
+                param.Value
+            );
+        }
+
+        return content;
+    }
+
+    public StringContent ToContentLoginObj<T>(string userName, string pwd)
     {
 
         StringContent content = new StringContent("");
@@ -84,7 +145,7 @@ public partial class BotMaestroSDK
     public async Task<HttpResponseMessage> ToPostResponse(StringContent content, string URI)
     {
         var response = BotMaestroSDK.ApiClient.PostAsync(
-                ToStrUri(URI),
+                URI,
                 content).Result;
 
         ResponseMessage = response;
@@ -112,7 +173,7 @@ public partial class BotMaestroSDK
     public async Task<HttpResponseMessage> ToPostResponseURL(StringContent content, string URI )
     {
         var response = BotMaestroSDK.ApiClient.PostAsync(
-                ToStrUri(URI),
+                URI,
                 content).Result;
 
         ResponseMessage = response;
@@ -120,6 +181,23 @@ public partial class BotMaestroSDK
         var statusCode = response.StatusCode;
         ResultRaw = await response.Content.ReadAsStringAsync();
         if ((int)statusCode != 200) return null;
+
+        return response;
+
+    }
+
+    public async Task<HttpResponseMessage> ToGetTaskResponseURL(string URI)
+    {
+
+        var response = BotMaestroSDK.ApiClient.GetAsync(
+                URI).Result;
+
+        ResponseMessage = response;
+        //Console.WriteLine("response:" + response);
+        var statusCode = response.StatusCode;
+        ResultRaw = await response.Content.ReadAsStringAsync();
+        if ((int)statusCode != 200) return null;
+
 
         return response;
 
@@ -187,9 +265,14 @@ public partial class BotMaestroSDK
         return (T)Convert.ChangeType(resultNull, typeof(T));
     }
 
-    private string URL_ID(string value, string id)
+    private string ToStrUri(string JsonString, string id = "")
     {
-        return value.Replace("{id}", id);
+
+        var result = JsonString.Replace("{id}", id);
+
+        return URL_BOT_SERVER_API_HOTS + result;
+
     }
+
 
 }

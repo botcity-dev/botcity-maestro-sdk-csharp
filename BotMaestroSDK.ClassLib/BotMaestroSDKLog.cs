@@ -20,9 +20,36 @@ public partial class BotMaestroSDK
 
         InitializeClient();
 
-        var content = ToContentLog(Token, Organization, sendLogDTO);
+        var content = ToContentParamAndObj(Token, Organization, sendLogDTO);
 
         await ToPostResponse(content, URIs_Log.LOG_POST_CREATE);
+
+        return ToObject<ResultLogDTO>();
+
+    }
+
+    public async Task<ResultLogDTO> LogById(string Token, string Organization, string idLog)
+    {
+
+        List<Param> list = new List<Param>();
+
+        var paramToken = new Param
+        {
+            Name = "token",
+            Value = Token
+        };
+
+        var paramOrg = new Param
+        {
+            Name = "organization",
+            Value = Organization
+        };
+
+        list.Add(paramToken);
+        list.Add(paramOrg);
+        InitializeClient(list);
+
+        await ToGetTaskResponseURL( ToStrUri(URIs_Log.LOG_GET_ID,idLog));
 
         return ToObject<ResultLogDTO>();
 

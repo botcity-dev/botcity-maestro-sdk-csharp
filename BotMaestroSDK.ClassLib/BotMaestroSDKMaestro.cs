@@ -15,11 +15,21 @@ public partial class BotMaestroSDK
 
     public async Task<TokenMaestroVersion> MaestroVersion(){
 
-        await ToGetMaestroResponse( URIs_Maestro.MAESTRO_VERSION);
+        await ToGetTaskResponseURL( URIs_Maestro.MAESTRO_VERSION);
 
         return ToObjectMaestro<TokenMaestroVersion>();
         
     }
 
+    public TokenMaestroVersion ToObjectMaestro<T>()
+    {
+
+        TokenMaestroVersion result = JsonConvert.DeserializeObject<TokenMaestroVersion>(ResultRaw);
+        this.TokenMaestroVersion = result;
+
+        return result;
+
+
+    }
 
 }

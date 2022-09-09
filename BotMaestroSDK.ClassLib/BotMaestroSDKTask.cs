@@ -8,6 +8,7 @@ using System;
 using BotCityMaestroSDK.Dtos.Task;
 using BotCityMaestroSDK.Dtos;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 
 namespace BotCityMaestroSDK.Lib;
@@ -16,13 +17,20 @@ public partial class BotMaestroSDK
 {
 
 
-    public async Task<ResultTaskDTO> TaskCreate(string Token, string Organization, Activity Activity){
+    public async Task<ResultTaskDTO> TaskCreate(string Token, string Organization, BotCityMaestroSDK.Dtos.Task.Activity Activity){
        
         InitializeClient();
 
-        var content = ToContentTask(Token,Organization, Activity);
+        SendTaskDTO sendTask = new SendTaskDTO
+        {
+            activityLabel = Activity.ActivityLabel,
+            test = Activity.Test,
+            Parameters = Activity.Parameters
+        };
 
-        await ToPostResponse(content, URIs_Task.TASK_POST_CREATE);
+        var content = ToContentParamAndObj(Token,Organization, sendTask);
+
+        await ToPostResponse(content, ToStrUri(URIs_Task.TASK_POST_CREATE));
 
         return ToObject<ResultTaskDTO>();
         
@@ -33,9 +41,9 @@ public partial class BotMaestroSDK
         if (SendTaskStateDTO.FinishStatus == "")
             SendTaskStateDTO.FinishStatus = Enum.GetName(typeof(FinishedStatus), SendTaskStateDTO.SendStatus);
 
-        var content = ToContentTask(Token, Organization, SendTaskStateDTO);
+        var content = ToContentParamAndObj(Token, Organization, SendTaskStateDTO);
 
-        await ToPostResponseURL(content, URL_ID( URIs_Task.TASK_POST_SET_STATE, TaskId.ToString()));
+        await ToPostResponseURL(content, ToStrUri( URIs_Task.TASK_POST_SET_STATE, TaskId.ToString()));
 
         return ToObject<ResultTaskDTO>();
 
@@ -62,7 +70,7 @@ public partial class BotMaestroSDK
         list.Add(paramOrg);
         InitializeClient(list);
 
-        var result = await ToGetTaskResponseURL( URL_ID(URIs_Task.TASK_GETID, TaskId.ToString()));
+        var result = await ToGetTaskResponseURL(ToStrUri(URIs_Task.TASK_GETID, TaskId.ToString()));
 
         
         if (result == null)

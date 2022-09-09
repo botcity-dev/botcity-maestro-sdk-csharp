@@ -19,7 +19,7 @@ public class UnitTestLog
 
     
     private SendLogDTO sendLogDTO;
-    private int? LogId;
+    private string? LogId;
 
     [SetUp]
     public void Setup()
@@ -85,11 +85,28 @@ public class UnitTestLog
 
         Assert.AreEqual(result.ToString(),"200");
         Assert.AreEqual(log.organizationLabel, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
-      
-      
+        LogId = log.id;
+
+
 
     }
 
+    [Test, Order(2)]
+    public async Task TestLogById()
+    {
+        //ARRANGE
+        var BotApi = new BotMaestroSDK(url);
+        var loginUser = await BotApi.Login(user, senha);
+
+        Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
+        var log = await BotApi.LogById(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, LogId);
+
+        int result = (int)BotApi.ResponseMessage.StatusCode;
+
+        Assert.AreEqual(result.ToString(), "200");
+        Assert.AreEqual(log.organizationLabel, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
+        Console.WriteLine("LOG ID:" + LogId);
+    }
     /*
     [Test, Order(2)]
     public async Task TaskSetStateTest()
@@ -113,7 +130,7 @@ public class UnitTestLog
         Assert.AreEqual(taskId2.Id, TaskId);
 
     }
-
+    /*
 
     [Test, Order(3)]
     public async Task TaskGetStateTest()

@@ -16,7 +16,7 @@ public partial class BotMaestroSDK
     public async Task<ResultLoginDTO> Login(string UserName, string Password){
 
        
-        var content = ToContent<SendLoginDTO>(UserName, Password);
+        var content = ToContentLoginObj<SendLoginDTO>(UserName, Password);
 
         await ToPostResponse(content, URIs.LOGIN_POST);
 
@@ -26,7 +26,7 @@ public partial class BotMaestroSDK
 
     public async Task<ResultLoginStudioDTO> LoginStudio(string UserName, string Password){
 
-        var content = ToContent<SendLoginStudioDTO>(UserName, Password);
+        var content = ToContentLoginObj<SendLoginStudioDTO>(UserName, Password);
 
         await ToPostResponse(content, URIs.LOGIN_STUDIO_POST);
 
@@ -76,7 +76,7 @@ public partial class BotMaestroSDK
     public async Task<ResultLoginCliDTO> LoginCli(string UserName, string Password)
     {
 
-        var content = ToContent<SendLoginCliDTO>(UserName, Password);
+        var content = ToContentLoginObj<SendLoginCliDTO>(UserName, Password);
 
         await ToPostResponse(content, URIs.LOGIN_CLI_POST);
 
