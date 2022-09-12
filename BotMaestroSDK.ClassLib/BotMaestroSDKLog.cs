@@ -49,9 +49,65 @@ public partial class BotMaestroSDK
         list.Add(paramOrg);
         InitializeClient(list);
 
-        await ToGetTaskResponseURL( ToStrUri(URIs_Log.LOG_GET_ID,idLog));
+        await ToGetResponseURL( ToStrUri(URIs_Log.LOG_GET_ID,idLog));
 
         return ToObject<ResultLogDTO>();
+
+    }
+
+    public async Task<ResultLogEntryDTO> LogGetLog(string Token, string Organization,
+                                              string idLog, List<Param> Queries, SendLogEntryDTO sendLogEntryDTO)
+    {
+
+        string Query = "?";
+
+        foreach(Param param in Queries)
+        {
+            Query += param.Name + "=" + param.Value + "&";
+        }
+        
+        InitializeClient();
+
+        var content = ToContentParamAndObj(Token, Organization, sendLogEntryDTO);
+
+        await ToGetResponseURL(ToStrUri(URIs_Log.LOG_GET_ID_ENTRY, idLog) + Query);
+
+        return ToObject<ResultLogEntryDTO>();
+
+    }
+
+    public async Task<ResultLogEntryDTO> LogGetLog(string Token, string Organization,
+                                              string idLog, List<Param> Queries)
+    {
+
+        string Query = "?";
+
+        foreach (Param param in Queries)
+        {
+            Query += param.Name + "=" + param.Value + "&";
+        }
+
+        List<Param> list = new List<Param>();
+
+        var paramToken = new Param
+        {
+            Name = "token",
+            Value = Token
+        };
+
+        var paramOrg = new Param
+        {
+            Name = "organization",
+            Value = Organization
+        };
+
+        list.Add(paramToken);
+        list.Add(paramOrg);
+        InitializeClient(list);
+
+        await ToGetResponseURL(ToStrUri(URIs_Log.LOG_GET_ID_ENTRY, idLog) + Query);
+
+        return ToObject<ResultLogEntryDTO>();
 
     }
 

@@ -70,7 +70,7 @@ public partial class BotMaestroSDK
         list.Add(paramOrg);
         InitializeClient(list);
 
-        var result = await ToGetTaskResponseURL(ToStrUri(URIs_Task.TASK_GETID, TaskId.ToString()));
+        var result = await ToGetResponseURL(ToStrUri(URIs_Task.TASK_GETID, TaskId.ToString()));
 
         
         if (result == null)

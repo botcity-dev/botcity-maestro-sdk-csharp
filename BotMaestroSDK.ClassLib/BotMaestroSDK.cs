@@ -22,6 +22,7 @@ public partial class BotMaestroSDK
     public TokenMaestroVersion TokenMaestroVersion { get; set; }
     public ResultTaskDTO ResultTaskDTO { get; set; }
     public ResultLogDTO ResultLogDTO { get; set; }
+    public ResultLogEntryDTO ResultLogEntryDTO { get; set; }
     public List<Activity> Activities {get; set;}
     public static string URL_BOT_SERVER_API_HOTS { get; set; }
     public static void InitializeClient(){

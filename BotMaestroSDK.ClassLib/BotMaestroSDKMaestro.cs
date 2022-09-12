@@ -15,7 +15,7 @@ public partial class BotMaestroSDK
 
     public async Task<TokenMaestroVersion> MaestroVersion(){
 
-        await ToGetTaskResponseURL( URIs_Maestro.MAESTRO_VERSION);
+        await ToGetResponseURL( URIs_Maestro.MAESTRO_VERSION);
 
         return ToObjectMaestro<TokenMaestroVersion>();
         

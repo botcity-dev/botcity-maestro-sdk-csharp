@@ -186,16 +186,17 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<HttpResponseMessage> ToGetTaskResponseURL(string URI)
+    public async Task<HttpResponseMessage> ToGetResponseURL(string URI)
     {
 
         var response = BotMaestroSDK.ApiClient.GetAsync(
                 URI).Result;
 
         ResponseMessage = response;
-        //Console.WriteLine("response:" + response);
+       
         var statusCode = response.StatusCode;
         ResultRaw = await response.Content.ReadAsStringAsync();
+        Console.WriteLine("ResultRaw:" + ResultRaw);
         if ((int)statusCode != 200) return null;
 
 
@@ -260,6 +261,12 @@ public partial class BotMaestroSDK
             return (T)Convert.ChangeType(result1, typeof(T));
         }
 
+        if (typeof(ResultLogEntryDTO) == typeof(T))
+        {
+            ResultLogEntryDTO result1 = JsonConvert.DeserializeObject<ResultLogEntryDTO>(ResultRaw);
+            this.ResultLogEntryDTO = result1;
+            return (T)Convert.ChangeType(result1, typeof(T));
+        }
         string resultNull = null;
 
         return (T)Convert.ChangeType(resultNull, typeof(T));

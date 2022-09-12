@@ -150,3 +150,24 @@ Console.WriteLine("LOG2:" + Log2.activityLabel);
 Console.WriteLine("LOG2:" + Log2.organizationLabel);
 
 
+
+var list = new List<Param>();
+Param param = new Param
+{
+    Name = "size",
+    Value = "10"
+};
+list.Add(param);
+
+SendLogEntryDTO sendLogEntry = new SendLogEntryDTO();
+//sendLogEntry.
+
+var Log3 = await BotApi.LogGetLog(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73",
+                                Log.id, list);
+Console.WriteLine("LOG3:" + Log3.ToString());
+Console.WriteLine("LOG3:" + Log3.TotalPages);
+Console.WriteLine("LOG3:" + Log3.size);
+
+
+
+
