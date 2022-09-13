@@ -8,6 +8,7 @@ using System;
 using BotCityMaestroSDK.Dtos.Maestro;
 using BotCityMaestroSDK.Dtos.Task;
 using BotCityMaestroSDK.Dtos;
+using System.Diagnostics.SymbolStore;
 
 namespace BotCityMaestroSDK.Lib;
 
@@ -76,7 +77,7 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<ResultLogEntryDTO> LogGetLog(string Token, string Organization,
+    public async Task<ResultLogEntryDTO> LogFetchData(string Token, string Organization,
                                               string idLog, List<Param> Queries)
     {
 
@@ -108,6 +109,41 @@ public partial class BotMaestroSDK
         await ToGetResponseURL(ToStrUri(URIs_Log.LOG_GET_ID_ENTRY, idLog) + Query);
 
         return ToObject<ResultLogEntryDTO>();
+
+    }
+
+    public async Task<bool> LogCSV(string Token, string Organization,
+                                              string idLog, int days, string filename)
+    {
+
+        string Query = "?days=" + days.ToString();
+
+        List<Param> list = new List<Param>();
+
+        var paramToken = new Param
+        {
+            Name = "token",
+            Value = Token
+        };
+
+        var paramOrg = new Param
+        {
+            Name = "organization",
+            Value = Organization
+        };
+
+        list.Add(paramToken);
+        list.Add(paramOrg);
+        InitializeClient(list);
+
+        var response = await ToGetResponseFile(ToStrUri(URIs_Log.LOG_GET_ID_CSV, idLog) + Query, filename);
+
+        var statusCode = response.StatusCode;
+
+        if ((int)statusCode != 200) return false;
+
+        return true;
+        //return ToObject<ResultLogEntryDTO>();
 
     }
 

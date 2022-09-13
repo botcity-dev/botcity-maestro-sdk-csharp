@@ -162,12 +162,17 @@ list.Add(param);
 SendLogEntryDTO sendLogEntry = new SendLogEntryDTO();
 //sendLogEntry.
 
-var Log3 = await BotApi.LogGetLog(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73",
+var Log3 = await BotApi.LogFetchData(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73",
                                 Log.id, list);
 Console.WriteLine("LOG3:" + Log3.ToString());
 Console.WriteLine("LOG3:" + Log3.TotalPages);
 Console.WriteLine("LOG3:" + Log3.size);
 
+var filename = @"d:\Programacao\" + Log.id + ".csv";
+var LogCSV = await BotApi.LogCSV(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73",
+                               Log.id, 7,filename);
+
+Console.WriteLine("LogCSV:" + LogCSV.ToString());
 
 
 

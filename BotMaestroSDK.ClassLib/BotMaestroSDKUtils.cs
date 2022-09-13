@@ -1,4 +1,5 @@
 ﻿
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -9,6 +10,9 @@ using BotCityMaestroSDK.Dtos.Login;
 using BotCityMaestroSDK.Dtos.Task;
 using BotCityMaestroSDK.Dtos;
 using System.Reflection;
+using System;
+using System.Net.Mime;
+using Microsoft.AspNetCore.Hosting.Internal;
 
 namespace BotCityMaestroSDK.Lib;
 
@@ -203,6 +207,41 @@ public partial class BotMaestroSDK
         return response;
 
     }
+
+
+    public async Task<HttpResponseMessage> ToGetResponseFile(string URI, string filename)
+    {
+
+
+        var response = await BotMaestroSDK.ApiClient.GetAsync(URI);
+
+        if (response.IsSuccessStatusCode)
+        {
+            using (var fs = new FileStream(filename, FileMode.Create))
+            {
+                await response.Content.CopyToAsync(fs);
+            }
+        }
+        else
+        {
+            throw new FileNotFoundException();
+        }
+
+        ResponseMessage = response;
+
+        var statusCode = response.StatusCode;
+        ResultRaw = await response.Content.ReadAsStringAsync();
+        Console.WriteLine("ResultRaw:" + ResultRaw);
+        if ((int)statusCode != 200) return null;
+
+
+        return response;
+
+    }
+
+
+
+    
 
     public T ToObject1<T>()
     {
