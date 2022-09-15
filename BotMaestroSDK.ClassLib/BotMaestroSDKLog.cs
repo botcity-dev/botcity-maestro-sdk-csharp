@@ -9,6 +9,7 @@ using BotCityMaestroSDK.Dtos.Maestro;
 using BotCityMaestroSDK.Dtos.Task;
 using BotCityMaestroSDK.Dtos;
 using System.Diagnostics.SymbolStore;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace BotCityMaestroSDK.Lib;
 
@@ -26,6 +27,33 @@ public partial class BotMaestroSDK
         await ToPostResponse(content, URIs_Log.LOG_POST_CREATE);
 
         return ToObject<ResultLogDTO>();
+
+    }
+
+    public async Task<bool> LogInsertEntry(string Token, string Organization, string idLog, List<string> Columns )
+    {
+
+        if (Columns.Count != 3) {
+            throw new InvalidOperationException("Expected three columns");
+        }
+
+        InitializeClient();
+        SendLogEntryIDColumn columns = new SendLogEntryIDColumn();
+        columns.col1 = Columns[0];
+        columns.col2 = Columns[1];
+        columns.col3 = Columns[2];
+
+        var content = ToContentParamAndObj(Token, Organization, columns);
+
+        var response = await ToPostResponse(content, ToStrUri(URIs_Log.LOG_GET_ID_ENTRY,idLog));
+
+        if (response == null) return false;
+            
+        var statusCode = response.StatusCode;
+
+        if ((int)statusCode != 200) return false;
+
+        return true;
 
     }
 
@@ -143,7 +171,6 @@ public partial class BotMaestroSDK
         if ((int)statusCode != 200) return false;
 
         return true;
-        //return ToObject<ResultLogEntryDTO>();
 
     }
 

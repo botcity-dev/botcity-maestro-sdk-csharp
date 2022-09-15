@@ -103,6 +103,39 @@ public partial class BotMaestroSDK
         return content;
     }
 
+    public StringContent ToContentParamAndStr(string Token, string Organization, string item)
+    {
+
+        StringContent content = new StringContent(item, Encoding.UTF8, "application/json");
+
+        List<Param> listHeaderParams = new List<Param>();
+
+        var paramToken = new Param
+        {
+            Name = "token",
+            Value = Token
+        };
+
+        var paramOrg = new Param
+        {
+            Name = "organization",
+            Value = Organization
+        };
+
+        listHeaderParams.Add(paramToken);
+        listHeaderParams.Add(paramOrg);
+
+        foreach (Param param in listHeaderParams)
+        {
+            content.Headers.Add(
+                param.Name,
+                param.Value
+            );
+        }
+
+        return content;
+    }
+
     public StringContent ToContentLoginObj<T>(string userName, string pwd)
     {
 

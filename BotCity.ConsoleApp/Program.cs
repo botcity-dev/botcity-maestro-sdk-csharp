@@ -144,6 +144,41 @@ Console.WriteLine("LOG:" + Log.activityLabel);
 Console.WriteLine("LOG:" + Log.organizationLabel);
 Console.WriteLine("LOG:" + Log.id);
 
+var listParam = new List<string>();
+
+/*
+Param param1 = new Param
+{
+    Name = "Column1",
+    Value = "Value Colum1"
+};
+
+Param param2 = new Param
+{
+    Name = "Column2",
+    Value = "Value Colum2"
+};
+
+Param param3 = new Param
+{
+    Name = "Column3",
+    Value = "Value Colum3"
+};
+*/
+
+string param1, param2, param3;
+param1 = "Coluna1";
+param2 = "Coluna2";
+param3 = "Coluna3";
+
+listParam.Add(param1);
+listParam.Add(param2);
+//listParam.Add(param3);
+
+bool LogEntry = await BotApi.LogInsertEntry(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", Log.id, listParam);
+Console.WriteLine("LogEntry:" + LogEntry.ToString());
+
+
 var Log2 = await BotApi.LogById(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", Log.id);
 Console.WriteLine("LOG2:" + Log2.ToString());
 Console.WriteLine("LOG2:" + Log2.activityLabel);
