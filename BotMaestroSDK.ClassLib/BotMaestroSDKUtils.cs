@@ -13,6 +13,7 @@ using System.Reflection;
 using System;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Hosting.Internal;
+using BotCityMaestroSDK.Dtos.Alert;
 
 namespace BotCityMaestroSDK.Lib;
 
@@ -339,6 +340,13 @@ public partial class BotMaestroSDK
             this.ResultLogEntryDTO = result1;
             return (T)Convert.ChangeType(result1, typeof(T));
         }
+
+        if (typeof(ResultAlert) == typeof(T))
+        {
+            ResultAlert result1 = JsonConvert.DeserializeObject<ResultAlert>(ResultRaw);
+            return (T)Convert.ChangeType(result1, typeof(T)); 
+        }
+
         string resultNull = null;
 
         return (T)Convert.ChangeType(resultNull, typeof(T));

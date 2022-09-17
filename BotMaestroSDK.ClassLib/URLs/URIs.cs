@@ -37,6 +37,11 @@ public static class URIs_Log
     public static string LOG_GET_ID_CSV = "log/{id}/csv";
 }
 
+public static class URIs_Alert
+{
+    public static string ALERT_CREATE = "alerts";
+    public static string ALERT_GET = "alerts";
+}
 
 
 

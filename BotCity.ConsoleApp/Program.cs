@@ -5,6 +5,7 @@ using BotCityMaestroSDK.Lib;
 using BotCityMaestroSDK.Dtos;
 using BotCityMaestroSDK.Dtos.Task;
 using BotCityMaestroSDK.Dtos.Login;
+using BotCityMaestroSDK.Dtos.Alert;
 
 var url = "https://developers.botcity.dev/api/v2/";
 
@@ -109,6 +110,7 @@ Console.WriteLine("TASK3:" + taskId3.ActivityLabel);
 Console.ReadKey();
 */
 
+/*
 SendLogDTO sendLogDTO = new SendLogDTO();
 
 sendLogDTO.activityLabel = "log3" + DateTime.Now.ToString("yyyymmddss");
@@ -166,6 +168,7 @@ Param param3 = new Param
 };
 */
 
+/*
 string param1, param2, param3;
 param1 = "Coluna1";
 param2 = "Coluna2";
@@ -209,5 +212,13 @@ var LogCSV = await BotApi.LogCSV(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c5
 
 Console.WriteLine("LogCSV:" + LogCSV.ToString());
 
+*/
 
+SendAlert sendAlert = new SendAlert();
+sendAlert.TaskId = 137985;
+sendAlert.Title = "Meu alerta alerta";
+sendAlert.Message = "Minha mensagem maneira de alerta";
+sendAlert.AlertType = AlertType.INFO;
 
+var Alert = await BotApi.AlertCreate(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", sendAlert);
+Console.WriteLine("Alert:" + Alert.ActivityName.ToString());
