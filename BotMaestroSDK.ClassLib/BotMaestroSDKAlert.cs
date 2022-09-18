@@ -23,7 +23,7 @@ public partial class BotMaestroSDK
 
         var content = ToContentParamAndObj(Token, Organization, sendAlert);
 
-        var response = await ToPostResponse(content, URIs_Alert.ALERT_CREATE);
+        var response = await ToPostResponse(content, ToStrUri(URIs_Alert.ALERT_CREATE));
 
         return ToObject<ResultAlert>();
 

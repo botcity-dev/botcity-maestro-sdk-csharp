@@ -6,6 +6,7 @@ using BotCityMaestroSDK.Dtos;
 using BotCityMaestroSDK.Dtos.Task;
 using BotCityMaestroSDK.Dtos.Login;
 using BotCityMaestroSDK.Dtos.Alert;
+using BotCityMaestroSDK.Dtos.Message;
 
 var url = "https://developers.botcity.dev/api/v2/";
 
@@ -214,6 +215,7 @@ Console.WriteLine("LogCSV:" + LogCSV.ToString());
 
 */
 
+/*
 SendAlert sendAlert = new SendAlert();
 sendAlert.TaskId = 137985;
 sendAlert.Title = "Meu alerta alerta";
@@ -222,3 +224,16 @@ sendAlert.AlertType = AlertType.INFO;
 
 var Alert = await BotApi.AlertCreate(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", sendAlert);
 Console.WriteLine("Alert:" + Alert.ActivityName.ToString());
+*/
+
+/*
+SendMessage sendMessage = new SendMessage();
+sendMessage.Emails.Add("edson.marcio7@gmail.com");
+//sendMessage.Logins.Add("");
+sendMessage.Subject = "Subject123 1247 BotCity";
+sendMessage.Body = "Corpo do e-mail.. bora billll";
+sendMessage.TypeMail = TypeMail.TEXT;
+
+var Message = await BotApi.MessageCreate(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", sendMessage);
+Console.WriteLine("Message:" + Message.ToString());
+*/

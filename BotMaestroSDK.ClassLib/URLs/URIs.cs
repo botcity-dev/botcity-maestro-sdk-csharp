@@ -43,5 +43,10 @@ public static class URIs_Alert
     public static string ALERT_GET = "alerts";
 }
 
+public static class URIs_Message
+{
+    public static string MESSAGE_CREATE = "message";
+}
+
 
 

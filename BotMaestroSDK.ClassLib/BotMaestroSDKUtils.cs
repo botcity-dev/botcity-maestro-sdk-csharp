@@ -201,6 +201,7 @@ public partial class BotMaestroSDK
             GetError.Message = ResultRaw;
             GetError.ErroDetail = response.ToString();
             Console.WriteLine("ERROR:" + GetError.Message);
+            BotMaestroSDK.ApiClient = null;
             //Console.WriteLine("ErroDetail:" + GetError.ErroDetail);
             return null;
         }
