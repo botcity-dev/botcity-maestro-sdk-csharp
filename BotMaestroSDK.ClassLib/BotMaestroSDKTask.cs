@@ -17,7 +17,7 @@ public partial class BotMaestroSDK
 {
 
 
-    public async Task<ResultTaskDTO> TaskCreate(string Token, string Organization, BotCityMaestroSDK.Dtos.Task.Activity Activity){
+    public async Task<ResultTaskDTO> TaskCreate(BotCityMaestroSDK.Dtos.Task.Activity Activity){
        
         InitializeClient();
 
@@ -28,7 +28,7 @@ public partial class BotMaestroSDK
             Parameters = Activity.Parameters
         };
 
-        var content = ToContentParamAndObj(Token,Organization, sendTask);
+        var content = ToContentParamAndObj(sendTask);
 
         await ToPostResponse(content, ToStrUri(URIs_Task.TASK_POST_CREATE));
 
@@ -36,12 +36,12 @@ public partial class BotMaestroSDK
         
     }
 
-    public async Task<ResultTaskDTO> TaskSetState(string Token, string Organization, SendTaskStateDTO SendTaskStateDTO,  int? TaskId)
+    public async Task<ResultTaskDTO> TaskSetState(SendTaskStateDTO SendTaskStateDTO,  int? TaskId)
     {
         if (SendTaskStateDTO.FinishStatus == "")
             SendTaskStateDTO.FinishStatus = Enum.GetName(typeof(FinishedStatus), SendTaskStateDTO.SendStatus);
 
-        var content = ToContentParamAndObj(Token, Organization, SendTaskStateDTO);
+        var content = ToContentParamAndObj( SendTaskStateDTO);
 
         await ToPostResponseURL(content, ToStrUri( URIs_Task.TASK_POST_SET_STATE, TaskId.ToString()));
 
@@ -49,7 +49,7 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<ResultTaskDTO> TaskGetState(string Token, string Organization, int? TaskId)
+    public async Task<ResultTaskDTO> TaskGetState(int? TaskId)
     {
      
         List<Param> list = new List<Param>();

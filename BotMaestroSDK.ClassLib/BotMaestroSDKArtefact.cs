@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
-using Newtonsoft.Json;
 using System;
 
 using BotCityMaestroSDK.Dtos.Maestro;
@@ -11,6 +10,7 @@ using BotCityMaestroSDK.Dtos.Task;
 using BotCityMaestroSDK.Dtos;
 using System.Diagnostics.SymbolStore;
 using Microsoft.AspNetCore.Http.Features;
+using BotCityMaestroSDK.Dtos.Artefact;
 
 namespace BotCityMaestroSDK.Lib;
 
@@ -18,20 +18,20 @@ public partial class BotMaestroSDK
 {
 
 
-    public async Task<ResultLogDTO> LogCreate(SendLogDTO sendLogDTO)
+    public async Task<Artefact> ArtifactCreate(SendArtefact sendArtefact)
     {
 
         InitializeClient();
 
-        var content = ToContentParamAndObj(sendLogDTO);
+        var content = ToContentParamAndObj(sendArtefact);
 
-        await ToPostResponse(content, URIs_Log.LOG_POST_CREATE);
+        await ToPostResponse(content, URIs_ResultFiles.RESULT_FILES_POST_CREATE);
 
-        return ToObject<ResultLogDTO>();
+        return ToObject<Artefact>();
 
     }
-
-    public async Task<bool> LogInsertEntry( string idLog, List<string> Columns )
+    /*
+    public async Task<bool> LogInsertEntry(string Token, string Organization, string idLog, List<string> Columns )
     {
 
         if (Columns.Count != 3) {
@@ -44,7 +44,7 @@ public partial class BotMaestroSDK
         columns.col2 = Columns[1];
         columns.col3 = Columns[2];
 
-        var content = ToContentParamAndObj(columns);
+        var content = ToContentParamAndObj(Token, Organization, columns);
 
         var response = await ToPostResponse(content, ToStrUri(URIs_Log.LOG_GET_ID_ENTRY,idLog));
 
@@ -58,7 +58,7 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<ResultLogDTO> LogById(string idLog)
+    public async Task<ResultLogDTO> LogById(string Token, string Organization, string idLog)
     {
 
         List<Param> list = new List<Param>();
@@ -85,8 +85,8 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<ResultLogEntryDTO> LogGetLog(string idLog, List<Param> Queries, 
-                                                    SendLogEntryDTO sendLogEntryDTO)
+    public async Task<ResultLogEntryDTO> LogGetLog(string Token, string Organization,
+                                              string idLog, List<Param> Queries, SendLogEntryDTO sendLogEntryDTO)
     {
 
         string Query = "?";
@@ -98,7 +98,7 @@ public partial class BotMaestroSDK
         
         InitializeClient();
 
-        var content = ToContentParamAndObj(sendLogEntryDTO);
+        var content = ToContentParamAndObj(Token, Organization, sendLogEntryDTO);
 
         await ToGetResponseURL(ToStrUri(URIs_Log.LOG_GET_ID_ENTRY, idLog) + Query);
 
@@ -106,7 +106,8 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<ResultLogEntryDTO> LogFetchData(string idLog, List<Param> Queries)
+    public async Task<ResultLogEntryDTO> LogFetchData(string Token, string Organization,
+                                              string idLog, List<Param> Queries)
     {
 
         string Query = "?";
@@ -140,7 +141,8 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<bool> LogCSV(string idLog, int days, string filename)
+    public async Task<bool> LogCSV(string Token, string Organization,
+                                              string idLog, int days, string filename)
     {
 
         string Query = "?days=" + days.ToString();
@@ -172,6 +174,6 @@ public partial class BotMaestroSDK
         return true;
 
     }
-
+    */
 
 }

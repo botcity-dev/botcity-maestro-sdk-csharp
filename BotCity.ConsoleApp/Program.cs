@@ -7,6 +7,7 @@ using BotCityMaestroSDK.Dtos.Task;
 using BotCityMaestroSDK.Dtos.Login;
 using BotCityMaestroSDK.Dtos.Alert;
 using BotCityMaestroSDK.Dtos.Message;
+using BotCityMaestroSDK.Dtos.Artefact;
 
 var url = "https://developers.botcity.dev/api/v2/";
 
@@ -16,7 +17,7 @@ var BotApi = new BotMaestroSDK(url);
 
 
 var user = "edson.marcio7@gmail.com";
-var senha = "!";
+var senha = "boyAika1!";
 
 
 
@@ -26,8 +27,8 @@ var senha = "!";
 //CALL LOGIN
 var loginUser = await BotApi.Login(user,senha);
 Console.WriteLine("LoginToken:" + loginUser.Token);
-/*
 
+/*
 //After called any API endpoint, the developer can use ResponseMessage 
 Console.WriteLine(BotApi.ResponseMessage.StatusCode + " " + (int)BotApi.ResponseMessage.StatusCode);
 
@@ -74,7 +75,7 @@ activity.ParamAdd("ParametroAutomacao01","");
 
 Console.WriteLine("ORGANIZATION LABEL:" + loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label );
 Console.WriteLine("loginUser.Token:" + loginUser.Token);
-var task = await BotApi.TaskCreate(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, activity); ;
+var task = await BotApi.TaskCreate( activity); ;
 Console.WriteLine("TASK:" + task.ToString());
 Console.WriteLine("TASK:" + task.Id);
 Console.WriteLine("TASK STATE:" + task.State);
@@ -93,7 +94,7 @@ sendTaskState.finishMessage = "MINHA MENSAGEM SUPER MANEIRA";
 
 activity.ParamAdd("ParametroAutomacao01", "");
 
-var taskId2 = await BotApi.TaskSetState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, sendTaskState, task.Id); ;
+var taskId2 = await BotApi.TaskSetState(sendTaskState, task.Id); ;
 Console.WriteLine("TASK2:" + taskId2.ToString());
 Console.WriteLine("TASK2:" + taskId2.Id);
 Console.WriteLine("TASK2:" + taskId2.State);
@@ -101,7 +102,7 @@ Console.WriteLine("TASK2:" + taskId2.ActivityLabel);
 
 
 //var taskId3 = await BotApi.TaskGetState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, task.Id); ;
-var taskId3 = await BotApi.TaskGetState(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", 129984);
+var taskId3 = await BotApi.TaskGetState( 129984);
 Console.WriteLine("TASK3:" + taskId3.ToString());
 Console.WriteLine("TASK3:" + taskId3.Id);
 Console.WriteLine("TASK3:" + taskId3.State);
@@ -109,9 +110,9 @@ Console.WriteLine("TASK3:" + taskId3.ActivityLabel);
 
 
 Console.ReadKey();
-*/
 
-/*
+
+
 SendLogDTO sendLogDTO = new SendLogDTO();
 
 sendLogDTO.activityLabel = "log3" + DateTime.Now.ToString("yyyymmddss");
@@ -137,19 +138,26 @@ Column column3 = new Column
     Width = 100
 };
 
-sendLogDTO.Columns.Add(column1);
-sendLogDTO.Columns.Add(column2);
-sendLogDTO.Columns.Add(column3);
+sendLogDTO.columns.Add(column1);
+sendLogDTO.columns.Add(column2);
+sendLogDTO.columns.Add(column3);
 
-var Log = await BotApi.LogCreate(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73" ,sendLogDTO);
-Console.WriteLine("LOG:" + Log.ToString());
-Console.WriteLine("LOG:" + Log.activityLabel);
-Console.WriteLine("LOG:" + Log.organizationLabel);
-Console.WriteLine("LOG:" + Log.id);
+var Log = await BotApi.LogCreate(sendLogDTO);
+if (Log != null)
+{
+    Console.WriteLine("LOG:" + Log.ToString());
+    Console.WriteLine("LOG:" + Log.activityLabel);
+    Console.WriteLine("LOG:" + Log.organizationLabel);
+    Console.WriteLine("LOG:" + Log.id);
+}
+else
+{
+    return;
+}
 
 var listParam = new List<string>();
 
-/*
+
 Param param1 = new Param
 {
     Name = "Column1",
@@ -167,23 +175,23 @@ Param param3 = new Param
     Name = "Column3",
     Value = "Value Colum3"
 };
-*/
 
-/*
-string param1, param2, param3;
-param1 = "Coluna1";
-param2 = "Coluna2";
-param3 = "Coluna3";
 
-listParam.Add(param1);
-listParam.Add(param2);
-//listParam.Add(param3);
 
-bool LogEntry = await BotApi.LogInsertEntry(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", Log.id, listParam);
+string sParam1, sParam2, sParam3;
+sParam1 = "Coluna1";
+sParam2 = "Coluna2";
+sParam3 = "Coluna3";
+
+listParam.Add(sParam1);
+listParam.Add(sParam2);
+listParam.Add(sParam3);
+
+bool LogEntry = await BotApi.LogInsertEntry(Log.id, listParam);
 Console.WriteLine("LogEntry:" + LogEntry.ToString());
 
 
-var Log2 = await BotApi.LogById(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", Log.id);
+var Log2 = await BotApi.LogById(Log.id);
 Console.WriteLine("LOG2:" + Log2.ToString());
 Console.WriteLine("LOG2:" + Log2.activityLabel);
 Console.WriteLine("LOG2:" + Log2.organizationLabel);
@@ -201,32 +209,30 @@ list.Add(param);
 SendLogEntryDTO sendLogEntry = new SendLogEntryDTO();
 //sendLogEntry.
 
-var Log3 = await BotApi.LogFetchData(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73",
-                                Log.id, list);
+var Log3 = await BotApi.LogFetchData( Log.id, list);
 Console.WriteLine("LOG3:" + Log3.ToString());
 Console.WriteLine("LOG3:" + Log3.TotalPages);
 Console.WriteLine("LOG3:" + Log3.size);
 
 var filename = @"d:\Programacao\" + Log.id + ".csv";
-var LogCSV = await BotApi.LogCSV(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73",
-                               Log.id, 7,filename);
+var LogCSV = await BotApi.LogCSV( Log.id, 7,filename);
 
 Console.WriteLine("LogCSV:" + LogCSV.ToString());
 
-*/
 
-/*
+
+
 SendAlert sendAlert = new SendAlert();
 sendAlert.TaskId = 137985;
 sendAlert.Title = "Meu alerta alerta";
 sendAlert.Message = "Minha mensagem maneira de alerta";
 sendAlert.AlertType = AlertType.INFO;
 
-var Alert = await BotApi.AlertCreate(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", sendAlert);
+var Alert = await BotApi.AlertCreate(sendAlert);
 Console.WriteLine("Alert:" + Alert.ActivityName.ToString());
-*/
 
-/*
+
+
 SendMessage sendMessage = new SendMessage();
 sendMessage.Emails.Add("edson.marcio7@gmail.com");
 //sendMessage.Logins.Add("");
@@ -234,6 +240,19 @@ sendMessage.Subject = "Subject123 1247 BotCity";
 sendMessage.Body = "Corpo do e-mail.. bora billll";
 sendMessage.TypeMail = TypeMail.TEXT;
 
-var Message = await BotApi.MessageCreate(loginUser.Token, "79af9981-8d3c-4ea9-ae81-d33c525fba73", sendMessage);
+var Message = await BotApi.MessageCreate(sendMessage);
 Console.WriteLine("Message:" + Message.ToString());
+
 */
+
+SendArtefact sendArtefact = new SendArtefact();
+sendArtefact.taskId = 129984;
+sendArtefact.Name = "Name mó da hora";
+sendArtefact.FileName = "FileNameMaisDaHoraAinda.txt";
+ 
+Artefact artifact = await BotApi.ArtifactCreate(sendArtefact);
+Console.WriteLine("Message:" + artifact.ToString());
+Console.WriteLine("Message:" + artifact.Type);
+Console.WriteLine("Message:" + artifact.userId);
+
+Console.ReadKey();

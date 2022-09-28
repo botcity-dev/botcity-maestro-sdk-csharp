@@ -14,6 +14,7 @@ using System;
 using System.Net.Mime;
 using Microsoft.AspNetCore.Hosting.Internal;
 using BotCityMaestroSDK.Dtos.Alert;
+using BotCityMaestroSDK.Dtos.Artefact;
 
 namespace BotCityMaestroSDK.Lib;
 
@@ -38,7 +39,7 @@ public partial class BotMaestroSDK
    
 
 
-    public StringContent ToContentOnlyParams(string Token, string Organization)
+    public StringContent ToContentOnlyParams()
     {
 
         StringContent content = new StringContent(JsonConvert.SerializeObject(""), Encoding.UTF8, "application/json");
@@ -71,7 +72,7 @@ public partial class BotMaestroSDK
         return content;
     }
 
-    public StringContent ToContentParamAndObj<T>(string Token, string Organization, T item)
+    public StringContent ToContentParamAndObj<T>(T item)
     {
      
         StringContent content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
@@ -104,7 +105,7 @@ public partial class BotMaestroSDK
         return content;
     }
 
-    public StringContent ToContentParamAndStr(string Token, string Organization, string item)
+    public StringContent ToContentParamAndStr( string item)
     {
 
         StringContent content = new StringContent(item, Encoding.UTF8, "application/json");
@@ -298,7 +299,8 @@ public partial class BotMaestroSDK
         {
             ResultLoginDTO result1 = JsonConvert.DeserializeObject<ResultLoginDTO>(ResultRaw);
             this.TokenLoginDTO = result1;
-
+            this.Token = result1.Token;
+            this.Organization = result1.Organizations.FirstOrDefault(x => x.Label != "").Label;
             return (T)Convert.ChangeType(result1, typeof(T));
 
         }
@@ -307,7 +309,6 @@ public partial class BotMaestroSDK
         {
             ResultLoginStudioDTO result1 = JsonConvert.DeserializeObject<ResultLoginStudioDTO>(ResultRaw);
             this.TokenLoginStudioDTO = result1;
-
             return (T)Convert.ChangeType(result1, typeof(T));
 
         }
@@ -316,7 +317,6 @@ public partial class BotMaestroSDK
         {
             ResultLoginCliDTO result1 = JsonConvert.DeserializeObject<ResultLoginCliDTO>(ResultRaw);
             this.TokenLoginCliDTO = result1;
-
             return (T)Convert.ChangeType(result1, typeof(T));
 
         }
@@ -330,9 +330,27 @@ public partial class BotMaestroSDK
 
         if (typeof(ResultLogDTO) == typeof(T))
         {
-            ResultLogDTO result1 = JsonConvert.DeserializeObject<ResultLogDTO>(ResultRaw);
-            this.ResultLogDTO = result1;
-            return (T)Convert.ChangeType(result1, typeof(T));
+            try
+            {
+                ResultLogDTO result1 = JsonConvert.DeserializeObject<ResultLogDTO>(ResultRaw);
+                this.ResultLogDTO = result1;
+                return (T)Convert.ChangeType(result1, typeof(T));
+            }
+            catch (Exception e)
+            {
+                try
+                {
+                    List<ResultLogDTO> resultList = JsonConvert.DeserializeObject<List<ResultLogDTO>>(ResultRaw);
+                    this.ListLog = resultList;
+                    return (T)Convert.ChangeType(resultList.FirstOrDefault(), typeof(T));
+                }
+                catch(Exception f)
+                {
+
+                }
+            }
+            
+          
         }
 
         if (typeof(ResultLogEntryDTO) == typeof(T))
@@ -346,6 +364,12 @@ public partial class BotMaestroSDK
         {
             ResultAlert result1 = JsonConvert.DeserializeObject<ResultAlert>(ResultRaw);
             return (T)Convert.ChangeType(result1, typeof(T)); 
+        }
+
+        if (typeof(Artefact) == typeof(T))
+        {
+            Artefact result1 = JsonConvert.DeserializeObject<Artefact>(ResultRaw);
+            return (T)Convert.ChangeType(result1, typeof(T));
         }
 
         string resultNull = null;

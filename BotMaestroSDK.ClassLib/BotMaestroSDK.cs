@@ -14,6 +14,9 @@ public partial class BotMaestroSDK
     public static HttpClient ApiClient { get; set; }
 
     private string ResultRaw { get; set; }
+
+    public string Token { get; set; }
+    public string Organization { get; set; }
     public HttpResponseMessage ResponseMessage { get; set; }
     public static GetError GetError { get; set; }
     public ResultLoginDTO TokenLoginDTO { get; set; }
@@ -22,6 +25,7 @@ public partial class BotMaestroSDK
     public TokenMaestroVersion TokenMaestroVersion { get; set; }
     public ResultTaskDTO ResultTaskDTO { get; set; }
     public ResultLogDTO ResultLogDTO { get; set; }
+    public List<ResultLogDTO> ListLog { get; set; }
     public ResultLogEntryDTO ResultLogEntryDTO { get; set; }
     public List<Activity> Activities {get; set;}
     public static string URL_BOT_SERVER_API_HOTS { get; set; }

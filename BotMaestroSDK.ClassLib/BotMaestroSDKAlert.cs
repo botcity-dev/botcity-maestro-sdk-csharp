@@ -17,11 +17,11 @@ namespace BotCityMaestroSDK.Lib;
 public partial class BotMaestroSDK
 {
 
-    public async Task<ResultAlert> AlertCreate(string Token, string Organization, SendAlert sendAlert)
+    public async Task<ResultAlert> AlertCreate(SendAlert sendAlert)
     {
         InitializeClient();
 
-        var content = ToContentParamAndObj(Token, Organization, sendAlert);
+        var content = ToContentParamAndObj(sendAlert);
 
         var response = await ToPostResponse(content, ToStrUri(URIs_Alert.ALERT_CREATE));
 

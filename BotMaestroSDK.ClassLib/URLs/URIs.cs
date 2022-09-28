@@ -49,4 +49,14 @@ public static class URIs_Message
 }
 
 
+public static class URIs_ResultFiles
+{
+    public static string RESULT_FILES_POST_CREATE = "artifact";
+    public static string RESULT_FILES_GET_ARTIFACT = "artifact";
+    public static string RESULT_FILES_POST_ARTIFACT = "artifact/log/{id}";
+    public static string RESULT_FILES_GET_ARTIFACT_ID = "artifact/{id}";
+    public static string RESULT_FILES_GET_FILE_ARTIFACT_ID = "artifact/{id}/file";
+}
+
+
 

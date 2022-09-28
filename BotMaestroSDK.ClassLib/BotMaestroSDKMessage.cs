@@ -18,11 +18,11 @@ namespace BotCityMaestroSDK.Lib;
 public partial class BotMaestroSDK
 {
 
-    public async Task<bool> MessageCreate(string Token, string Organization, SendMessage sendMessage)
+    public async Task<bool> MessageCreate(SendMessage sendMessage)
     {
         InitializeClient();
 
-        var content = ToContentParamAndObj(Token, Organization, sendMessage);
+        var content = ToContentParamAndObj(sendMessage);
 
         var response = await ToPostResponse(content, ToStrUri(URIs_Message.MESSAGE_CREATE));
 
