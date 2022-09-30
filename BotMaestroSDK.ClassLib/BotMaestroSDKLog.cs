@@ -3,7 +3,6 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using Newtonsoft.Json;
-using Newtonsoft.Json;
 using System;
 
 using BotCityMaestroSDK.Dtos.Maestro;
@@ -46,7 +45,7 @@ public partial class BotMaestroSDK
 
         var content = ToContentParamAndObj(columns);
 
-        var response = await ToPostResponse(content, ToStrUri(URIs_Log.LOG_GET_ID_ENTRY,idLog));
+        var response = await ToPostResponse(content, ToStrUri(URIs_Log.LOG_POST_ID_ENTRY,idLog));
 
         if (response == null) return false;
             
@@ -61,25 +60,9 @@ public partial class BotMaestroSDK
     public async Task<ResultLogDTO> LogById(string idLog)
     {
 
-        List<Param> list = new List<Param>();
+        InitializeClient(ListParams);
 
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        list.Add(paramToken);
-        list.Add(paramOrg);
-        InitializeClient(list);
-
-        await ToGetResponseURL( ToStrUri(URIs_Log.LOG_GET_ID,idLog));
+        await ToGetResponseURL(ToStrUri(URIs_Log.LOG_GET_ID,idLog));
 
         return ToObject<ResultLogDTO>();
 
@@ -116,23 +99,8 @@ public partial class BotMaestroSDK
             Query += param.Name + "=" + param.Value + "&";
         }
 
-        List<Param> list = new List<Param>();
 
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        list.Add(paramToken);
-        list.Add(paramOrg);
-        InitializeClient(list);
+        InitializeClient(ListParams);
 
         await ToGetResponseURL(ToStrUri(URIs_Log.LOG_GET_ID_ENTRY, idLog) + Query);
 
@@ -142,26 +110,9 @@ public partial class BotMaestroSDK
 
     public async Task<bool> LogCSV(string idLog, int days, string filename)
     {
-
         string Query = "?days=" + days.ToString();
 
-        List<Param> list = new List<Param>();
-
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        list.Add(paramToken);
-        list.Add(paramOrg);
-        InitializeClient(list);
+        InitializeClient(ListParams);
 
         var response = await ToGetResponseFile(ToStrUri(URIs_Log.LOG_GET_ID_CSV, idLog) + Query, filename);
 

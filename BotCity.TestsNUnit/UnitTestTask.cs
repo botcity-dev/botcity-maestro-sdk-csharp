@@ -75,7 +75,7 @@ public class UnitTestTask
         
 
         //Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
-        var task = await BotApi.TaskCreate(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, activity);
+        var task = await BotApi.TaskCreate( activity);
 
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
@@ -99,7 +99,7 @@ public class UnitTestTask
 
         //var task = await BotApi.Task(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, activity);
 
-        var taskId2 = await BotApi.TaskSetState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, sendTaskState, TaskId);
+        var taskId2 = await BotApi.TaskSetState(sendTaskState, TaskId);
 
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
@@ -120,7 +120,7 @@ public class UnitTestTask
         var loginUser = await BotApi.Login(user, senha);
         Arrange();
 
-        var taskId3 = await BotApi.TaskGetState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, TaskId); 
+        var taskId3 = await BotApi.TaskGetState(TaskId); 
 
         int result = (int)BotApi.ResponseMessage.StatusCode;
 

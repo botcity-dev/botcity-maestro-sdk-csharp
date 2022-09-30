@@ -25,11 +25,26 @@ public partial class BotMaestroSDK
 
         var content = ToContentParamAndObj(sendArtefact);
 
-        await ToPostResponse(content, URIs_ResultFiles.RESULT_FILES_POST_CREATE);
+        await ToPostResponse(content, URIs_ResultFiles.ARTIFACT_POST_CREATE);
 
-        return ToObject<Artefact>();
+       return ToObject<Artefact>();
+
 
     }
+
+    public async Task<bool> ArtifactSend(int ArtifactId, string filePath)
+    {
+
+        InitializeClient();
+
+        var response = await ToPostSendFile1(filePath, ArtifactId, ToStrUri(URIs_ResultFiles.ARTIFACT_POST_UPLOAD_ARTIFACT,ArtifactId.ToString()));
+
+        if (response == null) return false;
+
+        return true;
+
+    }
+
     /*
     public async Task<bool> LogInsertEntry(string Token, string Organization, string idLog, List<string> Columns )
     {

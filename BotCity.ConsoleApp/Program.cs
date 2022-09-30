@@ -8,6 +8,7 @@ using BotCityMaestroSDK.Dtos.Login;
 using BotCityMaestroSDK.Dtos.Alert;
 using BotCityMaestroSDK.Dtos.Message;
 using BotCityMaestroSDK.Dtos.Artefact;
+using System.IO;
 
 var url = "https://developers.botcity.dev/api/v2/";
 
@@ -17,7 +18,7 @@ var BotApi = new BotMaestroSDK(url);
 
 
 var user = "edson.marcio7@gmail.com";
-var senha = "!";
+var senha = "boyAika1!";
 
 
 
@@ -110,7 +111,7 @@ Console.WriteLine("TASK3:" + taskId3.ActivityLabel);
 
 
 Console.ReadKey();
-
+*/
 
 
 SendLogDTO sendLogDTO = new SendLogDTO();
@@ -219,7 +220,7 @@ var LogCSV = await BotApi.LogCSV( Log.id, 7,filename);
 
 Console.WriteLine("LogCSV:" + LogCSV.ToString());
 
-
+/*
 
 
 SendAlert sendAlert = new SendAlert();
@@ -243,16 +244,23 @@ sendMessage.TypeMail = TypeMail.TEXT;
 var Message = await BotApi.MessageCreate(sendMessage);
 Console.WriteLine("Message:" + Message.ToString());
 
-*/
+
+
 
 SendArtefact sendArtefact = new SendArtefact();
 sendArtefact.taskId = 129984;
 sendArtefact.Name = "Name mó da hora";
-sendArtefact.FileName = "FileNameMaisDaHoraAinda.txt";
+sendArtefact.FileName = "arquivoTeste.txt";
  
 Artefact artifact = await BotApi.ArtifactCreate(sendArtefact);
 Console.WriteLine("Message:" + artifact.ToString());
 Console.WriteLine("Message:" + artifact.Type);
 Console.WriteLine("Message:" + artifact.userId);
 
+var path = @"d:\arquivoTeste.txt";
+
+var send = await BotApi.ArtifactSend(179, path);
+Console.WriteLine("Message:" + send.ToString());
+
 Console.ReadKey();
+*/

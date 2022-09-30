@@ -8,6 +8,8 @@ using System.Linq;
 using System;
 using static NUnit.Framework.Constraints.Tolerance;
 using BotCityMaestroSDK.Dtos;
+using System.Security.Cryptography;
+using System.Collections.Generic;
 
 namespace BotCity.TestsNUnit;
 
@@ -37,7 +39,8 @@ public class UnitTestLog
         sendLogDTO = new SendLogDTO();
 
         sendLogDTO.Id = random.Next(0, 9999).ToString();
-        sendLogDTO.activityLabel = "LabelLogName" + sendLogDTO.Id;
+        sendLogDTO.activityLabel = "LabelLogName" + random.Next(0, 9999).ToString();
+        LogId = sendLogDTO.Id;
 
         Column column1 = new Column
         {
@@ -60,9 +63,9 @@ public class UnitTestLog
             Width = 100
         };
 
-        sendLogDTO.Columns.Add(column1);
-        sendLogDTO.Columns.Add(column2);
-        sendLogDTO.Columns.Add(column3);
+        sendLogDTO.columns.Add(column1);
+        sendLogDTO.columns.Add(column2);
+        sendLogDTO.columns.Add(column3);
 
     }
 
@@ -75,23 +78,52 @@ public class UnitTestLog
 
         Arrange();
 
-
-        
-
         Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
-        var log = await BotApi.LogCreate(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, sendLogDTO);
-
+        var log = await BotApi.LogCreate(sendLogDTO);
+        
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
-        Assert.AreEqual(result.ToString(),"200");
+        Assert.AreEqual("200", result.ToString());
         Assert.AreEqual(log.organizationLabel, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
-        LogId = log.id;
-
-
+       
 
     }
 
     [Test, Order(2)]
+    public async Task CreateLogEntry()
+    {
+        //ARRANGE
+        var BotApi = new BotMaestroSDK(url);
+        var loginUser = await BotApi.Login(user, senha);
+
+        var listColunas = new List<string>();
+        string sParam1, sParam2, sParam3;
+        sParam1 = "Coluna1";
+        sParam2 = "Coluna2";
+        sParam3 = "Coluna3";
+
+        listColunas.Add(sParam1);
+        listColunas.Add(sParam2);
+        listColunas.Add(sParam3);
+
+
+        //ACT
+        Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
+        Console.WriteLine("LogId:" + LogId);
+
+
+        var log = await BotApi.LogInsertEntry(sendLogDTO.activityLabel, listColunas);
+
+        int result = (int)BotApi.ResponseMessage.StatusCode;
+
+
+        //ASSERT
+        Assert.AreEqual("200", result.ToString());
+       
+
+    }
+
+    [Test, Order(3)]
     public async Task TestLogById()
     {
         //ARRANGE
@@ -99,56 +131,15 @@ public class UnitTestLog
         var loginUser = await BotApi.Login(user, senha);
 
         Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
-        var log = await BotApi.LogById(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, LogId);
-
-        int result = (int)BotApi.ResponseMessage.StatusCode;
-
-        Assert.AreEqual(result.ToString(), "200");
-        Assert.AreEqual(log.organizationLabel, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
+        Console.WriteLine("LOG ID:" + sendLogDTO.Id);
         Console.WriteLine("LOG ID:" + LogId);
-    }
-    /*
-    [Test, Order(2)]
-    public async Task TaskSetStateTest()
-    {
-        Console.WriteLine("TaskSetStateTest:" + TaskId + " - Date:" + DateTime.Now.ToString());
-        //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
-        var loginUser = await BotApi.Login(user, senha);
-        Arrange();
-
-
-        //var task = await BotApi.Task(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, activity);
-
-        var taskId2 = await BotApi.TaskSetState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, sendTaskState, TaskId);
+        var log = await BotApi.LogById(sendLogDTO.activityLabel);
 
         int result = (int)BotApi.ResponseMessage.StatusCode;
-
-
-        //ASSERT
-        Assert.AreEqual(result.ToString(), "200");
-        Assert.AreEqual(taskId2.Id, TaskId);
-
+        Console.WriteLine("Result:" + result.ToString());
+        Assert.AreEqual("200", result.ToString());
+        Assert.AreEqual(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, log.organizationLabel);
+        
     }
-    /*
-
-    [Test, Order(3)]
-    public async Task TaskGetStateTest()
-    {
-        Console.WriteLine("TaskGetStateTest:" + TaskId + " - Date:" + DateTime.Now.ToString());
-        //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
-        var loginUser = await BotApi.Login(user, senha);
-        Arrange();
-
-        var taskId3 = await BotApi.TaskGetState(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, TaskId); 
-
-        int result = (int)BotApi.ResponseMessage.StatusCode;
-
-        Assert.AreEqual(result.ToString(), "200");
-        Assert.AreEqual(taskId3.Id, TaskId);
-
-    }
-
-    */
+   
 }
