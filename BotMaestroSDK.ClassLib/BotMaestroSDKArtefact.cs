@@ -16,9 +16,9 @@ using System.Runtime.CompilerServices;
 
 namespace BotCityMaestroSDK.Lib;
 
-public partial class BotMaestroSDK
+public partial class Maestro
 {
-    public async Task<Artefact> ArtifactCreate(SendArtefact SendArtefact)
+    public async Task<Artefact> CreateArtifact(SendArtefact SendArtefact)
     {
 
         InitializeClient();
@@ -32,7 +32,7 @@ public partial class BotMaestroSDK
 
     } 
 
-    public async Task<bool> ArtifactSend(int ArtifactId, string FilePath)
+    public async Task<bool> SendArtifact(int ArtifactId, string FilePath)
     {
 
         InitializeClient();
@@ -45,7 +45,7 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<string> ArtifactGetAll(Artefact Artifact, int Size = 50, int Page = 0, string Sort = "dateCreation", string OrderBy = "desc", int Days = 7 )
+    public async Task<string> GetArtifacts(Artefact Artifact, int Size = 50, int Page = 0, string Sort = "dateCreation", string OrderBy = "desc", int Days = 7 )
     {
 
         InitializeClient(ListParams);
@@ -67,7 +67,7 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<bool> ArtifactGetFile(string ArtifactId, string FileName)
+    public async Task<bool> DownloadArtifact(string ArtifactId, string FileName)
     {
 
         InitializeClient(ListParams);

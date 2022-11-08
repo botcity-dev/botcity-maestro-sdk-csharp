@@ -15,10 +15,10 @@ using BotCityMaestroSDK.Dtos.Message;
 
 namespace BotCityMaestroSDK.Lib;
 
-public partial class BotMaestroSDK
+public partial class Maestro
 {
 
-    public async Task<bool> MessageCreate(SendMessage sendMessage)
+    public async Task<bool> Message(SendMessage sendMessage)
     {
         InitializeClient();
 

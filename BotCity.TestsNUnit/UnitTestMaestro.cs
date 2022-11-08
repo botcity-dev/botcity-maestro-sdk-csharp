@@ -11,13 +11,13 @@ public class UnitTestMaestro
     string url = "https://developers.botcity.dev/api/v2/";
     string user = "edson.marcio7@gmail.com";
     string senha = ClassSenha.Password;
-    private BotMaestroSDK BotApi;
+    private Maestro BotApi;
 
 
     [Test]
     public async Task MaestroVersionTest()
     {
-        BotApi = new BotMaestroSDK(url);
+        BotApi = new Maestro(url);
         var version = await BotApi.MaestroVersion();
 
         int result = (int)BotApi.ResponseMessage.StatusCode;

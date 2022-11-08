@@ -13,12 +13,12 @@ using System.IO;
 var url = "https://developers.botcity.dev/api/v2/";
 
 //CREATE Library Instance
-var BotApi = new BotMaestroSDK(url);
+var BotApi = new Maestro(url);
 
 
 
 var user = "edson.marcio7@gmail.com";
-var senha = "boyAika1!";
+var senha = "!";
 
 
 
@@ -254,22 +254,22 @@ sendArtefact.taskId = 129984;
 sendArtefact.Name = "User Facing Name.txt";
 sendArtefact.FileName = "arquivoTeste.txt";
  
-Artefact artifact = await BotApi.ArtifactCreate(sendArtefact);
+Artefact artifact = await BotApi.CreateArtifact(sendArtefact);
 Console.WriteLine("Message:" + artifact.ToString());
 Console.WriteLine("Message:" + artifact.Type);
 Console.WriteLine("Message:" + artifact.userId);
 
 var path = @"d:\arquivoTeste.txt";
 
-var send = await BotApi.ArtifactSend(artifact.id, path); //179
+var send = await BotApi.SendArtifact(artifact.id, path); //179
 Console.WriteLine("Message:" + send.ToString());
 
 
-var artifactAll = await BotApi.ArtifactGetAll(artifact); //179
+var artifactAll = await BotApi.GetArtifacts(artifact); //179
 Console.WriteLine("Message:" + artifactAll.ToString());
 
 var filename = @"d:\Programacao\Artifact_" + artifact.id.ToString() + ".txt";
-var artifactDownload = await BotApi.ArtifactGetFile(artifact.id.ToString(), filename); //179
+var artifactDownload = await BotApi.DownloadArtifact(artifact.id.ToString(), filename); //179
 Console.WriteLine("Message:" + artifactAll.ToString());
 
 

@@ -13,11 +13,11 @@ using Microsoft.AspNetCore.Http.Features;
 
 namespace BotCityMaestroSDK.Lib;
 
-public partial class BotMaestroSDK
+public partial class Maestro
 {
 
 
-    public async Task<ResultLogDTO> LogCreate(SendLogDTO sendLogDTO)
+    public async Task<ResultLogDTO> CreateLog(SendLogDTO sendLogDTO)
     {
 
         InitializeClient();
@@ -30,7 +30,7 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<bool> LogInsertEntry( string idLog, List<string> Columns )
+    public async Task<bool> LogEntry( string idLog, List<string> Columns )
     {
 
         if (Columns.Count != 3) {
@@ -69,7 +69,7 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<ResultLogEntryDTO> LogGetLog(string idLog, List<Param> Queries, 
+    public async Task<ResultLogEntryDTO> GetLog(string idLog, List<Param> Queries, 
                                                     SendLogEntryDTO sendLogEntryDTO)
     {
 
@@ -90,7 +90,7 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<ResultLogEntryDTO> LogFetchData(string idLog, List<Param> Queries)
+    public async Task<ResultLogEntryDTO> FetchDataLog(string idLog, List<Param> Queries)
     {
 
         string Query = "?";

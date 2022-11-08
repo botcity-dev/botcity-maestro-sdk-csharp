@@ -9,7 +9,7 @@ using BotCityMaestroSDK.Dtos.Login;
 
 namespace BotCityMaestroSDK.Lib;
 
-public partial class BotMaestroSDK
+public partial class Maestro
 {
     public async Task<ResultLoginDTO> Login(string UserName, string Password)
     {

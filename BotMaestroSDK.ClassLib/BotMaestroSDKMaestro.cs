@@ -9,7 +9,7 @@ using BotCityMaestroSDK.Dtos.Maestro;
 
 namespace BotCityMaestroSDK.Lib;
 
-public partial class BotMaestroSDK
+public partial class Maestro
 {
 
 

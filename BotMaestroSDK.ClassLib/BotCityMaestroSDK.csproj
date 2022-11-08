@@ -4,6 +4,11 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <PackageId>BotCityMaestroSDK</PackageId>
+    <Title>BotCityMaestroSDK</Title>
+    <Authors>EdsonMarcio</Authors>
+    <Company>BotCity</Company>
   </PropertyGroup>
 
   <ItemGroup>

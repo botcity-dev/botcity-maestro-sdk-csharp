@@ -21,7 +21,7 @@ using RestSharp;
 
 namespace BotCityMaestroSDK.Lib;
 
-public partial class BotMaestroSDK
+public partial class Maestro
 {
 
     private ByteArrayContent ToContent(string JsonString)
@@ -131,7 +131,7 @@ public partial class BotMaestroSDK
             GetError.ErrorNumber = (int)statusCode;
             GetError.Message = ResultRaw;
             GetError.ErroDetail = response.ToString();
-            BotMaestroSDK.ApiClient = null;
+            Maestro.ApiClient = null;
             return false;
         }
 
@@ -141,7 +141,7 @@ public partial class BotMaestroSDK
 
     public async Task<HttpResponseMessage> ToPostResponse(StringContent content, string URI)
     {
-        var response = BotMaestroSDK.ApiClient.PostAsync(
+        var response = Maestro.ApiClient.PostAsync(
                 URI,
                 content).Result;
 
@@ -156,7 +156,7 @@ public partial class BotMaestroSDK
             GetError.ErrorNumber = (int)statusCode;
             GetError.Message = ResultRaw;
             GetError.ErroDetail = response.ToString();
-            BotMaestroSDK.ApiClient = null;
+            Maestro.ApiClient = null;
             return null;
         }
 
@@ -166,7 +166,7 @@ public partial class BotMaestroSDK
 
     public async Task<HttpResponseMessage> ToPostResponseURL(StringContent content, string URI )
     {
-        var response = BotMaestroSDK.ApiClient.PostAsync(
+        var response = Maestro.ApiClient.PostAsync(
                 URI,
                 content).Result;
 
@@ -181,7 +181,7 @@ public partial class BotMaestroSDK
 
     public async Task<HttpResponseMessage> ToGetResponseURL(string URI)
     {
-        var response = BotMaestroSDK.ApiClient.GetAsync(
+        var response = Maestro.ApiClient.GetAsync(
                 URI).Result;
 
         ResponseMessage = response;
@@ -196,7 +196,7 @@ public partial class BotMaestroSDK
 
     public async Task<HttpResponseMessage> ToGetResponseFile(string URI, string filename)
     {
-        var response = await BotMaestroSDK.ApiClient.GetAsync(URI);
+        var response = await Maestro.ApiClient.GetAsync(URI);
 
         if (response.IsSuccessStatusCode)
         {

@@ -11,7 +11,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace BotCityMaestroSDK.Lib;
 
-public partial class BotMaestroSDK
+public partial class Maestro
 {
     public static HttpClient ApiClient { get; set; }
     private string ResultRaw { get; set; }
@@ -55,7 +55,7 @@ public partial class BotMaestroSDK
         }
     }
 
-    public BotMaestroSDK(string url){
+    public Maestro(string url){
         URL_BOT_SERVER_API_HOTS = url;
         //Activities = new List<Activity>();
         ListLog = new List<ResultLogDTO>();

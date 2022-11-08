@@ -13,9 +13,9 @@ using System.Diagnostics;
 
 namespace BotCityMaestroSDK.Lib;
 
-public partial class BotMaestroSDK
+public partial class Maestro
 {
-    public async Task<ResultTaskDTO> TaskCreate(BotCityMaestroSDK.Dtos.Task.Activity Activity){
+    public async Task<ResultTaskDTO> CreateTask(BotCityMaestroSDK.Dtos.Task.Activity Activity){
        
         InitializeClient();
 
@@ -34,7 +34,7 @@ public partial class BotMaestroSDK
         
     }
 
-    public async Task<ResultTaskDTO> TaskSetState(SendTaskStateDTO SendTaskStateDTO,  int? TaskId)
+    public async Task<ResultTaskDTO> FinishTask(SendTaskStateDTO SendTaskStateDTO,  int? TaskId)
     {
         if (SendTaskStateDTO.FinishStatus == "")
             SendTaskStateDTO.FinishStatus = Enum.GetName(typeof(FinishedStatus), SendTaskStateDTO.SendStatus);
@@ -47,7 +47,7 @@ public partial class BotMaestroSDK
 
     }
 
-    public async Task<ResultTaskDTO> TaskGetState(int? TaskId)
+    public async Task<ResultTaskDTO> GetTask(int? TaskId)
     {
         AddParamsToList();
         InitializeClient(ListParams);

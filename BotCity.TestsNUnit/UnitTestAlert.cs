@@ -46,12 +46,12 @@ public class UnitTestAlert
     public async Task CreateAlertTest()
     {
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
 
         Arrange();
 
-        var alert = await BotApi.AlertCreate(sendAlert);
+        var alert = await BotApi.Alert(sendAlert);
      
 
         int result = (int)BotApi.ResponseMessage.StatusCode;

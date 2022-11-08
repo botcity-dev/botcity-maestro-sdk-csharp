@@ -11,14 +11,14 @@ namespace BotCity.TestsNUnit
         string url = "https://developers.botcity.dev/api/v2/";
         string user = "edson.marcio7@gmail.com";
         string senha = ClassSenha.Password;
-        private BotMaestroSDK BotApi;
+        private Maestro BotApi;
         
        
 
         [Test]
         public async Task LoginTest()
         {
-            BotApi = new BotMaestroSDK(url);
+            BotApi = new Maestro(url);
             var loginUser  = await BotApi.Login(user, senha);
 
             int result = (int)BotApi.ResponseMessage.StatusCode;
@@ -32,7 +32,7 @@ namespace BotCity.TestsNUnit
         [Test]
         public async Task LoginStudio()
         {
-            BotApi = new BotMaestroSDK(url);
+            BotApi = new Maestro(url);
             var loginStudio = await BotApi.LoginStudio(user, senha);
 
             int result = (int)BotApi.ResponseMessage.StatusCode;
@@ -45,7 +45,7 @@ namespace BotCity.TestsNUnit
         [Test]
         public async Task LoginCookieComParametro()
         {
-            BotApi = new BotMaestroSDK(url);
+            BotApi = new Maestro(url);
             var loginStudio = await BotApi.LoginStudio(user, senha);
 
             var loginCookie = await BotApi.LoginCookie();
@@ -62,7 +62,7 @@ namespace BotCity.TestsNUnit
         [Test]
         public async Task LoginCookieSemParametro()
         {
-            BotApi = new BotMaestroSDK(url);
+            BotApi = new Maestro(url);
             var loginStudio = await BotApi.LoginStudio(user, senha);
 
             var loginCookie = await BotApi.LoginCookie();
@@ -77,7 +77,7 @@ namespace BotCity.TestsNUnit
         [Test]
         public async Task LoginCli()
         {
-            BotApi = new BotMaestroSDK(url);
+            BotApi = new Maestro(url);
             var loginCli = await BotApi.LoginCli(user, senha);
 
             int result = (int)BotApi.ResponseMessage.StatusCode;
@@ -90,7 +90,7 @@ namespace BotCity.TestsNUnit
         [Test]
         public async Task LoginCliCookie()
         {
-            BotApi = new BotMaestroSDK(url);
+            BotApi = new Maestro(url);
 
             var loginCli1 = await BotApi.LoginCli(user, senha);
             var loginCli = await BotApi.LoginCookieCli();

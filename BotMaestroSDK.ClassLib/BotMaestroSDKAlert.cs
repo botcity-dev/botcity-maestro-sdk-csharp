@@ -14,10 +14,10 @@ using BotCityMaestroSDK.Dtos.Alert;
 
 namespace BotCityMaestroSDK.Lib;
 
-public partial class BotMaestroSDK
+public partial class Maestro
 {
 
-    public async Task<ResultAlert> AlertCreate(SendAlert sendAlert)
+    public async Task<ResultAlert> Alert(SendAlert sendAlert)
     {
         InitializeClient();
 

@@ -71,12 +71,12 @@ public class UnitTestLog
     public async Task CreateLogTest()
     {
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
 
         Arrange();
 
-        var log = await BotApi.LogCreate(sendLogDTO);
+        var log = await BotApi.CreateLog(sendLogDTO);
         resultLogDTO = log;
 
         int result = (int)BotApi.ResponseMessage.StatusCode;
@@ -90,7 +90,7 @@ public class UnitTestLog
     public async Task CreateLogEntry()
     {
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
 
         var listColunas = new List<string>();
@@ -105,7 +105,7 @@ public class UnitTestLog
 
 
         //ACT
-        var log = await BotApi.LogInsertEntry(resultLogDTO.activityLabel, listColunas);
+        var log = await BotApi.LogEntry(resultLogDTO.activityLabel, listColunas);
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
 
@@ -119,7 +119,7 @@ public class UnitTestLog
     public async Task TestLogById()
     {
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
 
         var log = await BotApi.LogById(resultLogDTO.activityLabel);
@@ -135,7 +135,7 @@ public class UnitTestLog
     public async Task TestFetchData()
     {
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
 
         var list = new List<Param>();
@@ -148,7 +148,7 @@ public class UnitTestLog
 
 
         //ACTION
-        var Log3 = await BotApi.LogFetchData(resultLogDTO.id, list);
+        var Log3 = await BotApi.FetchDataLog(resultLogDTO.id, list);
 
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
@@ -163,12 +163,12 @@ public class UnitTestLog
     {
         //ARRANGE
 
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
 
         Arrange();
 
-        var Log1 = await BotApi.LogCreate(sendLogDTO);
+        var Log1 = await BotApi.CreateLog(sendLogDTO);
 
         var listColunas = new List<string>();
         string sParam1, sParam2, sParam3;
@@ -180,7 +180,7 @@ public class UnitTestLog
         listColunas.Add(sParam2);
         listColunas.Add(sParam3);
 
-        var log = await BotApi.LogInsertEntry(Log1.activityLabel, listColunas);
+        var log = await BotApi.LogEntry(Log1.activityLabel, listColunas);
 
         //ACTION
         var filename = @"d:\Programacao\" + Log1.id + ".csv";

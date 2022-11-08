@@ -55,7 +55,7 @@ public class UnitTestTask
     public async Task CreateTaskTest()
     {
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
         Arrange();
 
@@ -63,7 +63,7 @@ public class UnitTestTask
         
 
         //Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
-        var task = await BotApi.TaskCreate( _activity);
+        var task = await BotApi.CreateTask( _activity);
 
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
@@ -80,14 +80,14 @@ public class UnitTestTask
     {
         Console.WriteLine("TaskSetStateTest:" + _TaskId + " - Date:" + DateTime.Now.ToString());
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
         Arrange();
 
 
         //var task = await BotApi.Task(loginUser.Token, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, activity);
 
-        var taskId2 = await BotApi.TaskSetState(_sendTaskState, _TaskId);
+        var taskId2 = await BotApi.FinishTask(_sendTaskState, _TaskId);
 
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
@@ -104,11 +104,11 @@ public class UnitTestTask
     {
         Console.WriteLine("TaskGetStateTest:" + _TaskId + " - Date:" + DateTime.Now.ToString());
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
         Arrange();
 
-        var taskId3 = await BotApi.TaskGetState(_TaskId); 
+        var taskId3 = await BotApi.GetTask(_TaskId); 
 
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
@@ -122,12 +122,12 @@ public class UnitTestTask
     {
         Console.WriteLine("TaskGetStateTest:" + _TaskId + " - Date:" + DateTime.Now.ToString());
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
 
         Arrange();
 
-        Artefact artifact = await BotApi.ArtifactCreate(_sendArtefact);
+        Artefact artifact = await BotApi.CreateArtifact(_sendArtefact);
         Console.WriteLine("Message:" + artifact.ToString());
         Console.WriteLine("Message:" + artifact.Type);
         Console.WriteLine("Message:" + artifact.userId);
@@ -152,13 +152,13 @@ public class UnitTestTask
 
         Console.WriteLine("TaskGetStateTest:" + _TaskId + " - Date:" + DateTime.Now.ToString());
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
 
         Arrange();
 
         var path = @"d:\arquivoTeste.txt";
-        var send = await BotApi.ArtifactSend(_artefact.id, path); //179
+        var send = await BotApi.SendArtifact(_artefact.id, path); //179
   
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
@@ -177,19 +177,19 @@ public class UnitTestTask
         }
 
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
 
         Arrange();
 
         Console.WriteLine("ARTI:" + _artefact.id);
 
-        Artefact artifact = await BotApi.ArtifactCreate(_sendArtefact);
+        Artefact artifact = await BotApi.CreateArtifact(_sendArtefact);
 
         var path = @"d:\arquivoTeste.txt";
-        var send = await BotApi.ArtifactSend(artifact.id, path); //179
+        var send = await BotApi.SendArtifact(artifact.id, path); //179
         
-        var artifactAll = await BotApi.ArtifactGetAll(artifact);
+        var artifactAll = await BotApi.GetArtifacts(artifact);
         Console.WriteLine("artifactAll:" + artifactAll.ToString());
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
@@ -207,19 +207,19 @@ public class UnitTestTask
         }
 
         //ARRANGE
-        var BotApi = new BotMaestroSDK(url);
+        var BotApi = new Maestro(url);
         var loginUser = await BotApi.Login(user, senha);
 
         Arrange();
 
-        Artefact artifact = await BotApi.ArtifactCreate(_sendArtefact);
+        Artefact artifact = await BotApi.CreateArtifact(_sendArtefact);
 
         var path = @"d:\arquivoTeste.txt";
-        var send = await BotApi.ArtifactSend(artifact.id, path); //179
+        var send = await BotApi.SendArtifact(artifact.id, path); //179
 
         var filename = @"d:\Programacao\Artifact" + artifact.id.ToString() + ".txt";
         Console.WriteLine("ID:" + artifact.id.ToString());
-        var getFile = await BotApi.ArtifactGetFile(artifact.id.ToString(), filename); //179
+        var getFile = await BotApi.DownloadArtifact(artifact.id.ToString(), filename); //179
 
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
