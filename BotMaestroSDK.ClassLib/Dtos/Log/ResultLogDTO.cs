@@ -15,6 +15,7 @@ namespace BotCityMaestroSDK.Dtos.Task
         public string id { get; set; }
         public string organizationLabel { get; set; }
         public string activityLabel { get; set; }
+        public string Label { get; set; }
 
         public List<Column> columns { get; set; }
 

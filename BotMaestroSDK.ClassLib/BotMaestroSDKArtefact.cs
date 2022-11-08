@@ -11,33 +11,33 @@ using BotCityMaestroSDK.Dtos;
 using System.Diagnostics.SymbolStore;
 using Microsoft.AspNetCore.Http.Features;
 using BotCityMaestroSDK.Dtos.Artefact;
+using System.Drawing;
+using System.Runtime.CompilerServices;
 
 namespace BotCityMaestroSDK.Lib;
 
 public partial class BotMaestroSDK
 {
-
-
-    public async Task<Artefact> ArtifactCreate(SendArtefact sendArtefact)
+    public async Task<Artefact> ArtifactCreate(SendArtefact SendArtefact)
     {
 
         InitializeClient();
 
-        var content = ToContentParamAndObj(sendArtefact);
+        var content = ToContentParamAndObj(SendArtefact);
 
         await ToPostResponse(content, URIs_ResultFiles.ARTIFACT_POST_CREATE);
 
        return ToObject<Artefact>();
 
 
-    }
+    } 
 
-    public async Task<bool> ArtifactSend(int ArtifactId, string filePath)
+    public async Task<bool> ArtifactSend(int ArtifactId, string FilePath)
     {
 
         InitializeClient();
 
-        var response = await ToPostSendFile1(filePath, ArtifactId, ToStrUri(URIs_ResultFiles.ARTIFACT_POST_UPLOAD_ARTIFACT,ArtifactId.ToString()));
+        var response = await ToPostSendFile(FilePath, ArtifactId, ToStrUri(URIs_ResultFiles.ARTIFACT_POST_UPLOAD_ARTIFACT,ArtifactId.ToString()));
 
         if (response == null) return false;
 
@@ -45,143 +45,35 @@ public partial class BotMaestroSDK
 
     }
 
-    /*
-    public async Task<bool> LogInsertEntry(string Token, string Organization, string idLog, List<string> Columns )
+    public async Task<string> ArtifactGetAll(Artefact Artifact, int Size = 50, int Page = 0, string Sort = "dateCreation", string OrderBy = "desc", int Days = 7 )
     {
 
-        if (Columns.Count != 3) {
-            throw new InvalidOperationException("Expected three columns");
-        }
-
-        InitializeClient();
-        SendLogEntryIDColumn columns = new SendLogEntryIDColumn();
-        columns.col1 = Columns[0];
-        columns.col2 = Columns[1];
-        columns.col3 = Columns[2];
-
-        var content = ToContentParamAndObj(Token, Organization, columns);
-
-        var response = await ToPostResponse(content, ToStrUri(URIs_Log.LOG_GET_ID_ENTRY,idLog));
-
-        if (response == null) return false;
-            
-        var statusCode = response.StatusCode;
-
-        if ((int)statusCode != 200) return false;
-
-        return true;
-
-    }
-
-    public async Task<ResultLogDTO> LogById(string Token, string Organization, string idLog)
-    {
-
-        List<Param> list = new List<Param>();
-
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        list.Add(paramToken);
-        list.Add(paramOrg);
-        InitializeClient(list);
-
-        await ToGetResponseURL( ToStrUri(URIs_Log.LOG_GET_ID,idLog));
-
-        return ToObject<ResultLogDTO>();
-
-    }
-
-    public async Task<ResultLogEntryDTO> LogGetLog(string Token, string Organization,
-                                              string idLog, List<Param> Queries, SendLogEntryDTO sendLogEntryDTO)
-    {
-
-        string Query = "?";
-
-        foreach(Param param in Queries)
-        {
-            Query += param.Name + "=" + param.Value + "&";
-        }
+        InitializeClient(ListParams);
+        //example "?size=50&page=0&sort=dateCreation,desc&days=7"
+        string options = "?size=SIZEX&page=PAGEX&sort=SORTX,ORDERBYX&days=DAYSX";
+        options = options.Replace("SIZEX", Size.ToString());
+        options = options.Replace("PAGEX", Page.ToString());
+        options = options.Replace("SORTX", Sort.ToString());
+        options = options.Replace("ORDERBYX", OrderBy.ToString());
+        options = options.Replace("DAYSX", Days.ToString());
+        var content = ToContentParamAndObj(Artifact);
         
-        InitializeClient();
 
-        var content = ToContentParamAndObj(Token, Organization, sendLogEntryDTO);
+        var response = await ToGetResponseURL(ToStrUri(URIs_ResultFiles.ARTIFACT_GET_ARTIFACT) + options );
 
-        await ToGetResponseURL(ToStrUri(URIs_Log.LOG_GET_ID_ENTRY, idLog) + Query);
+        if (response == null) return "";
 
-        return ToObject<ResultLogEntryDTO>();
-
-    }
-
-    public async Task<ResultLogEntryDTO> LogFetchData(string Token, string Organization,
-                                              string idLog, List<Param> Queries)
-    {
-
-        string Query = "?";
-
-        foreach (Param param in Queries)
-        {
-            Query += param.Name + "=" + param.Value + "&";
-        }
-
-        List<Param> list = new List<Param>();
-
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        list.Add(paramToken);
-        list.Add(paramOrg);
-        InitializeClient(list);
-
-        await ToGetResponseURL(ToStrUri(URIs_Log.LOG_GET_ID_ENTRY, idLog) + Query);
-
-        return ToObject<ResultLogEntryDTO>();
+        return ResultRaw;
 
     }
 
-    public async Task<bool> LogCSV(string Token, string Organization,
-                                              string idLog, int days, string filename)
+    public async Task<bool> ArtifactGetFile(string ArtifactId, string FileName)
     {
 
-        string Query = "?days=" + days.ToString();
+        InitializeClient(ListParams);
 
-        List<Param> list = new List<Param>();
-
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        list.Add(paramToken);
-        list.Add(paramOrg);
-        InitializeClient(list);
-
-        var response = await ToGetResponseFile(ToStrUri(URIs_Log.LOG_GET_ID_CSV, idLog) + Query, filename);
-
+        var response = await ToGetResponseFile(ToStrUri(URIs_ResultFiles.ARTIFACT_GET_ARTIFACT,ArtifactId), FileName );
+ 
         var statusCode = response.StatusCode;
 
         if ((int)statusCode != 200) return false;
@@ -189,6 +81,6 @@ public partial class BotMaestroSDK
         return true;
 
     }
-    */
+
 
 }

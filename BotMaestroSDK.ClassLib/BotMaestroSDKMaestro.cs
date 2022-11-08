@@ -25,7 +25,6 @@ public partial class BotMaestroSDK
     {
 
         TokenMaestroVersion result = JsonConvert.DeserializeObject<TokenMaestroVersion>(ResultRaw);
-        //this.TokenMaestroVersion = result;
 
         return result;
 

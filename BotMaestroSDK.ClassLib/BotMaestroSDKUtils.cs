@@ -15,21 +15,17 @@ using System.Net.Mime;
 using Microsoft.AspNetCore.Hosting.Internal;
 using BotCityMaestroSDK.Dtos.Alert;
 using BotCityMaestroSDK.Dtos.Artefact;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using static System.Net.WebRequestMethods;
-using static System.Net.Mime.MediaTypeNames;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
-using System.Reflection.Metadata;
-using Newtonsoft.Json.Converters;
+
+using RestSharp;
+
 
 namespace BotCityMaestroSDK.Lib;
 
 public partial class BotMaestroSDK
 {
 
-    private ByteArrayContent ToContent(string JsonString){
-
+    private ByteArrayContent ToContent(string JsonString)
+    {
         var buffer = System.Text.Encoding.UTF8.GetBytes(JsonString);
         var byteContent = new ByteArrayContent(buffer);
         return byteContent;
@@ -37,7 +33,6 @@ public partial class BotMaestroSDK
 
     private ByteArrayContent ToContent()
     {
-
         var buffer = System.Text.Encoding.UTF8.GetBytes("");
         var byteContent = new ByteArrayContent(buffer);
         return byteContent;
@@ -48,7 +43,6 @@ public partial class BotMaestroSDK
 
     public StringContent ToContentOnlyParams()
     {
-
         StringContent content = new StringContent(JsonConvert.SerializeObject(""), Encoding.UTF8, "application/json");
 
         content = AddParamsToHeader(content);
@@ -58,7 +52,6 @@ public partial class BotMaestroSDK
 
     public StringContent ToContentParamAndObj<T>(T item)
     {
-     
         StringContent content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
 
         content = AddParamsToHeader(content);
@@ -68,7 +61,6 @@ public partial class BotMaestroSDK
 
     public StringContent ToContentParamAndStr( string item)
     {
-
         StringContent content = new StringContent(item, Encoding.UTF8, "application/json");
 
         content = AddParamsToHeader(content);
@@ -89,7 +81,6 @@ public partial class BotMaestroSDK
 
             var content1 = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
             content = content1;
-
         }
 
         if (typeof(SendLoginStudioDTO) == typeof(T))
@@ -100,7 +91,6 @@ public partial class BotMaestroSDK
 
             var content1 = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
             content = content1;
-
         }
 
         if (typeof(SendLoginCliDTO) == typeof(T))
@@ -111,175 +101,41 @@ public partial class BotMaestroSDK
 
             var content1 = new StringContent(JsonConvert.SerializeObject(login), Encoding.UTF8, "application/json");
             content = content1;
-
         }
-
-
         return content;
-
     }
 
-    public async Task<string> ToPostSendFile(byte[] file, int idArtifact, string URI)
-    {
-       
-
-        using (var content = new ByteArrayContent(file))
-        {
-
-            if (ListParams.Count <= 0)
-            {
-
-                var paramToken = new Param
-                {
-                    Name = "token",
-                    Value = Token
-                };
-
-                var paramOrg = new Param
-                {
-                    Name = "organization",
-                    Value = Organization
-                };
-
-                ListParams.Add(paramToken);
-                ListParams.Add(paramOrg);
-            }
-
-            foreach (Param param in ListParams)
-            {
-                content.Headers.Add(
-                param.Name,
-                    param.Value
-                );
-            }
-
-            content.Headers.ContentType = new MediaTypeHeaderValue("*/*");
- 
-            //Send it
-            var response = await BotMaestroSDK.ApiClient.PostAsync(URI, content);
-            response.EnsureSuccessStatusCode();
-            Stream responseStream = await response.Content.ReadAsStreamAsync();
-            StreamReader reader = new StreamReader(responseStream);
-            return reader.ReadToEnd();
-        }
-
-
-        
-    }
+    
 
     public async Task<bool> ToPostSendFile(string filePath, int idArtifact, string URI)
     {
-        //StringContent content = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
- 
+        var client = new RestClient(URI);
+   
+        RestRequest request = new RestRequest();
+        request.Method = Method.Post;
 
-
-
-        using (ApiClient)
+        foreach (Param param in ListParams)
         {
-
-            using (var multipartFormDataContent = new MultipartFormDataContent())
-            {
-                var values = new[]
-                {
-                    new KeyValuePair<string, string>("Id", Guid.NewGuid().ToString()),
-                    new KeyValuePair<string, string>("Key", "awesome"),
-                    new KeyValuePair<string, string>("From", "khalid@home.com")
-                     //other values
-                };
-
-                /*
-                foreach (var keyValuePair in values)
-                {
-                    multipartFormDataContent.Add(new StringContent(keyValuePair.Value),
-                        String.Format("\"{0}\"", keyValuePair.Key));
-                }
-                */
-
-                multipartFormDataContent.Add(new ByteArrayContent(System.IO.File.ReadAllBytes(filePath)),
-                    '"' + "file" + '"',
-                    '"' + "arqTeste" + '"');
-
-                
-                var result = ApiClient.PostAsync(URI, multipartFormDataContent).Result;
-
-                var statusCode = result.StatusCode;
-
-                if ((int)statusCode != 200)
-                {
-                    GetError.ErrorNumber = (int)statusCode;
-                    GetError.Message = ResultRaw;
-                    GetError.ErroDetail = result.ToString();
-                    Console.WriteLine("ERROR:" + GetError.Message);
-                    BotMaestroSDK.ApiClient = null;
-                    //Console.WriteLine("ErroDetail:" + GetError.ErroDetail);
-                    return false;
-                }
-
-                return true;
-
-            }
+            request.AddHeader(
+                param.Name,
+                param.Value
+            );
         }
 
+        request.AddFile("file", filePath);
+        var response = client.Execute(request);
 
-    }
-
-    public async Task<bool> ToPostSendFile1(string filePath, int idArtifact, string URI)
-    {
-        
-        try
+        var statusCode = response.StatusCode;
+        if ((int)statusCode != 200)
         {
-            using (var content = new MultipartFormDataContent())
-            {
-                //Content-Disposition: form-data; name="json"
-                var item = "";
-                StringContent stringContent = new StringContent(JsonConvert.SerializeObject(item), Encoding.UTF8, "application/json");
-                stringContent.Headers.Add("Content-Disposition", "form-data; name=\"json\"");
-                content.Add(stringContent, "json");
-
-                stringContent = AddParamsToHeader(stringContent);
-
-                FileStream fs = System.IO.File.OpenRead(filePath);
-
-                var streamContent = new StreamContent(fs);
-                streamContent.Headers.Add("Content-Type", "application/octet-stream");
-                streamContent.Headers.Add("Content-Disposition", "form-data; name=\"file\"; filename=\"" + Path.GetFileName(filePath) + "\"");
-                content.Add(streamContent, "file", Path.GetFileName(filePath));
-
-                //content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-
-                Task<HttpResponseMessage> message = ApiClient.PostAsync(URI, content);
-
-                //var result = ApiClient.PostAsync(URI, multipartFormDataContent).Result;
-
-                var statusCode = message.Result.StatusCode;
-
-                if ((int)statusCode != 200)
-                {
-                    GetError.ErrorNumber = (int)statusCode;
-                    GetError.Message = ResultRaw;
-                    GetError.ErroDetail = message.Result.ToString();
-                    Console.WriteLine("ERROR:" + GetError.Message);
-                    BotMaestroSDK.ApiClient = null;
-                    //Console.WriteLine("ErroDetail:" + GetError.ErroDetail);
-                    return false;
-                }
-
-               
-
-                var input = message.Result.Content.ReadAsStringAsync();
-                Console.WriteLine(input.Result);
-                Console.Read();
-                
-            }
-
+            GetError.ErrorNumber = (int)statusCode;
+            GetError.Message = ResultRaw;
+            GetError.ErroDetail = response.ToString();
+            BotMaestroSDK.ApiClient = null;
+            return false;
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
+
         return true;
-
-
     }
 
 
@@ -300,11 +156,10 @@ public partial class BotMaestroSDK
             GetError.ErrorNumber = (int)statusCode;
             GetError.Message = ResultRaw;
             GetError.ErroDetail = response.ToString();
-            Console.WriteLine("ERROR:" + GetError.Message);
             BotMaestroSDK.ApiClient = null;
-            //Console.WriteLine("ErroDetail:" + GetError.ErroDetail);
             return null;
         }
+
         return response;
 
     }
@@ -316,7 +171,6 @@ public partial class BotMaestroSDK
                 content).Result;
 
         ResponseMessage = response;
-        //Console.WriteLine("response:" + response);
         var statusCode = response.StatusCode;
         ResultRaw = await response.Content.ReadAsStringAsync();
         if ((int)statusCode != 200) return null;
@@ -327,7 +181,6 @@ public partial class BotMaestroSDK
 
     public async Task<HttpResponseMessage> ToGetResponseURL(string URI)
     {
-
         var response = BotMaestroSDK.ApiClient.GetAsync(
                 URI).Result;
 
@@ -335,18 +188,14 @@ public partial class BotMaestroSDK
        
         var statusCode = response.StatusCode;
         ResultRaw = await response.Content.ReadAsStringAsync();
-        Console.WriteLine("ResultRaw:" + ResultRaw);
         if ((int)statusCode != 200) return null;
 
         return response;
-
     }
 
 
     public async Task<HttpResponseMessage> ToGetResponseFile(string URI, string filename)
     {
-
-
         var response = await BotMaestroSDK.ApiClient.GetAsync(URI);
 
         if (response.IsSuccessStatusCode)
@@ -365,24 +214,18 @@ public partial class BotMaestroSDK
 
         var statusCode = response.StatusCode;
         ResultRaw = await response.Content.ReadAsStringAsync();
-        Console.WriteLine("ResultRaw:" + ResultRaw);
         if ((int)statusCode != 200) return null;
 
 
         return response;
-
     }
-
-
 
     public T ToObject<T>()
     {
 
-        //var resultRaw = ResponseMessage.Content.ReadAsStringAsync();
         if (typeof(ResultLoginDTO) == typeof(T))
         {
             ResultLoginDTO result1 = JsonConvert.DeserializeObject<ResultLoginDTO>(ResultRaw);
-            //this.TokenLoginDTO = result1;
             this.Token = result1.Token;
             this.Organization = result1.Organizations.FirstOrDefault(x => x.Label != "").Label;
             return (T)Convert.ChangeType(result1, typeof(T));
@@ -394,25 +237,20 @@ public partial class BotMaestroSDK
             ResultLoginStudioDTO result1 = JsonConvert.DeserializeObject<ResultLoginStudioDTO>(ResultRaw);
             this.TokenLoginStudioDTO = result1;
             this.Token = result1.Access_Token;
-            //this.Organization = result1.Organizations.FirstOrDefault(x => x.Label != "").Label;
             return (T)Convert.ChangeType(result1, typeof(T));
-
         }
 
         if (typeof(ResultLoginCliDTO) == typeof(T))
         {
             ResultLoginCliDTO result1 = JsonConvert.DeserializeObject<ResultLoginCliDTO>(ResultRaw);
             this.Token = result1.Access_Token;
-            //this.Organization = result1.Organizations.FirstOrDefault(x => x.Label != "").Label;
             this.TokenLoginCliDTO = result1;
             return (T)Convert.ChangeType(result1, typeof(T));
-
         }
         
         if (typeof(ResultTaskDTO) == typeof(T))
         {
                ResultTaskDTO result1 = JsonConvert.DeserializeObject<ResultTaskDTO>(ResultRaw);
-               //this.ResultTaskDTO = result1;
                return (T)Convert.ChangeType(result1, typeof(T));
         }
 
@@ -421,7 +259,6 @@ public partial class BotMaestroSDK
             try
             {
                 ResultLogDTO result1 = JsonConvert.DeserializeObject<ResultLogDTO>(ResultRaw);
-                //this.ResultLogDTO = result1;
                 return (T)Convert.ChangeType(result1, typeof(T));
             }
             catch (Exception e)
@@ -429,7 +266,6 @@ public partial class BotMaestroSDK
                 try
                 {
                     List<ResultLogDTO> resultList = JsonConvert.DeserializeObject<List<ResultLogDTO>>(ResultRaw);
-                    //this.ListLog = resultList;
                     return (T)Convert.ChangeType(resultList.FirstOrDefault(), typeof(T));
                 }
                 catch(Exception f)
@@ -437,14 +273,11 @@ public partial class BotMaestroSDK
 
                 }
             }
-            
-          
         }
 
         if (typeof(ResultLogEntryDTO) == typeof(T))
         {
             ResultLogEntryDTO result1 = JsonConvert.DeserializeObject<ResultLogEntryDTO>(ResultRaw);
-            //this.ResultLogEntryDTO = result1;
             return (T)Convert.ChangeType(result1, typeof(T));
         }
 
@@ -467,35 +300,43 @@ public partial class BotMaestroSDK
 
     private string ToStrUri(string JsonString, string id = "")
     {
-
         var result = JsonString.Replace("{id}", id);
 
         return URL_BOT_SERVER_API_HOTS + result;
 
     }
 
+    private void AddParamsToList()
+    {
+        if (ListParams.Count <=0)
+        {
+            if (ListParams.Count <= 0)
+            {
+
+                var paramToken = new Param
+                {
+                    Name = "token",
+                    Value = Token
+                };
+
+                var paramOrg = new Param
+                {
+                    Name = "organization",
+                    Value = Organization
+                };
+
+                ListParams.Add(paramToken);
+                ListParams.Add(paramOrg);
+            }
+        }
+    }
+
     private StringContent AddParamsToHeader(StringContent content)
     {
         StringContent content1 = content;
 
-        if (ListParams.Count<=0)
-        {
-           
-            var paramToken = new Param
-            {
-                Name = "token",
-                Value = Token
-            };
+        AddParamsToList();
 
-            var paramOrg = new Param
-            {
-                Name = "organization",
-                Value = Organization
-            };
-
-            ListParams.Add(paramToken);
-            ListParams.Add(paramOrg);
-        }
         foreach (Param param in ListParams)
         {
             content.Headers.Add(

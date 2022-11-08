@@ -60,6 +60,7 @@ public partial class BotMaestroSDK
     public async Task<ResultLogDTO> LogById(string idLog)
     {
 
+        AddParamsToList();
         InitializeClient(ListParams);
 
         await ToGetResponseURL(ToStrUri(URIs_Log.LOG_GET_ID,idLog));
@@ -99,7 +100,7 @@ public partial class BotMaestroSDK
             Query += param.Name + "=" + param.Value + "&";
         }
 
-
+        AddParamsToList();
         InitializeClient(ListParams);
 
         await ToGetResponseURL(ToStrUri(URIs_Log.LOG_GET_ID_ENTRY, idLog) + Query);

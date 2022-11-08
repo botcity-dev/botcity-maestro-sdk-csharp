@@ -15,8 +15,6 @@ namespace BotCityMaestroSDK.Lib;
 
 public partial class BotMaestroSDK
 {
-
-
     public async Task<ResultTaskDTO> TaskCreate(BotCityMaestroSDK.Dtos.Task.Activity Activity){
        
         InitializeClient();
@@ -51,28 +49,11 @@ public partial class BotMaestroSDK
 
     public async Task<ResultTaskDTO> TaskGetState(int? TaskId)
     {
-     
-        List<Param> list = new List<Param>();
-
-        var paramToken = new Param
-        {
-            Name = "token",
-            Value = Token
-        };
-
-        var paramOrg = new Param
-        {
-            Name = "organization",
-            Value = Organization
-        };
-
-        list.Add(paramToken);
-        list.Add(paramOrg);
-        InitializeClient(list);
+        AddParamsToList();
+        InitializeClient(ListParams);
 
         var result = await ToGetResponseURL(ToStrUri(URIs_Task.TASK_GETID, TaskId.ToString()));
 
-        
         if (result == null)
         {
             ResultTaskDTO emptyTaskDTO = new ResultTaskDTO();

@@ -18,7 +18,7 @@ var BotApi = new BotMaestroSDK(url);
 
 
 var user = "edson.marcio7@gmail.com";
-var senha = "!";
+var senha = "boyAika1!";
 
 
 
@@ -113,7 +113,7 @@ Console.WriteLine("TASK3:" + taskId3.ActivityLabel);
 Console.ReadKey();
 */
 
-
+/*
 SendLogDTO sendLogDTO = new SendLogDTO();
 
 sendLogDTO.activityLabel = "log3" + DateTime.Now.ToString("yyyymmddss");
@@ -147,9 +147,9 @@ var Log = await BotApi.LogCreate(sendLogDTO);
 if (Log != null)
 {
     Console.WriteLine("LOG:" + Log.ToString());
-    Console.WriteLine("LOG:" + Log.activityLabel);
-    Console.WriteLine("LOG:" + Log.organizationLabel);
-    Console.WriteLine("LOG:" + Log.id);
+    Console.WriteLine("LOG_ACTIVI:" + Log.activityLabel);
+    Console.WriteLine("LOG_ORG_LABEL:" + Log.organizationLabel);
+    Console.WriteLine("LOG_ID:" + Log.id);
 }
 else
 {
@@ -188,13 +188,13 @@ listParam.Add(sParam1);
 listParam.Add(sParam2);
 listParam.Add(sParam3);
 
-bool LogEntry = await BotApi.LogInsertEntry(Log.id, listParam);
+bool LogEntry = await BotApi.LogInsertEntry(Log.activityLabel, listParam);
 Console.WriteLine("LogEntry:" + LogEntry.ToString());
 
 
-var Log2 = await BotApi.LogById(Log.id);
+var Log2 = await BotApi.LogById(Log.activityLabel);
 Console.WriteLine("LOG2:" + Log2.ToString());
-Console.WriteLine("LOG2:" + Log2.activityLabel);
+Console.WriteLine("LOG2:" + Log2.Label);
 Console.WriteLine("LOG2:" + Log2.organizationLabel);
 
 
@@ -207,22 +207,24 @@ Param param = new Param
 };
 list.Add(param);
 
-SendLogEntryDTO sendLogEntry = new SendLogEntryDTO();
-//sendLogEntry.
 
 var Log3 = await BotApi.LogFetchData( Log.id, list);
 Console.WriteLine("LOG3:" + Log3.ToString());
 Console.WriteLine("LOG3:" + Log3.TotalPages);
 Console.WriteLine("LOG3:" + Log3.size);
+Console.WriteLine("Log3.Content:" + Log3.Content);
+
 
 var filename = @"d:\Programacao\" + Log.id + ".csv";
 var LogCSV = await BotApi.LogCSV( Log.id, 7,filename);
 
 Console.WriteLine("LogCSV:" + LogCSV.ToString());
 
+*/
+
+
+
 /*
-
-
 SendAlert sendAlert = new SendAlert();
 sendAlert.TaskId = 137985;
 sendAlert.Title = "Meu alerta alerta";
@@ -231,9 +233,9 @@ sendAlert.AlertType = AlertType.INFO;
 
 var Alert = await BotApi.AlertCreate(sendAlert);
 Console.WriteLine("Alert:" + Alert.ActivityName.ToString());
+*/
 
-
-
+/*
 SendMessage sendMessage = new SendMessage();
 sendMessage.Emails.Add("edson.marcio7@gmail.com");
 //sendMessage.Logins.Add("");
@@ -243,13 +245,13 @@ sendMessage.TypeMail = TypeMail.TEXT;
 
 var Message = await BotApi.MessageCreate(sendMessage);
 Console.WriteLine("Message:" + Message.ToString());
-
+*/
 
 
 
 SendArtefact sendArtefact = new SendArtefact();
 sendArtefact.taskId = 129984;
-sendArtefact.Name = "Name mó da hora";
+sendArtefact.Name = "User Facing Name.txt";
 sendArtefact.FileName = "arquivoTeste.txt";
  
 Artefact artifact = await BotApi.ArtifactCreate(sendArtefact);
@@ -259,8 +261,16 @@ Console.WriteLine("Message:" + artifact.userId);
 
 var path = @"d:\arquivoTeste.txt";
 
-var send = await BotApi.ArtifactSend(179, path);
+var send = await BotApi.ArtifactSend(artifact.id, path); //179
 Console.WriteLine("Message:" + send.ToString());
 
+
+var artifactAll = await BotApi.ArtifactGetAll(artifact); //179
+Console.WriteLine("Message:" + artifactAll.ToString());
+
+var filename = @"d:\Programacao\Artifact_" + artifact.id.ToString() + ".txt";
+var artifactDownload = await BotApi.ArtifactGetFile(artifact.id.ToString(), filename); //179
+Console.WriteLine("Message:" + artifactAll.ToString());
+
+
 Console.ReadKey();
-*/

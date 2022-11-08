@@ -13,9 +13,7 @@ namespace BotCityMaestroSDK.Lib;
 
 public partial class BotMaestroSDK
 {
- 
     public static HttpClient ApiClient { get; set; }
-
     private string ResultRaw { get; set; }
     public string Token { get; set; }
     public string Organization { get; set; }
@@ -24,10 +22,8 @@ public partial class BotMaestroSDK
     public static GetError GetError { get; set; }
     public ResultLoginStudioDTO TokenLoginStudioDTO {get; set;}
     public ResultLoginCliDTO TokenLoginCliDTO { get; set; }
-
     public static List<ResultLogDTO> ListLog { get; set; }
-    //public static ResultLogEntryDTO ResultLogEntryDTO { get; set; }
-    //public static List<Activity> Activities {get; set;}
+
     public static string URL_BOT_SERVER_API_HOTS { get; set; }
     public static void InitializeClient(){
 
@@ -39,8 +35,7 @@ public partial class BotMaestroSDK
         );
 
         GetError = new GetError();
-  
-
+ 
     }
 
     public static void InitializeClient(List<Param> ListParams){
@@ -67,10 +62,5 @@ public partial class BotMaestroSDK
         ListParams = new List<Param>();
         InitializeClient();
     }
-
-    public void ActivitiesClear(){
-        //Activities = new List<Activity>();
-    }
-
 
 }

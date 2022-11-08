@@ -11,17 +11,13 @@ namespace BotCityMaestroSDK.Lib;
 
 public partial class BotMaestroSDK
 {
-
-
-    public async Task<ResultLoginDTO> Login(string UserName, string Password){
-
-       
+    public async Task<ResultLoginDTO> Login(string UserName, string Password)
+    {
         var content = ToContentLoginObj<SendLoginDTO>(UserName, Password);
 
         await ToPostResponse(content, URIs.LOGIN_POST);
 
         return ToObject<ResultLoginDTO>();
-        
     }
 
     public async Task<ResultLoginStudioDTO> LoginStudio(string UserName, string Password){

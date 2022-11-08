@@ -10,6 +10,7 @@ using static NUnit.Framework.Constraints.Tolerance;
 using BotCityMaestroSDK.Dtos;
 using System.Security.Cryptography;
 using System.Collections.Generic;
+using System.IO;
 
 namespace BotCity.TestsNUnit;
 
@@ -21,7 +22,7 @@ public class UnitTestLog
 
     
     private SendLogDTO sendLogDTO;
-    private string? LogId;
+    private ResultLogDTO resultLogDTO;
 
     [SetUp]
     public void Setup()
@@ -37,10 +38,7 @@ public class UnitTestLog
         Random random = new Random();
 
         sendLogDTO = new SendLogDTO();
-
-        sendLogDTO.Id = random.Next(0, 9999).ToString();
-        sendLogDTO.activityLabel = "LabelLogName" + random.Next(0, 9999).ToString();
-        LogId = sendLogDTO.Id;
+        sendLogDTO.activityLabel = "log2" + DateTime.Now.ToString("yyyymmddss");
 
         Column column1 = new Column
         {
@@ -51,15 +49,15 @@ public class UnitTestLog
 
         Column column2 = new Column
         {
-            Name = "Column1",
-            Label = "Label 1",
+            Name = "Column2",
+            Label = "Label 2",
             Width = 100
         };
 
         Column column3 = new Column
         {
-            Name = "Column1",
-            Label = "Label 1",
+            Name = "Column3",
+            Label = "Label 3",
             Width = 100
         };
 
@@ -78,14 +76,13 @@ public class UnitTestLog
 
         Arrange();
 
-        Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
         var log = await BotApi.LogCreate(sendLogDTO);
-        
+        resultLogDTO = log;
+
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
         Assert.AreEqual("200", result.ToString());
         Assert.AreEqual(log.organizationLabel, loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
-       
 
     }
 
@@ -108,20 +105,15 @@ public class UnitTestLog
 
 
         //ACT
-        Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
-        Console.WriteLine("LogId:" + LogId);
-
-
-        var log = await BotApi.LogInsertEntry(sendLogDTO.activityLabel, listColunas);
-
+        var log = await BotApi.LogInsertEntry(resultLogDTO.activityLabel, listColunas);
         int result = (int)BotApi.ResponseMessage.StatusCode;
 
 
         //ASSERT
         Assert.AreEqual("200", result.ToString());
-       
 
     }
+
 
     [Test, Order(3)]
     public async Task TestLogById()
@@ -130,16 +122,77 @@ public class UnitTestLog
         var BotApi = new BotMaestroSDK(url);
         var loginUser = await BotApi.Login(user, senha);
 
-        Console.WriteLine(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label);
-        Console.WriteLine("LOG ID:" + sendLogDTO.Id);
-        Console.WriteLine("LOG ID:" + LogId);
-        var log = await BotApi.LogById(sendLogDTO.activityLabel);
-
+        var log = await BotApi.LogById(resultLogDTO.activityLabel);
+        Console.WriteLine("AGORA:" + DateTime.Now.ToString());
         int result = (int)BotApi.ResponseMessage.StatusCode;
-        Console.WriteLine("Result:" + result.ToString());
+
         Assert.AreEqual("200", result.ToString());
         Assert.AreEqual(loginUser.Organizations.FirstOrDefault(x => x.Label != "").Label, log.organizationLabel);
         
     }
-   
+
+    [Test, Order(4)]
+    public async Task TestFetchData()
+    {
+        //ARRANGE
+        var BotApi = new BotMaestroSDK(url);
+        var loginUser = await BotApi.Login(user, senha);
+
+        var list = new List<Param>();
+        Param param = new Param
+        {
+            Name = "size",
+            Value = "10"
+        };
+        list.Add(param);
+
+
+        //ACTION
+        var Log3 = await BotApi.LogFetchData(resultLogDTO.id, list);
+
+        int result = (int)BotApi.ResponseMessage.StatusCode;
+
+        //ASSERT
+        Assert.AreEqual("200", result.ToString());
+        Assert.AreEqual(10, Log3.size);
+
+    }
+
+    [Test, Order(5)]
+    public async Task TestCSV()
+    {
+        //ARRANGE
+
+        var BotApi = new BotMaestroSDK(url);
+        var loginUser = await BotApi.Login(user, senha);
+
+        Arrange();
+
+        var Log1 = await BotApi.LogCreate(sendLogDTO);
+
+        var listColunas = new List<string>();
+        string sParam1, sParam2, sParam3;
+        sParam1 = "Coluna1";
+        sParam2 = "Coluna2";
+        sParam3 = "Coluna3";
+
+        listColunas.Add(sParam1);
+        listColunas.Add(sParam2);
+        listColunas.Add(sParam3);
+
+        var log = await BotApi.LogInsertEntry(Log1.activityLabel, listColunas);
+
+        //ACTION
+        var filename = @"d:\Programacao\" + Log1.id + ".csv";
+
+        var LogCSV = await BotApi.LogCSV(Log1.id, 7, filename);
+
+        int result = (int)BotApi.ResponseMessage.StatusCode;
+
+        //ASSERT
+        Assert.AreEqual("200", result.ToString());
+        Assert.AreEqual(true, LogCSV);
+
+    }
+
 }
