@@ -220,6 +220,20 @@ public partial class Maestro
         return response;
     }
 
+    public async Task<HttpResponseMessage> ToDelete(string URI)
+    {
+        var response = Maestro.ApiClient.DeleteAsync(
+                URI).Result;
+
+        ResponseMessage = response;
+
+        var statusCode = response.StatusCode;
+        ResultRaw = await response.Content.ReadAsStringAsync();
+        if ((int)statusCode != 200) return null;
+
+        return response;
+    }
+
     public T ToObject<T>()
     {
 

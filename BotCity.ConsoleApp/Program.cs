@@ -248,7 +248,7 @@ Console.WriteLine("Message:" + Message.ToString());
 */
 
 
-
+/*
 SendArtefact sendArtefact = new SendArtefact();
 sendArtefact.taskId = 129984;
 sendArtefact.Name = "User Facing Name.txt";
@@ -271,6 +271,54 @@ Console.WriteLine("Message:" + artifactAll.ToString());
 var filename = @"d:\Programacao\Artifact_" + artifact.id.ToString() + ".txt";
 var artifactDownload = await BotApi.DownloadArtifact(artifact.id.ToString(), filename); //179
 Console.WriteLine("Message:" + artifactAll.ToString());
+*/
 
+
+
+//DELETE LOG
+
+SendLogDTO sendLogDTO = new SendLogDTO();
+
+sendLogDTO.activityLabel = "log3" + DateTime.Now.ToString("yyyymmddss");
+
+Column column1 = new Column
+{
+    Name = "Column1",
+    Label = "Label 1",
+    Width = 100
+};
+
+Column column2 = new Column
+{
+    Name = "Column1",
+    Label = "Label 1",
+    Width = 100
+};
+
+Column column3 = new Column
+{
+    Name = "Column1",
+    Label = "Label 1",
+    Width = 100
+};
+
+sendLogDTO.columns.Add(column1);
+sendLogDTO.columns.Add(column2);
+sendLogDTO.columns.Add(column3);
+
+var Log = await BotApi.CreateLog(sendLogDTO);
+if (Log != null)
+{
+    Console.WriteLine("LOG:" + Log.ToString());
+    Console.WriteLine("LOG_ACTIVI:" + Log.activityLabel);
+    Console.WriteLine("LOG_ORG_LABEL:" + Log.organizationLabel);
+    Console.WriteLine("LOG_ID:" + Log.id);
+
+    var deleteLog = await BotApi.DeleteLog(Log.activityLabel);
+}
+else
+{
+    return;
+}
 
 Console.ReadKey();

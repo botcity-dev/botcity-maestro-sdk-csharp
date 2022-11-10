@@ -125,5 +125,21 @@ public partial class Maestro
 
     }
 
+    public async Task<bool> DeleteLog(string idLog)
+    {
+      
+
+        InitializeClient(ListParams);
+
+        var response = await ToDelete(ToStrUri(URIs_Log.LOG_DELETE, idLog));
+
+        var statusCode = response.StatusCode;
+
+        if ((int)statusCode != 200) return false;
+
+        return true;
+
+    }
+
 
 }
