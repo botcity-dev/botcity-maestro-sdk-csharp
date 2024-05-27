@@ -12,6 +12,7 @@ using Dev.BotCity.MaestroSdk.Model.Alert;
 using Dev.BotCity.MaestroSdk.Model.Log;
 using Dev.BotCity.MaestroSdk.Model.Datapool;
 using Dev.BotCity.MaestroSdk.Model.Message;
+using Dev.BotCity.MaestroSdk.Model.Artifact;
 using System.Text.Json.Serialization;
 using Dev.BotCity.MaestroSdk.Utils;
 using Newtonsoft.Json;
@@ -351,7 +352,6 @@ public class BotMaestroSDK {
         public async Task CreateCredential(string label, string key, string value) {
             string url = $"{_server}/api/v2/credential/{label}/key";
             bool existCredential = await this.GetCredentialByLabel(label);
-            Console.WriteLine(!existCredential);
             if (!existCredential) {
                 await this.CreateCredentialByLabel(label, key, value);
                 return;
@@ -408,7 +408,6 @@ public class BotMaestroSDK {
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.PostAsync(url, content);
-                Console.WriteLine(response);
                 verifyResponse(response, "Error in send error credential");
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 JObject json = JObject.Parse(jsonResponse);
@@ -539,7 +538,6 @@ public class BotMaestroSDK {
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.PostAsync(url, content);
-                Console.WriteLine(await response.Content.ReadAsStringAsync());
                 verifyResponse(response, "Error in New Log credential");
                 var jsonResponse = await response.Content.ReadAsStringAsync();
                 return Log.FromJson(jsonResponse);
@@ -602,9 +600,120 @@ public class BotMaestroSDK {
                 verifyResponse(response, "Error in New Log Entry");
             }
         }
-    
+
+        public async Task PostArtifact(string taskId, string name, string filepath) {
+            string artifact_id = await this.CreateArtifact(taskId, name, filepath);
+            string url = $"{_server}/api/v2/artifact/log/{artifact_id}";
+            filepath = Environment.ExpandEnvironmentVariables(filepath);
+            filepath = Path.GetFullPath(filepath);
+            try
+            {
+                using (var client = new HttpClient()) {
+                    using (var form = new MultipartFormDataContent())
+                    {
+                        var fileContent = new ByteArrayContent(File.ReadAllBytes(filepath));
+                        var provider = new FileExtensionContentTypeProvider();
+                        string contentType;
+
+                        if (!provider.TryGetContentType(filepath, out contentType)){
+                            contentType = "application/octet-stream";
+                        }
+                        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse(contentType);
+                        fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+                        {
+                            Name = "file",
+                            FileName = name
+                        };
+                        form.Add(fileContent);
+                        client.AddDefaultHeaders(_accessToken, _login, 30);
+                        var response = await client.PostAsync(url, form);
+
+                        if (!response.IsSuccessStatusCode){
+                            string responseContent = await response.Content.ReadAsStringAsync();
+                            throw new Exception($"Error during send attachment. Server returned {response.StatusCode}. {responseContent}");
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Console.WriteLine($"An error occurred while creating attachment: {ex.Message}");
+                throw;
+            }
+        }
+
+        private async Task<string> CreateArtifact(string taskId, string name, string filename) {
+            string url = $"{_server}/api/v2/artifact";
+            var data = new Dictionary<string, object>
+            {
+                { "taskId", taskId },
+                { "name", name },
+                { "filename", filename },
+            };
+            var content = HttpContentFactory.CreateJsonContent(data);
+            string artifactId = "";
+            using (var client = new HttpClient())
+            {
+                client.AddDefaultHeaders(_accessToken, _login, 30);
+                var response = await client.PostAsync(url, content);
+                verifyResponse(response, "Error in create attachment credential");
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(jsonResponse);
+                artifactId = json["id"].ToString();
+            }
+            return artifactId;
+        }
+        
+        public async Task<(string filename, byte[] fileContent)> GetArtifact(string artifactId) {
+            string url = $"{_server}/api/v2/artifact/{artifactId}";
+
+            using (var client = new HttpClient())
+            {
+                client.AddDefaultHeaders(_accessToken, _login, 30);
+
+                var response = await client.GetAsync(url);
+                verifyResponse(response, "Error in get artifact");
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(jsonResponse);
+                string fileName = json["fileName"].ToString();
+                string urlGetFile = $"{_server}/api/v2/artifact/{artifactId}/file";
+                var file = await client.GetAsync(urlGetFile);
+                verifyResponse(file, "Error in get file artifact");
+                var fileContent = await file.Content.ReadAsByteArrayAsync();
+
+                return (fileName, fileContent);
+            }
+        }
+        
+        public async Task<List<Artifact>> ListArtifact(int days = 7) {
+            string url = $"{_server}/api/v2/artifact?size=5&page=0&sort=dateCreation,desc&days={days}";
+            var artifacts = new List<Artifact>();
+            
+            var (content, totalPages) = await FetchArtifactPageAsync(url);
+            artifacts.AddRange(content);
+            for (int page = 1; page < totalPages; page++) {
+                url = $"{_server}/api/v2/artifact?size=5&page={page}&sort=dateCreation,desc&days={days}";
+                var (pageContent, _) = await FetchArtifactPageAsync(url);
+                artifacts.AddRange(pageContent);
+            }
+            return artifacts
+        }
+
+        private async Task<(List<Artifact>, int)> FetchArtifactPageAsync(string url)
+        {
+            using (var client = new HttpClient())
+            {
+                client.AddDefaultHeaders(_accessToken, _login, 30);
+                var response = await client.GetAsync(url);
+                var responseString = await response.Content.ReadAsStringAsync();
+                var json = JObject.Parse(responseString);
+                var content = json["content"].ToObject<List<Artifact>>();
+                int totalPages = (int)json["totalPages"];
+
+                return (content, totalPages);
+            }
+        }
+        
         public void Logoff()
         {
             _accessToken = null;
-        }
+        }   
     }
