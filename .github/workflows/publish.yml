@@ -1,0 +1,29 @@
+name: Publish Nupkg to Nuget
+
+on:
+  release:
+    types: [published]
+
+env:
+  PROJECT_PATH: 'BotCity.Maestro.SDK.csproj'
+  PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}/Output
+  NUGET_PUSH_URL: ${{ secrets.NUGET_PUSH_URL }}
+  NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+
+
+jobs:
+  publish:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+      - name: 'Pack & Publish project'
+        run: |
+          dotnet clean ${{ env.PROJECT_PATH }}
+          dotnet pack ${{ env.PROJECT_PATH }} --configuration Release --include-symbols --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
+          dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg -k ${{ secrets.NUGET_TOKEN }} -s ${{ env.NUGET_PUSH_URL }}

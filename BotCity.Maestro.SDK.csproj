@@ -2,9 +2,25 @@
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <OutputType>Exe</OutputType>
+    <Version>1.0.0</Version>
+    <PackageVersion>1.0.0</PackageVersion>
+    <PackageId>BotCity.Maestro.SDK</PackageId>
+    <PackageTags>botcity sdk automation automation desktop</PackageTags>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://botcity.dev/</PackageProjectUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <RepositoryUrl>https://github.com/botcity-dev/botcity-maestro-sdk-csharp</RepositoryUrl>
+    <PackageIconUrl>https://developers.botcity.dev/favicon.ico</PackageIconUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Authors>BotCity</Authors>
+    <Description>BotCity SDK </Description>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <Company>BotCity</Company>
+    <Owners>BotCity</Owners>
+
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+  
   </PropertyGroup>
 
   <ItemGroup>
