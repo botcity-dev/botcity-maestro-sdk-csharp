@@ -366,3 +366,4 @@ FodyWeavers.xsd
 bin/
 .vscode/
 dotnet.sln
+Output/

@@ -13,6 +13,8 @@ using Dev.BotCity.MaestroSdk.Model.Log;
 using Dev.BotCity.MaestroSdk.Model.Datapool;
 using Dev.BotCity.MaestroSdk.Model.Message;
 using Dev.BotCity.MaestroSdk.Model.Artifact;
+using Dev.BotCity.MaestroSdk.Model.Summary;
+using Dev.BotCity.MaestroSdk.Model.DatapoolEntry;
 using System.Text.Json.Serialization;
 using Dev.BotCity.MaestroSdk.Utils;
 using Newtonsoft.Json;
@@ -34,6 +36,7 @@ public class BotMaestroSDK {
         private string _key = "";
 
         private string _accessToken = "";
+
         public BotMaestroSDK(string server = "", string login = "", string key = "", bool notifiedDisconnect = false, bool raiseNotConnected = true, bool verifySSLCert = false)
         {
             notifiedDisconnect = notifiedDisconnect;
@@ -77,12 +80,12 @@ public class BotMaestroSDK {
             _key = newValue;
         }
 
-        private string GetAccessToken()
+        public string GetAccessToken()
         {
             return _accessToken;
         }
 
-        private void SetAccessToken(string newValue)
+        public void SetAccessToken(string newValue)
         {
             _accessToken = newValue;
         }
@@ -106,7 +109,7 @@ public class BotMaestroSDK {
                         throw new InvalidOperationException($"Error during login. Server returned {response.StatusCode}. {error}");
                     }    
                 } catch (HttpRequestException error) {
-                    Console.WriteLine($"Ocorreu um erro durante a requisição: {error.Message}");
+                    Console.WriteLine($"Error during request: {error.Message}");
                 }
             }
         }
@@ -115,7 +118,6 @@ public class BotMaestroSDK {
             if (data.IsSuccessStatusCode) {
                 return;
             }
-
             var errorMessage = $"{error}. Server returned {data.StatusCode}.";
             try {
                 var jsonResponse = await data.Content.ReadAsStringAsync();
@@ -368,25 +370,6 @@ public class BotMaestroSDK {
                 var response = await client.PostAsync(url, content);
                 verifyResponse(response, "Error in create credential");
                 
-            }
-        }
-        
-        public async Task<Datapool> CreateDatapool(Datapool pool)
-        {
-            string url = $"{_server}/api/v2/datapool";
-        
-            var content = HttpContentFactory.CreateJsonContent(pool.ToJson());
-
-            using (var client = new HttpClient())
-            {
-                client.AddDefaultHeaders(_accessToken, _login, 30);
-
-                var response = await client.PostAsync(url, content);
-
-                verifyResponse(response, "Error during create alert");
-
-                var jsonResponse = await response.Content.ReadAsStringAsync();
-                return Datapool.FromJson(jsonResponse);
             }
         }
         
@@ -694,7 +677,7 @@ public class BotMaestroSDK {
                 var (pageContent, _) = await FetchArtifactPageAsync(url);
                 artifacts.AddRange(pageContent);
             }
-            return artifacts
+            return artifacts;
         }
 
         private async Task<(List<Artifact>, int)> FetchArtifactPageAsync(string url)
@@ -711,9 +694,42 @@ public class BotMaestroSDK {
                 return (content, totalPages);
             }
         }
+
+        public async Task<Datapool> CreateDatapool(Datapool pool)
+        {
+            string url = $"{_server}/api/v2/datapool";
+
+            using (var client = new HttpClient())
+            {
+                client.AddDefaultHeaders(_accessToken, _login, 30);
+                var content = HttpContentFactory.CreateJsonContent(pool.ToJson());
+                var response = await client.PostAsync(url, content);
+                verifyResponse(response, "Error in get artifact");
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                Datapool data = Datapool.FromJson(jsonResponse);
+                data.Maestro = this;
+                return data;
+            }
+        }
+
+        public async Task<Datapool> GetDatapool(string label)
+        {
+            string url = $"{_server}/api/v2/datapool/{label}";
+
+            using (var client = new HttpClient())
+            {
+                client.AddDefaultHeaders(_accessToken, _login, 30);
+                var response = await client.GetAsync(url);
+                verifyResponse(response, "Error in get Datapool");
+                var jsonResponse = await response.Content.ReadAsStringAsync();
+                Datapool data = Datapool.FromJson(jsonResponse);
+                data.Maestro = this;
+                return data;
+            }
+        }
         
         public void Logoff()
         {
             _accessToken = null;
-        }   
+        }
     }
