@@ -17,7 +17,8 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <Company>BotCity</Company>
     <Owners>BotCity</Owners>
-
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <EmbedAllSources>true</EmbedAllSources>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IncludeSymbols>true</IncludeSymbols>
