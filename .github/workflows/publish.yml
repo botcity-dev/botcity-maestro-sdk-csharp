@@ -23,6 +23,8 @@ jobs:
         with:
           dotnet-version: "8.0.x"
           source-url: ${{ env.NUGET_PUSH_URL }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
       - name: 'Pack & Publish project'
         run: |
           dotnet clean ${{ env.PROJECT_PATH }}
