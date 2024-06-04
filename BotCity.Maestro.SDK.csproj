@@ -20,6 +20,7 @@
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <EmbedAllSources>true</EmbedAllSources>
     <ImplicitUsings>enable</ImplicitUsings>
+    <DebugSymbols>true</DebugSymbols>
     <DebugType>embedded</DebugType>
     <Nullable>enable</Nullable>
     <IncludeSymbols>true</IncludeSymbols>
