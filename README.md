@@ -1,12 +1,4 @@
-<p align="center">
-  <h1 align="center">BotCity Maestro SDK - C#</h1>
-
-  <p align="center">
-    <strong>« Explore Framework <a href="https://documentation.botcity.dev/maestro/maestro-sdk/">docs</a> »</strong>
-  </p>
-</p>
-
-<br>
+# BotCity Maestro SDK - C#
 
 ## Summary  <!-- omit in toc -->
 
