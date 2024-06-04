@@ -11,7 +11,6 @@
 - [⛑ Support](#-support)
   - [🐛 Bug reports and 💎 Feature requests](#-bug-reports-and--feature-requests)
   - [📢 Contact us](#-contact-us)
-- [💡 Related Projects](#-related-projects)
 
 
 ## 🤖 Computer-vision based UI Automation
