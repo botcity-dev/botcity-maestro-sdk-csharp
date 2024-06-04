@@ -14,17 +14,7 @@
 - [🚀 Getting Started](#-getting-started)
   - [📦 Prerequisites](#-prerequisites)
   - [💫 Installing](#-installing)
-  - [⭐ Orchestrating with BotCity Maestro](#-orchestrating-with-botcity-maestro)
 - [📚 Documentation](#-documentation)
-- [💻 Developers Portal](#-developers-portal)
-- [💬 Forum](#-forum)
-- [🌎 BotCity Automation Platform](#-botcity-automation-platform)
-  - [1️⃣  All in One Platform](#1️⃣--all-in-one-platform)
-  - [2️⃣  Deploy with a Single Line](#2️⃣--deploy-with-a-single-line)
-  - [3️⃣  Manage your Task Queue](#3️⃣--manage-your-task-queue)
-  - [4️⃣  Manage your Runtime Environments](#4️⃣--manage-your-runtime-environments)
-  - [5️⃣  Create Alerts and Reports from the Automation Execution](#5️⃣--create-alerts-and-reports-from-the-automation-execution)
-  - [6️⃣  Create your Community Account](#6️⃣--create-your-community-account)
 - [🤝 Contributing to BotCity Framework](#-contributing-to-botcity-framework)
 - [⛑ Support](#-support)
   - [🐛 Bug reports and 💎 Feature requests](#-bug-reports-and--feature-requests)
@@ -54,50 +44,8 @@ dotnet add package BotCity.Maestro.SDK
 
 Documentation is available at https://documentation.botcity.dev/maestro/maestro-sdk/.
 
-## 💻 Developers Portal
-
-[![Developers Portal](https://files.botcity.dev/github/readme/portal.png?)](https://documentation.botcity.dev)
-
-## 💬 Forum
-
-[![Forum](https://files.botcity.dev/github/readme/forum.png)](https://community.botcity.dev/)
-
 ## 🌎 BotCity Automation Platform
 BotCity is a platform to develop, deploy, manage and maintain automations. Automations can be developed in Python, Java, Javascript or Csharp using open-source libraries that are market standard.
-
-### 1️⃣  All in One Platform
-Develop, deploy, manage and scale your Automation Ops using All in One platform that provides task queue, runtime environment management, reports, alerts, logs and much more.
-
-[![BotCity Maestro](https://files.botcity.dev/github/readme/maestro/maestro.png?)](https://documentation.botcity.dev/maestro/)
-
-### 2️⃣  Deploy with a Single Line
-
-Use BotCity command-line interface (CLI) to deploy your bot into a runtime environment with a single line:
-
-[![BotCity CLI](https://files.botcity.dev/github/readme/cli/botcli.gif)](https://documentation.botcity.dev/cli/)
-
-### 3️⃣  Manage your Task Queue
-
-[![BotCity Maestro Task Queue](https://files.botcity.dev/github/readme/maestro/tasks.png?)](https://documentation.botcity.dev/maestro/features/task-queue/)
-
-### 4️⃣  Manage your Runtime Environments
-
-[![BotCity Maestro Machines](https://files.botcity.dev/github/readme/maestro/machines.png?)](https://documentation.botcity.dev/maestro/features/runners/)
-
-### 5️⃣  Create Alerts and Reports from the Automation Execution
-
-#### Alerts
-[![BotCity Maestro Alerts](https://files.botcity.dev/github/readme/maestro/alerts.png?)](https://documentation.botcity.dev/maestro/features/alerts/)
-
-#### Execution Logs
-[![BotCity Maestro Alerts](https://files.botcity.dev/github/readme/maestro/logs.png?)](https://documentation.botcity.dev/maestro/features/logs/)
-
-### 6️⃣  Create your Community Account
-
-We have a community account for hobbyists and students. Just signup and start automating.
-
-[![Sign Up](https://files.botcity.dev/github/readme/signup.png?)](https://developers.botcity.dev/signup)
-
 
 ## 🤝 Contributing to BotCity Framework
 
