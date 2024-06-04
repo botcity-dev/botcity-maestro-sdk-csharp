@@ -11,7 +11,7 @@
     <RepositoryType>GitHub</RepositoryType>
     <RepositoryUrl>https://github.com/botcity-dev/botcity-maestro-sdk-csharp</RepositoryUrl>
     <PackageIconUrl>https://developers.botcity.dev/favicon.ico</PackageIconUrl>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReadmeFile>./README.md</PackageReadmeFile>
     <Authors>BotCity</Authors>
     <Description>BotCity SDK </Description>
     <NeutralLanguage>en-US</NeutralLanguage>
