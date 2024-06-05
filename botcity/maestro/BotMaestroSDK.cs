@@ -64,7 +64,7 @@ public class BotMaestroSDK {
 
         public void SetServer(string newValue)
         {
-            if (!string.IsNullOrEmpty(newValue) && newValue[^1] == '/'){
+            if (newValue == null || newValue == String.Empty && newValue[^1] == '/'){
                 newValue = newValue.Substring(0, newValue.Length - 1);
             }
             _server = newValue;
@@ -542,7 +542,7 @@ public class BotMaestroSDK {
         public async Task<List<Entry>> GetLog(string label, string date = null) {
             string url = $"{_server}/api/v2/log/{label}";
             int days = 365;
-            if (!string.IsNullOrEmpty(date)) {
+            if (date == null || date == String.Empty) {
                 DateTime parsedDate = DateTime.ParseExact(date, "dd/MM/yyyy", null);
                 days = (DateTime.Now - parsedDate).Days + 1;
             }
