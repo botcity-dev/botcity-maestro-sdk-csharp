@@ -20,7 +20,6 @@
     <Owners>BotCity</Owners>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
     <EmbedAllSources>true</EmbedAllSources>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>8.0</LangVersion> 
     <IncludeSymbols>true</IncludeSymbols>
