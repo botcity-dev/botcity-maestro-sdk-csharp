@@ -36,8 +36,9 @@ public class BotMaestroSDK {
         private string _key = "";
 
         private string _accessToken = "";
+        private string _taskId = "";
 
-        public BotMaestroSDK(string server = "", string login = "", string key = "", bool notifiedDisconnect = false, bool raiseNotConnected = true, bool verifySSLCert = false)
+        public BotMaestroSDK(string server = "", string login = "", string key = "", string taskId = "", bool notifiedDisconnect = false, bool raiseNotConnected = true, bool verifySSLCert = false)
         {
             notifiedDisconnect = notifiedDisconnect;
             _raiseNotConnected = raiseNotConnected;
@@ -45,6 +46,7 @@ public class BotMaestroSDK {
             _server = server;
             _login = login;
             _key = key;
+            _taskId = taskId;
         }
 
         public string GetLogin()
@@ -89,11 +91,41 @@ public class BotMaestroSDK {
         {
             _accessToken = newValue;
         }
-
         private StringContent GetContent(object data) {
             string jsonBody = JsonConvert.SerializeObject(data);
             var content = new StringContent(jsonBody, Encoding.UTF8, "application/json");
-            return content;
+            return content; 
+        }
+        
+        public string GetTaskId()
+        {
+            return _taskId;
+        }
+
+        public void SetTaskId(string newValue)
+        {
+            _taskId = newValue;
+        }
+    
+        public static BotMaestroSDK FromSysArgs(string defaultServer = "", string defaultLogin = "", string defaultKey = "")
+        {
+            string[] args = Environment.GetCommandLineArgs();
+            BotMaestroSDK maestro;
+
+            if (args.Length >= 4) {
+                string server = args[1];
+                string taskId = args[2];
+                string token = args[3];
+                string organization = args.Length > 4 ? args[4] : string.Empty;
+                maestro = new BotMaestroSDK();
+                maestro.SetServer(server);
+                maestro.SetTaskId(taskId);
+                maestro.SetAccessToken(token);
+                maestro.SetLogin(organization);
+            } else {
+                maestro = new BotMaestroSDK(defaultServer, defaultLogin, defaultKey);
+            }
+            return maestro;
         }
 
         public async Task Login(string server = "", string login = "", string key = "") {
