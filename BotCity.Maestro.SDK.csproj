@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <Version>1.0.3</Version>
-    <PackageVersion>1.0.3</PackageVersion>
+    <Version>1.0.4</Version>
+    <PackageVersion>1.0.4</PackageVersion>
     <PackageId>BotCity.Maestro.SDK</PackageId>
     <PackageTags>botcity sdk automation automation desktop</PackageTags>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
