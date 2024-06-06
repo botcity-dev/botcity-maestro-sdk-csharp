@@ -129,20 +129,25 @@ public class BotMaestroSDK {
         }
 
         public async Task<Execution> GetExecutionAsync(string taskId = "") {
-            taskId = taskId ?? this._taskId;
-            if (string.IsNullOrEmpty(_accessToken)) {
-                return new Execution("", taskId, "", new Dictionary<string, object>{});
+            string verifyTaskId = taskId;
+
+            if (string.IsNullOrEmpty(taskId)) {
+                verifyTaskId = this._taskId;
             }
 
-            if (taskId == null) {
+            if (string.IsNullOrEmpty(_accessToken)) {
+                return new Execution("", verifyTaskId, "", new Dictionary<string, object>{});
+            }
+
+            if (string.IsNullOrEmpty(verifyTaskId)) {
                 throw new Exception("A task ID must be informed either via the parameter or the class property.");
             }
 
-            AutomationTask task = await this.GetTaskAsync(taskId);
+            AutomationTask task = await this.GetTaskAsync(verifyTaskId);
             JObject parametersObject = JObject.FromObject(task.Parameters);
             Dictionary<string, object> parametersDictionary = parametersObject.ToObject<Dictionary<string, object>>();
 
-            return new Execution(_server, taskId, _accessToken, parametersDictionary);
+            return new Execution(_server, verifyTaskId, _accessToken, parametersDictionary);
         }
 
         private Dictionary<string, object> ToDictionary(dynamic item)
