@@ -128,13 +128,13 @@ public class BotMaestroSDK {
             return maestro;
         }
 
-        public async Task<Execution> GetExecutionAsync(string taskId) {
+        public async Task<Execution> GetExecutionAsync(string taskId = "") {
             taskId = taskId ?? this._taskId;
             if (string.IsNullOrEmpty(_accessToken)) {
                 return new Execution("", taskId, "", new Dictionary<string, object>{});
             }
 
-            if (string.IsNullOrEmpty(taskId)) {
+            if (taskId == null) {
                 throw new Exception("A task ID must be informed either via the parameter or the class property.");
             }
 
