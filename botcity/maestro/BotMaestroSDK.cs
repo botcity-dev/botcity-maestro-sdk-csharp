@@ -15,6 +15,7 @@ using Dev.BotCity.MaestroSdk.Model.Message;
 using Dev.BotCity.MaestroSdk.Model.Artifact;
 using Dev.BotCity.MaestroSdk.Model.Summary;
 using Dev.BotCity.MaestroSdk.Model.DatapoolEntry;
+using Dev.BotCity.MaestroSdk.Model.Execution;
 using System.Text.Json.Serialization;
 using Dev.BotCity.MaestroSdk.Utils;
 using Newtonsoft.Json;
@@ -22,7 +23,6 @@ using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using Microsoft.AspNetCore.StaticFiles;
 using System.Globalization;
-
 
 
 public class BotMaestroSDK {
@@ -126,6 +126,33 @@ public class BotMaestroSDK {
                 maestro = new BotMaestroSDK(defaultServer, defaultLogin, defaultKey);
             }
             return maestro;
+        }
+
+        public async Task<Execution> GetExecutionAsync(string taskId) {
+            taskId = taskId ?? this._taskId;
+            if (string.IsNullOrEmpty(_accessToken)) {
+                return new Execution("", taskId, "", new Dictionary<string, object>{});
+            }
+
+            if (string.IsNullOrEmpty(taskId)) {
+                throw new Exception("A task ID must be informed either via the parameter or the class property.");
+            }
+
+            AutomationTask task = await this.GetTaskAsync(taskId);
+            JObject parametersObject = JObject.FromObject(task.Parameters);
+            Dictionary<string, object> parametersDictionary = parametersObject.ToObject<Dictionary<string, object>>();
+
+            return new Execution(_server, taskId, _accessToken, parametersDictionary);
+        }
+
+        private Dictionary<string, object> ToDictionary(dynamic item)
+        {
+            var dictionary = new Dictionary<string, object>();
+            foreach (var property in (IDictionary<string, object>)item)
+            {
+                dictionary.Add(property.Key, property.Value);
+            }
+            return dictionary;
         }
 
         public async Task Login(string server = "", string login = "", string key = "") {
