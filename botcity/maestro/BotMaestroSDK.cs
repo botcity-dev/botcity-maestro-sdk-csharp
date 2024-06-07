@@ -436,10 +436,27 @@ public class BotMaestroSDK {
                 
             }
         }
-        
-        public async Task CreateError(Exception exception, string taskId, string screenshotPath = "", List<string> attachments = null) {
+        private Dictionary<string, string> MergeDictionaries(Dictionary<string, string> first, Dictionary<string, object> second)
+        {
+            Dictionary<string, string> result = new Dictionary<string, string>(first);
+
+            foreach (var kvp in second)
+            {
+                if (!result.ContainsKey(kvp.Key))
+                {
+                    result.Add(kvp.Key, kvp.Value.ToString());
+                }
+            }
+
+            return result;
+        }
+
+        public async Task CreateError(Exception exception, string taskId, string screenshotPath = "", Dictionary<string, object> tags = null, List<string> attachments = null) {
             string url = $"{_server}/api/v2/error";
-            Dictionary<string, string> tags = this.GetDefaultErrorTags();
+            Dictionary<string, string> defaultTags = this.GetDefaultErrorTags();
+            if (tags != null) {
+                defaultTags = this.MergeDictionaries(defaultTags, tags);
+            }
             var data = new Dictionary<string, object>
             {
                 { "taskId", taskId },
@@ -447,7 +464,7 @@ public class BotMaestroSDK {
                 { "message", exception.Message },
                 { "stackTrace", exception.StackTrace },
                 { "language", "SHELL" },
-                { "tags", tags },
+                { "tags", defaultTags },
             };
             var content = HttpContentFactory.CreateJsonContent(data);
             string idError = "";
@@ -464,7 +481,7 @@ public class BotMaestroSDK {
                 await this.CreateScreenshotAsync(idError, screenshotPath);
             }
 
-            if (attachments.Count > 0) {
+            if (attachments != null && attachments.Count > 0) {
                 foreach (string attachment in attachments){
                     await this.CreateAttachment(idError, attachment);
                 }
