@@ -160,7 +160,7 @@ public class BotMaestroSDK {
             return dictionary;
         }
 
-        public async Task Login(string server = "", string login = "", string key = "") {
+        public async Task LoginAsync(string server = "", string login = "", string key = "") {
             using (HttpClient client = new HttpClient()) {
                 try {
                     var data = new { login = _login, key = _key };
@@ -262,7 +262,7 @@ public class BotMaestroSDK {
             }
         }
 
-        public async Task<AutomationTask> InterruptTask(string taskId) {
+        public async Task<AutomationTask> InterruptTaskAsync(string taskId) {
             string url = $"{_server}/api/v2/task/{taskId}";
             var data = new Dictionary<string, object>
             {
@@ -284,7 +284,7 @@ public class BotMaestroSDK {
             }
         }
 
-        public async Task<AutomationTask> RestartTask(string taskId) {
+        public async Task<AutomationTask> RestartTaskAsync(string taskId) {
             string url = $"{_server}/api/v2/task/{taskId}";
             var data = new Dictionary<string, object>
             {
@@ -306,7 +306,7 @@ public class BotMaestroSDK {
             }
         }
 
-        public async Task<Alert> CreateAlert(string taskId, string title, string message, AlertTypeEnum alertType)
+        public async Task<Alert> CreateAlertAsync(string taskId, string title, string message, AlertTypeEnum alertType)
         {
             string url = $"{_server}/api/v2/alerts";
             var data = new Dictionary<string, object>
@@ -332,7 +332,7 @@ public class BotMaestroSDK {
             }
         }
 
-        public async Task SendMessage(List<string> emails, List<string> logins, string subject, string body, MessageTypeEnum messageType, List<string> groups = null)
+        public async Task SendMessageAsync(List<string> emails, List<string> logins, string subject, string body, MessageTypeEnum messageType, List<string> groups = null)
         {
             string url = $"{_server}/api/v2/message";
             var data = new Dictionary<string, object>
@@ -357,7 +357,7 @@ public class BotMaestroSDK {
             }
         }
 
-        public async Task<string> GetCredential(string label, string key) {
+        public async Task<string> GetCredentialAsync(string label, string key) {
             string url = $"{_server}/api/v2/credential/{label}/key/{key}";
 
             using (var client = new HttpClient())
@@ -415,7 +415,7 @@ public class BotMaestroSDK {
             }
         }
         
-        public async Task CreateCredential(string label, string key, string value) {
+        public async Task CreateCredentialAsync(string label, string key, string value) {
             string url = $"{_server}/api/v2/credential/{label}/key";
             bool existCredential = await this.GetCredentialByLabel(label);
             if (!existCredential) {
@@ -451,7 +451,7 @@ public class BotMaestroSDK {
             return result;
         }
 
-        public async Task CreateError(Exception exception, string taskId, string screenshotPath = "", Dictionary<string, object> tags = null, List<string> attachments = null) {
+        public async Task CreateErrorAsync(Exception exception, string taskId, string screenshotPath = "", Dictionary<string, object> tags = null, List<string> attachments = null) {
             string url = $"{_server}/api/v2/error";
             Dictionary<string, string> defaultTags = this.GetDefaultErrorTags();
             if (tags != null) {
@@ -620,7 +620,7 @@ public class BotMaestroSDK {
             }
         }
 
-        public async Task<List<Entry>> GetLog(string label, string date = null) {
+        public async Task<List<Entry>> GetLogAsync(string label, string date = null) {
             string url = $"{_server}/api/v2/log/{label}";
             int days = 365;
             if (!string.IsNullOrEmpty(date)) {
@@ -665,8 +665,8 @@ public class BotMaestroSDK {
             }
         }
 
-        public async Task PostArtifact(string taskId, string name, string filepath) {
-            string artifact_id = await this.CreateArtifact(taskId, name, filepath);
+        public async Task PostArtifactAsync(string taskId, string name, string filepath) {
+            string artifact_id = await this.CreateArtifactAsync(taskId, name, filepath);
             string url = $"{_server}/api/v2/artifact/log/{artifact_id}";
             filepath = Environment.ExpandEnvironmentVariables(filepath);
             filepath = Path.GetFullPath(filepath);
@@ -704,7 +704,7 @@ public class BotMaestroSDK {
             }
         }
 
-        private async Task<string> CreateArtifact(string taskId, string name, string filename) {
+        private async Task<string> CreateArtifactAsync(string taskId, string name, string filename) {
             string url = $"{_server}/api/v2/artifact";
             var data = new Dictionary<string, object>
             {
@@ -726,7 +726,7 @@ public class BotMaestroSDK {
             return artifactId;
         }
         
-        public async Task<(string filename, byte[] fileContent)> GetArtifact(string artifactId) {
+        public async Task<(string filename, byte[] fileContent)> GetArtifactAsync(string artifactId) {
             string url = $"{_server}/api/v2/artifact/{artifactId}";
 
             using (var client = new HttpClient())
@@ -747,7 +747,7 @@ public class BotMaestroSDK {
             }
         }
         
-        public async Task<List<Artifact>> ListArtifact(int days = 7) {
+        public async Task<List<Artifact>> ListArtifactAsync(int days = 7) {
             string url = $"{_server}/api/v2/artifact?size=5&page=0&sort=dateCreation,desc&days={days}";
             var artifacts = new List<Artifact>();
             
@@ -776,7 +776,7 @@ public class BotMaestroSDK {
             }
         }
 
-        public async Task<Datapool> CreateDatapool(Datapool pool)
+        public async Task<Datapool> CreateDatapoolAsync(Datapool pool)
         {
             string url = $"{_server}/api/v2/datapool";
 
@@ -793,7 +793,7 @@ public class BotMaestroSDK {
             }
         }
 
-        public async Task<Datapool> GetDatapool(string label)
+        public async Task<Datapool> GetDatapoolAsync(string label)
         {
             string url = $"{_server}/api/v2/datapool/{label}";
 

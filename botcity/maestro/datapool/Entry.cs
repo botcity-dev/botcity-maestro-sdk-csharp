@@ -140,7 +140,7 @@ namespace Dev.BotCity.MaestroSdk.Model.DatapoolEntry
             return data;
         }
 
-        public async Task<DatapoolEntry> Save(string? taskId = null) {
+        public async Task<DatapoolEntry> SaveAsync(string? taskId = null) {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.DatapoolLabel}/entry/{this.EntryId}";
             var data = JsonConvert.SerializeObject(this.JsonToUpdate());
             var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
@@ -160,13 +160,13 @@ namespace Dev.BotCity.MaestroSdk.Model.DatapoolEntry
         
         private async Task Report(StateEntryEnum state) {
             this.State = state;
-            await this.Save();
+            await this.SaveAsync();
         }
-        public async Task ReportDone() {
+        public async Task ReportDoneAsync() {
             await this.Report(StateEntryEnum.DONE);
         }
 
-        public async Task ReportError() {
+        public async Task ReportErrorAsync() {
             await this.Report(StateEntryEnum.ERROR);
         }
 

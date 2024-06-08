@@ -160,7 +160,7 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             return await this.ActiveAsync(false);
         }
         
-        public async Task<bool> IsActive() {
+        public async Task<bool> IsActiveAsync() {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}";
 
             using (var client = new HttpClient()) {
@@ -175,7 +175,7 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             }
         }
 
-        public async Task<Summary> GetSummary() {
+        public async Task<Summary> GetSummaryAsync() {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/summary";
 
             using (var client = new HttpClient()) {
@@ -189,16 +189,16 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             }
         }
 
-        public async Task<bool> IsEmpty() {
-            Summary summary = await this.GetSummary();
+        public async Task<bool> IsEmptyAsync() {
+            Summary summary = await this.GetSummaryAsync();
             if(summary.CountPending == 0) {
                 return true;
             }
             return false;
         }
 
-        public async Task<bool> HasNext() {
-            return !(await this.IsEmpty());
+        public async Task<bool> HasNextAsync() {
+            return !(await this.IsEmptyAsync());
         }
 
         private async void verifyResponse(HttpResponseMessage data, string error) {
@@ -253,7 +253,7 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             }
         }
 
-        public async Task<DatapoolEntry> GetEntry(string entryId) {
+        public async Task<DatapoolEntry> GetEntryAsync(string entryId) {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/entry/{entryId}";
 
             using (var client = new HttpClient()) {
@@ -271,7 +271,7 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
                 return entry;
             }
         }
-        public async Task<DatapoolEntry> CreateEntry(DatapoolEntry entry) {
+        public async Task<DatapoolEntry> CreateEntryAsync(DatapoolEntry entry) {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/push";
             var data = JsonConvert.SerializeObject(entry.ToJson());
             using (var client = new HttpClient()) {
