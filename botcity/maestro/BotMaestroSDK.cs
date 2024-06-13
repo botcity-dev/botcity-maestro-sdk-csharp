@@ -191,6 +191,54 @@ public class BotMaestroSDK {
             throw new Exception(errorMessage);
  
         }
+        private (int? totalItems, int? processedItems, int? failedItems) ValidateItems(int? totalItems, int? processedItems, int? failedItems)
+        {
+            if (totalItems == null && processedItems == null && failedItems == null)
+            {
+                string msg = @"
+                    Attention: this task is not reporting items. Please inform the total, processed and failed items.
+                    Reporting items is a crucial step to calculate the ROI, success rate and other metrics for your automation
+                    via BotCity Insights.
+                ";
+                Console.WriteLine(msg);
+                return (null, null, null);
+            }
+
+            if (totalItems == null && processedItems != null && failedItems != null)
+            {
+                totalItems = processedItems + failedItems;
+            }
+
+            if (totalItems != null && processedItems != null && failedItems == null)
+            {
+                failedItems = totalItems - processedItems;
+            }
+
+            if (totalItems != null && processedItems == null && failedItems != null)
+            {
+                processedItems = totalItems - failedItems;
+            }
+
+            if (totalItems == null || processedItems == null || failedItems == null)
+            {
+                throw new ArgumentException("You must inform at least two of the following parameters: totalItems, processedItems, failedItems.");
+            }
+
+            totalItems = Math.Max(0, totalItems.Value);
+            processedItems = Math.Max(0, processedItems.Value);
+            failedItems = Math.Max(0, failedItems.Value);
+
+            if (totalItems != null && processedItems != null && failedItems != null)
+            {
+                if (totalItems != processedItems + failedItems)
+                {
+                    throw new ArgumentException("Total items is not equal to the sum of processed and failed items.");
+                }
+            }
+
+            return (totalItems, processedItems, failedItems);
+        }
+        
         public async Task<AutomationTask> CreateTaskAsync(string activityLabel, Dictionary<string, object> parameters = null,
             bool test = false, int priority = 0, DateTime? minExecutionDate = null)
         {
@@ -238,13 +286,17 @@ public class BotMaestroSDK {
             }
         }
 
-        public async Task<AutomationTask> FinishTaskAsync(string taskId, FinishStatusEnum status, string message = "") {
+        public async Task<AutomationTask> FinishTaskAsync(string taskId, FinishStatusEnum status, string message = "", int? totalItems = null, int? processedItems = null, int? failedItems = null) {
             string url = $"{_server}/api/v2/task/{taskId}";
+            (int? total, int? processed, int? failed) = this.ValidateItems(totalItems, processedItems, failedItems);
             var data = new Dictionary<string, object>
             {
                 { "finishStatus", status },
                 { "finishMessage", message },
                 { "state", StateEnum.FINISHED },
+                { "totalItems", total}
+                { "processedItems", processed}
+                { "failedItems", failed}
             };
             
             var content = HttpContentFactory.CreateJsonContent(data);
