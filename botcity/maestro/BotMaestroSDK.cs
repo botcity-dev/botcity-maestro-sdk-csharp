@@ -294,8 +294,8 @@ public class BotMaestroSDK {
                 { "finishStatus", status },
                 { "finishMessage", message },
                 { "state", StateEnum.FINISHED },
-                { "totalItems", total}
-                { "processedItems", processed}
+                { "totalItems", total},
+                { "processedItems", processed},
                 { "failedItems", failed}
             };
             
