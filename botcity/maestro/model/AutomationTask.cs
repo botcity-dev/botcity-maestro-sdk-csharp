@@ -86,6 +86,10 @@ namespace Dev.BotCity.MaestroSdk.Model.AutomationTask
 
         [JsonProperty("activityName")]
         public string ActivityName { get; set; }
+
+        public bool IsInterrupted() {
+            return this.Interrupted;
+        }
     }
 
     public partial class AutomationTask
