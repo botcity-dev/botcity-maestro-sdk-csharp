@@ -23,6 +23,19 @@ namespace Dev.BotCity.MaestroSdk.Utils {
             return new StringContent(jsonData, Encoding.UTF8, "application/json");
         }
     }
+    public static class Handler {
+        public static HttpClientHandler Get (bool ssl = true) {
+            var handler = new HttpClientHandler();
+
+            if (!ssl)
+            {
+                Console.WriteLine("ENTROU AQUIIIII");
+                handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
+            }
+            return handler;
+
+        }
+    }
 
     public static class HttpClientExtension {
         public static void AddDefaultHeaders(this HttpClient client, string token, string organization, int timeout) {

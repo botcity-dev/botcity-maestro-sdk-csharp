@@ -163,7 +163,7 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
         public async Task<bool> IsActiveAsync() {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}";
 
-            using (var client = new HttpClient()) {
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
                 var response = await client.GetAsync(url);
@@ -178,7 +178,7 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
         public async Task<Summary> GetSummaryAsync() {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/summary";
 
-            using (var client = new HttpClient()) {
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
                 var response = await client.GetAsync(url);
@@ -236,7 +236,7 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
         public async Task<DatapoolEntry> NextAsync(string? taskId = null) {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/pull";
 
-            using (var client = new HttpClient()) {
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
                 var response = await client.GetAsync(url);
@@ -256,7 +256,7 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
         public async Task<DatapoolEntry> GetEntryAsync(string entryId) {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/entry/{entryId}";
 
-            using (var client = new HttpClient()) {
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
                 var response = await client.GetAsync(url);
@@ -274,7 +274,7 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
         public async Task<DatapoolEntry> CreateEntryAsync(DatapoolEntry entry) {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/push";
             var data = JsonConvert.SerializeObject(entry.ToJson());
-            using (var client = new HttpClient()) {
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
                 var content = new StringContent(data, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(url, content);

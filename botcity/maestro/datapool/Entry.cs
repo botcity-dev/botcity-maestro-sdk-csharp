@@ -146,7 +146,7 @@ namespace Dev.BotCity.MaestroSdk.Model.DatapoolEntry
             var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
             var updatedData = JsonConvert.SerializeObject(dataDict);
 
-            using (var client = new HttpClient()) {
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
                 var content = new StringContent(updatedData, Encoding.UTF8, "application/json");
 

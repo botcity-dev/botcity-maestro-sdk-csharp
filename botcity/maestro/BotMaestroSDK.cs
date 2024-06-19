@@ -28,7 +28,7 @@ using System.Globalization;
 public class BotMaestroSDK {
         public bool notifiedDisconnect { get; set; } = false;
         public bool _raiseNotConnected { get; set; } = true;
-        public bool _verifySSLCert { get; set; } = false;
+        public bool _verifySSLCert { get; set; } = true;
         
         private string _server = "";
         private string _login = "";
@@ -38,7 +38,7 @@ public class BotMaestroSDK {
         private string _accessToken = "";
         private string _taskId = "";
 
-        public BotMaestroSDK(string server = "", string login = "", string key = "", string taskId = "", bool notifiedDisconnect = false, bool raiseNotConnected = true, bool verifySSLCert = false)
+        public BotMaestroSDK(string server = "", string login = "", string key = "", string taskId = "", bool notifiedDisconnect = false, bool raiseNotConnected = true, bool verifySSLCert = true)
         {
             notifiedDisconnect = notifiedDisconnect;
             _raiseNotConnected = raiseNotConnected;
@@ -52,6 +52,14 @@ public class BotMaestroSDK {
         public string GetLogin()
         {
             return _login;
+        }
+
+        public bool GetVerifySSL() {
+            return _verifySSLCert;
+        }
+
+        public void SetVerifySSL(bool newValue) {
+            _verifySSLCert = newValue;
         }
 
         public void SetLogin(string newValue)
@@ -161,10 +169,13 @@ public class BotMaestroSDK {
         }
 
         public async Task LoginAsync(string server = "", string login = "", string key = "") {
-            using (HttpClient client = new HttpClient()) {
+            var handler = Handler.Get(this.GetVerifySSL());
+            using (HttpClient client = new HttpClient(handler)) {
+                
                 try {
                     var data = new { login = _login, key = _key };
                     HttpResponseMessage response = await client.PostAsync($"{_server}/api/v2/workspace/login", GetContent(data));
+    
                     if (response.IsSuccessStatusCode){
                         string responseBody = await response.Content.ReadAsStringAsync();
                         _accessToken = System.Text.Json.JsonDocument.Parse(responseBody).RootElement.GetProperty("accessToken").GetString();
@@ -256,7 +267,7 @@ public class BotMaestroSDK {
 
             var content = HttpContentFactory.CreateJsonContent(data);
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
 
@@ -273,7 +284,7 @@ public class BotMaestroSDK {
         {
             string url = $"{_server}/api/v2/task/{taskId}";
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
 
@@ -301,7 +312,7 @@ public class BotMaestroSDK {
             
             var content = HttpContentFactory.CreateJsonContent(data);
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
 
@@ -323,7 +334,7 @@ public class BotMaestroSDK {
             
             var content = HttpContentFactory.CreateJsonContent(data);
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
 
@@ -345,7 +356,7 @@ public class BotMaestroSDK {
             
             var content = HttpContentFactory.CreateJsonContent(data);
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
 
@@ -371,7 +382,7 @@ public class BotMaestroSDK {
 
             var content = HttpContentFactory.CreateJsonContent(data);
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
 
@@ -399,7 +410,7 @@ public class BotMaestroSDK {
 
             var content = HttpContentFactory.CreateJsonContent(data);
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
 
@@ -412,7 +423,7 @@ public class BotMaestroSDK {
         public async Task<string> GetCredentialAsync(string label, string key) {
             string url = $"{_server}/api/v2/credential/{label}/key/{key}";
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
 
@@ -444,7 +455,7 @@ public class BotMaestroSDK {
             
             var content = HttpContentFactory.CreateJsonContent(data);
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
 
@@ -457,7 +468,7 @@ public class BotMaestroSDK {
         private async Task<bool> GetCredentialByLabel(string label) {
             string url = $"{_server}/api/v2/credential/{label}";
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
 
@@ -480,7 +491,7 @@ public class BotMaestroSDK {
                 { "value", value }
             };
             var content = HttpContentFactory.CreateJsonContent(data);
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.PostAsync(url, content);
@@ -520,7 +531,7 @@ public class BotMaestroSDK {
             };
             var content = HttpContentFactory.CreateJsonContent(data);
             string idError = "";
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.PostAsync(url, content);
@@ -562,7 +573,7 @@ public class BotMaestroSDK {
             filepath = Path.GetFullPath(filepath);
             try
             {
-                using (var client = new HttpClient()) {
+                using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
                     using (var form = new MultipartFormDataContent())
                     {
                         var fileContent = new ByteArrayContent(File.ReadAllBytes(filepath));
@@ -598,7 +609,7 @@ public class BotMaestroSDK {
 
             try
             {
-                using (var client = new HttpClient()) {
+                using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
                     using (var form = new MultipartFormDataContent())
                     {
                         var fileContent = new ByteArrayContent(File.ReadAllBytes(filepath));
@@ -650,7 +661,7 @@ public class BotMaestroSDK {
                 { "repositoryLabel", "DEFAULT" }
             };
             var content = HttpContentFactory.CreateJsonContent(data);
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.PostAsync(url, content);
@@ -664,7 +675,7 @@ public class BotMaestroSDK {
             string url = $"{_server}/api/v2/log/{label}/entry";
 
             var content = HttpContentFactory.CreateJsonContent(values);
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.PostAsync(url, content);
@@ -681,7 +692,7 @@ public class BotMaestroSDK {
             }
 
             var logData = new List<Dictionary<string, object>>();
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.GetAsync(url);
@@ -709,7 +720,7 @@ public class BotMaestroSDK {
         public async Task DeleteLogAsync(string label) {
             string url = $"{_server}/api/v2/log/{label}";
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.DeleteAsync(url);
@@ -724,7 +735,7 @@ public class BotMaestroSDK {
             filepath = Path.GetFullPath(filepath);
             try
             {
-                using (var client = new HttpClient()) {
+                using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
                     using (var form = new MultipartFormDataContent())
                     {
                         var fileContent = new ByteArrayContent(File.ReadAllBytes(filepath));
@@ -766,7 +777,7 @@ public class BotMaestroSDK {
             };
             var content = HttpContentFactory.CreateJsonContent(data);
             string artifactId = "";
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.PostAsync(url, content);
@@ -781,7 +792,7 @@ public class BotMaestroSDK {
         public async Task<(string filename, byte[] fileContent)> GetArtifactAsync(string artifactId) {
             string url = $"{_server}/api/v2/artifact/{artifactId}";
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
 
@@ -815,7 +826,7 @@ public class BotMaestroSDK {
 
         private async Task<(List<Artifact>, int)> FetchArtifactPageAsync(string url)
         {
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.GetAsync(url);
@@ -832,7 +843,7 @@ public class BotMaestroSDK {
         {
             string url = $"{_server}/api/v2/datapool";
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var content = HttpContentFactory.CreateJsonContent(pool.ToJson());
@@ -849,7 +860,7 @@ public class BotMaestroSDK {
         {
             string url = $"{_server}/api/v2/datapool/{label}";
 
-            using (var client = new HttpClient())
+            using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.GetAsync(url);
