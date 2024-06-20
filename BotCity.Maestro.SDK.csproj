@@ -3,8 +3,8 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <Version>1.0.15</Version>
-    <PackageVersion>1.0.15</PackageVersion>
+    <Version>1.0.16</Version>
+    <PackageVersion>1.0.16</PackageVersion>
     <PackageId>BotCity.Maestro.SDK</PackageId>
     <PackageTags>botcity sdk automation automation desktop</PackageTags>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>

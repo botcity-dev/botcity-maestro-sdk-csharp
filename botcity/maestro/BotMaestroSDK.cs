@@ -26,7 +26,7 @@ using System.Globalization;
 
 
 public class BotMaestroSDK {
-        public bool notifiedDisconnect { get; set; } = false;
+        private bool notifiedDisconnect { get; set; } = false;
         public bool _raiseNotConnected { get; set; } = true;
         public bool _verifySSLCert { get; set; } = true;
         
@@ -48,12 +48,10 @@ public class BotMaestroSDK {
         /// <param name="login">The username provided via server configuration. Available under `Dev. Environment`</param>
         /// <param name="key">The access key provided via server configuration. Available under `Dev. Environment`</param>
         /// <param name="taskId">The task ID associated with the current task.</param>
-        /// <param name="notifiedDisconnect">Flag to indicate if a notification should be sent on disconnect.</param>
         /// <param name="raiseNotConnected">Flag to indicate if an exception should be raised when not connected.</param>
         /// <param name="verifySSLCert">Flag to indicate if SSL certificates should be verified.</param>
-        public BotMaestroSDK(string server = "", string login = "", string key = "", string taskId = "", bool notifiedDisconnect = false, bool raiseNotConnected = true, bool verifySSLCert = true)
+        public BotMaestroSDK(string server = "", string login = "", string key = "", string taskId = "", bool raiseNotConnected = true, bool verifySSLCert = true)
         {
-            notifiedDisconnect = notifiedDisconnect;
             _raiseNotConnected = raiseNotConnected;
             _verifySSLCert = verifySSLCert;
             _server = server;
