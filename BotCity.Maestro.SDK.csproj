@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <Version>1.0.13</Version>
-    <PackageVersion>1.0.13</PackageVersion>
+    <Version>1.0.14</Version>
+    <PackageVersion>1.0.14</PackageVersion>
     <PackageId>BotCity.Maestro.SDK</PackageId>
     <PackageTags>botcity sdk automation automation desktop</PackageTags>
+    <DocumentationFile>bin\Debug\net6.0\YourProject.xml</DocumentationFile>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://botcity.dev/</PackageProjectUrl>
     <RepositoryType>GitHub</RepositoryType>

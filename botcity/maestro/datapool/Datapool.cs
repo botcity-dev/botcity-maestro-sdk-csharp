@@ -125,6 +125,9 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             RepositoryLabel = values.RepositoryLabel;
         }
 
+        /// <summary>
+        /// Enables the DataPool in Maestro.
+        /// </summary>
         public async Task<bool> ActivateAsync() {
             return await this.ActiveAsync(true);
         }
@@ -160,10 +163,18 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
                 }
             }
         }
+
+        /// <summary>
+        /// Disable the DataPool in Maestro.
+        /// </summary>
         public async Task<bool> DeactivateAsync() {
             return await this.ActiveAsync(false);
         }
         
+        /// <summary>
+        /// Check if the DataPool is active.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation. The task result is a boolean indicating if the DataPool is active.</returns>
         public async Task<bool> IsActiveAsync() {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}";
             if (!this.Maestro.CheckAccessTokenAvailable()) {
@@ -181,6 +192,10 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             }
         }
 
+        /// <summary>
+        /// Retrieves the DataPool counters.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation. The task result is a Summary object containing the DataPool counters.</returns>
         public async Task<Summary> GetSummaryAsync() {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/summary";
             if (!this.Maestro.CheckAccessTokenAvailable()) {
@@ -197,6 +212,10 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             }
         }
 
+        /// <summary>
+        /// Checks if the DataPool is empty.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation. The task result is true if the DataPool is empty, false otherwise.</returns>
         public async Task<bool> IsEmptyAsync() {
             Summary summary = await this.GetSummaryAsync();
             if(summary.CountPending == 0) {
@@ -204,7 +223,11 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             }
             return false;
         }
-
+        
+        /// <summary>
+        /// Checks if there are pending items in the DataPool.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation. The task result is true if there are pending items, false otherwise.</returns>
         public async Task<bool> HasNextAsync() {
             return !(await this.IsEmptyAsync());
         }
@@ -242,6 +265,11 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             return data;
         }
 
+        /// <summary>
+        /// Fetches the next pending entry.
+        /// </summary>
+        /// <param name="taskId">Optional task ID to be associated with this entry.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result is the next pending DataPoolEntry, or null if there are no pending entries.</returns>
         public async Task<DatapoolEntry> NextAsync(string? taskId = null) {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/pull";
             if (!this.Maestro.CheckAccessTokenAvailable()) {
@@ -264,6 +292,11 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             }
         }
 
+        /// <summary>
+        /// Fetches an entry from the DataPool by its ID.
+        /// </summary>
+        /// <param name="entryId">The ID of the entry to fetch.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result is the DataPoolEntry that was fetched.</returns>
         public async Task<DatapoolEntry> GetEntryAsync(string entryId) {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/entry/{entryId}";
             if (!this.Maestro.CheckAccessTokenAvailable()) {
@@ -284,6 +317,12 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
                 return entry;
             }
         }
+
+        /// <summary>
+        /// Creates an entry in the DataPool.
+        /// </summary>
+        /// <param name="entry">The DataPoolEntry instance to create.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result is the DataPoolEntry that was created.</returns>
         public async Task<DatapoolEntry> CreateEntryAsync(DatapoolEntry entry) {
             if (!this.Maestro.CheckAccessTokenAvailable()) {
                 return DatapoolEntry.FromJson("{}");

@@ -38,6 +38,19 @@ public class BotMaestroSDK {
         private string _accessToken = "";
         private string _taskId = "";
 
+        /// <summary>
+        /// Main class to interact with the BotMaestro web portal.
+        /// </summary>
+        /// <remarks>
+        /// This class offers methods to send alerts, messages, create log entries, post artifacts and more.
+        /// </remarks>
+        /// <param name="server">The server IP or name</param>
+        /// <param name="login">The username provided via server configuration. Available under `Dev. Environment`</param>
+        /// <param name="key">The access key provided via server configuration. Available under `Dev. Environment`</param>
+        /// <param name="taskId">The task ID associated with the current task.</param>
+        /// <param name="notifiedDisconnect">Flag to indicate if a notification should be sent on disconnect.</param>
+        /// <param name="raiseNotConnected">Flag to indicate if an exception should be raised when not connected.</param>
+        /// <param name="verifySSLCert">Flag to indicate if SSL certificates should be verified.</param>
         public BotMaestroSDK(string server = "", string login = "", string key = "", string taskId = "", bool notifiedDisconnect = false, bool raiseNotConnected = true, bool verifySSLCert = true)
         {
             notifiedDisconnect = notifiedDisconnect;
@@ -151,6 +164,11 @@ public class BotMaestroSDK {
             return maestro;
         }
 
+        /// <summary>
+        /// Fetch the BotExecution object for a given task.
+        /// </summary>
+        /// <param name="taskId">The task ID. Defaults to an empty string.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the Execution information. See <see cref="Execution"/></returns>
         public async Task<Execution> GetExecutionAsync(string taskId = "") {
             string verifyTaskId = taskId;
 
@@ -183,6 +201,15 @@ public class BotMaestroSDK {
             return dictionary;
         }
 
+        /// <summary>
+        /// Obtain an access token with the configured BotMaestro portal.
+        /// </summary>
+        /// <remarks>
+        /// Arguments are optional and can be used to configure or overwrite the object instantiation values.
+        /// </remarks>
+        /// <param name="server">The server IP or name</param>
+        /// <param name="login">The username provided via server configuration. Available under `Dev. Environment`</param>
+        /// <param name="key">The access key provided via server configuration. Available under `Dev. Environment`</param>
         public async Task LoginAsync(string server = "", string login = "", string key = "") {
             var handler = Handler.Get(this.GetVerifySSL());
             using (HttpClient client = new HttpClient(handler)) {
@@ -264,7 +291,20 @@ public class BotMaestroSDK {
 
             return (totalItems, processedItems, failedItems);
         }
-        
+
+        /// <summary>
+        /// Creates a task to be executed on the BotMaestro portal.
+        /// </summary>
+        /// <param name="activityLabel">The activity unique identifier.</param>
+        /// <param name="parameters">Dictionary with parameters and values for this task.</param>
+        /// <param name="test">Whether or not the task is a test.</param>
+        /// <param name="priority">An integer from 0 to 10 to refer to execution priority. Defaults to 0.</param>
+        /// <param name="minExecutionDate">Minimum execution date for the task. Defaults to null.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the automation task. See <see cref="AutomationTask"/>.</returns>
+        /// <remarks>
+        /// The BotCity Orchestrator time zone is in UTC-0. Therefore, consider the difference between
+        /// time zones when using the <paramref name="minExecutionDate"/> parameter.
+        /// </remarks>
         public async Task<AutomationTask> CreateTaskAsync(string activityLabel, Dictionary<string, object> parameters = null,
             bool test = false, int priority = 0, DateTime? minExecutionDate = null)
         {
@@ -294,7 +334,11 @@ public class BotMaestroSDK {
                 return AutomationTask.FromJson(jsonResponse);
             }
         }
-
+        /// <summary>
+        /// Return details about a given task.
+        /// </summary>
+        /// <param name="taskId">The task unique identifier.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the details of the automation task. See <see cref="AutomationTask"/>.</returns>
         public async Task<AutomationTask> GetTaskAsync(string taskId)
         {
             string url = $"{_server}/api/v2/task/{taskId}";
@@ -312,6 +356,25 @@ public class BotMaestroSDK {
             }
         }
 
+        /// <summary>
+        /// Finishes a given task.
+        /// </summary>
+        /// <param name="taskId">The task unique identifier.</param>
+        /// <param name="status">The condition in which the task must be finished. See <see cref="FinishStatusEnum"/>.</param>
+        /// <param name="message">A message to be associated with this action.</param>
+        /// <param name="totalItems">Total number of items processed by the task.</param>
+        /// <param name="processedItems">Number of items processed successfully by the task.</param>
+        /// <param name="failedItems">Number of items failed to be processed by the task.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the automation task See <see cref="AutomationTask"/>.</returns>
+        /// <remarks>
+        /// Starting from version 0.5.0, the parameters <paramref name="totalItems"/>, <paramref name="processedItems"/> and <paramref name="failedItems"/> are
+        /// available to be used. It is important to report the correct values for these parameters as they are used
+        /// to calculate the ROI, success rate and other metrics.
+        /// 
+        /// Keep in mind that the sum of <paramref name="processedItems"/> and <paramref name="failedItems"/> must be equal to <paramref name="totalItems"/>. If
+        /// <paramref name="totalItems"/> is null, then the sum of <paramref name="processedItems"/> and <paramref name="failedItems"/> will be used as <paramref name="totalItems"/>.
+        /// If you inform <paramref name="totalItems"/> and <paramref name="processedItems"/>, then <paramref name="failedItems"/> will be calculated as the difference.
+        /// </remarks>
         public async Task<AutomationTask> FinishTaskAsync(string taskId, FinishStatusEnum status, string message = "", int? totalItems = null, int? processedItems = null, int? failedItems = null) {
             string url = $"{_server}/api/v2/task/{taskId}";
             (int? total, int? processed, int? failed) = this.ValidateItems(totalItems, processedItems, failedItems);
@@ -340,6 +403,11 @@ public class BotMaestroSDK {
             }
         }
 
+        /// <summary>
+        /// Request the interruption of a given task.
+        /// </summary>
+        /// <param name="taskId">The task unique identifier.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the interrupted automation task. See <see cref="AutomationTask"/>.</returns>
         public async Task<AutomationTask> InterruptTaskAsync(string taskId) {
             string url = $"{_server}/api/v2/task/{taskId}";
             var data = new Dictionary<string, object>
@@ -361,7 +429,11 @@ public class BotMaestroSDK {
                 return AutomationTask.FromJson(jsonResponse);
             }
         }
-
+        /// <summary>
+        /// Restarts a given task.
+        /// </summary>
+        /// <param name="taskId">The task unique identifier.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the restarted automation task. See <see cref="AutomationTask"/>.</returns>
         public async Task<AutomationTask> RestartTaskAsync(string taskId) {
             string url = $"{_server}/api/v2/task/{taskId}";
             var data = new Dictionary<string, object>
@@ -384,6 +456,14 @@ public class BotMaestroSDK {
             }
         }
 
+        /// <summary>
+        /// Register an alert message on the BotMaestro portal.
+        /// </summary>
+        /// <param name="taskId">The activity label.</param>
+        /// <param name="title">A title associated with the alert message.</param>
+        /// <param name="message">The alert message.</param>
+        /// <param name="alertType">The alert type to be used. See <see cref="AlertTypeEnum"/>.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the server response message. See <see cref="Alert"/>.</returns>
         public async Task<Alert> CreateAlertAsync(string taskId, string title, string message, AlertTypeEnum alertType)
         {
             var data = new Dictionary<string, object>
@@ -413,7 +493,16 @@ public class BotMaestroSDK {
                 return Alert.FromJson(jsonResponse);
             }
         }
-
+    
+        /// <summary>
+        /// Send an email message to the list of email and users given.
+        /// </summary>
+        /// <param name="emails">List of emails to receive the message.</param>
+        /// <param name="logins">List of usernames registered on the BotMaestro portal to receive the message.</param>
+        /// <param name="subject">The message subject.</param>
+        /// <param name="body">The message body.</param>
+        /// <param name="messageType">The message body type. See <see cref="MessageTypeEnum"/>.</param>
+        /// <param name="groups">The message group information.</param>
         public async Task SendMessageAsync(List<string> emails, List<string> logins, string subject, string body, MessageTypeEnum messageType, List<string> groups = null)
         {
             string url = $"{_server}/api/v2/message";
@@ -442,6 +531,12 @@ public class BotMaestroSDK {
             }
         }
 
+        /// <summary>
+        /// Retrieves the value associated with a key inside credentials.
+        /// </summary>
+        /// <param name="label">Credential set name.</param>
+        /// <param name="key">Key name within the credential set.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the requested key value.</returns>
         public async Task<string> GetCredentialAsync(string label, string key) {
             if (!this.CheckAccessTokenAvailable()) {
                 return "";
@@ -508,7 +603,12 @@ public class BotMaestroSDK {
                 return response.IsSuccessStatusCode;
             }
         }
-        
+        /// <summary>
+        /// Creates a new credential.
+        /// </summary>
+        /// <param name="label">Credential set name.</param>
+        /// <param name="key">Key name within the credential set.</param>
+        /// <param name="value">Credential value.</param>
         public async Task CreateCredentialAsync(string label, string key, string value) {
             if (!this.CheckAccessTokenAvailable()) {
                 return;
@@ -548,6 +648,14 @@ public class BotMaestroSDK {
             return result;
         }
 
+        /// <summary>
+        /// Creates a new Error entry.
+        /// </summary>
+        /// <param name="exception">The exception object.</param>
+        /// <param name="taskId">The task unique identifier.</param>
+        /// <param name="screenshotPath">File path for a screenshot to be attached to the error. Defaults to an empty string.</param>
+        /// <param name="tags">Dictionary with tags to be associated with the error entry. Defaults to null.</param>
+        /// <param name="attachments">Additional files to be sent along with the error entry. Defaults to null.</param>
         public async Task CreateErrorAsync(Exception exception, string taskId, string screenshotPath = "", Dictionary<string, object> tags = null, List<string> attachments = null) {
             if (!this.CheckAccessTokenAvailable()) {
                 return;
@@ -694,6 +802,12 @@ public class BotMaestroSDK {
             }
         }
         
+        /// <summary>
+        /// Create a new log on the BotMaestro portal.
+        /// </summary>
+        /// <param name="label">The activity unique identifier.</param>
+        /// <param name="columns">A list of columns for the new log.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the newly created log. See <see cref="Log"/>.</returns>
         public async Task<Log> NewLogAsync(string label, List<Column> columns) {
             
             string url = $"{_server}/api/v2/log";
@@ -719,7 +833,12 @@ public class BotMaestroSDK {
                 return Log.FromJson(jsonResponse);
             }
         }
-
+        /// <summary>
+        /// Creates a new log entry.
+        /// </summary>
+        /// <param name="label">The activity unique identifier.</param>
+        /// <param name="values">Dictionary where the key is the column label and value is the entry value.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the newly created log entry. See <see cref="Log"/>.</returns>
         public async Task NewLogEntryAsync(string label, Dictionary<string, object> values) {
             if (!this.CheckAccessTokenAvailable()) {
                 return;
@@ -735,6 +854,12 @@ public class BotMaestroSDK {
             }
         }
 
+        /// <summary>
+        /// Fetches log information.
+        /// </summary>
+        /// <param name="label">The activity unique identifier.</param>
+        /// <param name="date">Initial date for log information in the format DD/MM/YYYY. If empty, all information is retrieved.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a list of log entries. See <see cref="Entry"/>.</returns>
         public async Task<List<Entry>> GetLogAsync(string label, string date = null) {
             if (!this.CheckAccessTokenAvailable()) {
                 return new List<Entry>();
@@ -772,6 +897,10 @@ public class BotMaestroSDK {
             }
         }
 
+        /// <summary>
+        /// Deletes log entries associated with the specified activity.
+        /// </summary>
+        /// <param name="label">The activity unique identifier.</param>
         public async Task DeleteLogAsync(string label) {
             if (!this.CheckAccessTokenAvailable()) {
                 return;
@@ -786,6 +915,12 @@ public class BotMaestroSDK {
             }
         }
 
+        /// <summary>
+        /// Uploads a new artifact into the BotMaestro portal.
+        /// </summary>
+        /// <param name="taskId">The task unique identifier.</param>
+        /// <param name="name">The name of the artifact to be displayed on the portal.</param>
+        /// <param name="filepath">The file to be uploaded.</param>
         public async Task PostArtifactAsync(string taskId, string name, string filepath) {
             if (!this.CheckAccessTokenAvailable()) {
                 return;
@@ -852,7 +987,11 @@ public class BotMaestroSDK {
             }
             return artifactId;
         }
-        
+        /// <summary>
+        /// Retrieves an artifact from the BotMaestro portal.
+        /// </summary>
+        /// <param name="artifactId">The artifact unique identifier.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a tuple with the artifact name (string) and the binary content of the artifact (byte[]).</returns>
         public async Task<(string filename, byte[] fileContent)> GetArtifactAsync(string artifactId) {
             string url = $"{_server}/api/v2/artifact/{artifactId}";
             if (!this.CheckAccessTokenAvailable()) {
@@ -876,6 +1015,11 @@ public class BotMaestroSDK {
             }
         }
         
+        /// <summary>
+        /// Lists all artifacts available for the organization.
+        /// </summary>
+        /// <param name="days">Number of days to filter artifacts. Defaults to 7.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains a list of artifacts. See <see cref="Artifact"/>.</returns>
         public async Task<List<Artifact>> ListArtifactAsync(int days = 7) {
             if (!this.CheckAccessTokenAvailable()) {
                 return new List<Artifact>();
@@ -911,6 +1055,11 @@ public class BotMaestroSDK {
             }
         }
 
+        /// <summary>
+        /// Creates a new datapool on the BotMaestro portal.
+        /// </summary>
+        /// <param name="pool">The DataPool instance.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the created DataPool instance.</returns>
         public async Task<Datapool> CreateDatapoolAsync(Datapool pool)
         {
             if (!this.CheckAccessTokenAvailable()) {
@@ -933,6 +1082,11 @@ public class BotMaestroSDK {
             }
         }
 
+        /// <summary>
+        /// Retrieves a datapool from the BotMaestro portal.
+        /// </summary>
+        /// <param name="label">The label of the DataPool.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result contains the DataPool instance.</returns>
         public async Task<Datapool> GetDatapoolAsync(string label)
         {
             if (!this.CheckAccessTokenAvailable()) {
@@ -953,9 +1107,13 @@ public class BotMaestroSDK {
                 return data;
             }
         }
-        
+
+        /// <summary>
+        /// Revoke the access token used to communicate with the BotMaestro portal.
+        /// </summary>
         public void Logoff()
         {
             _accessToken = null;
+            
         }
     }

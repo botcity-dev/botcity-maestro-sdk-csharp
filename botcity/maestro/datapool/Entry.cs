@@ -140,6 +140,11 @@ namespace Dev.BotCity.MaestroSdk.Model.DatapoolEntry
             return data;
         }
 
+        /// <summary>
+        /// Updates an entry in the DataPool.
+        /// </summary>
+        /// <param name="taskId">Optional task ID associated with this entry.</param>
+        /// <returns>A task that represents the asynchronous operation. The task result is the updated DataPoolEntry.</returns>
         public async Task<DatapoolEntry> SaveAsync(string? taskId = null) {
             if (!this.Maestro.CheckAccessTokenAvailable()) {
                 return DatapoolEntry.FromJson("{}");
@@ -165,10 +170,19 @@ namespace Dev.BotCity.MaestroSdk.Model.DatapoolEntry
             this.State = state;
             await this.SaveAsync();
         }
+
+        /// <summary>
+        /// Reports the state DONE to a DataPool Entry.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task ReportDoneAsync() {
             await this.Report(StateEntryEnum.DONE);
         }
 
+        /// <summary>
+        /// Reports the state ERROR to a DataPool Entry.
+        /// </summary>
+        /// <returns>A task that represents the asynchronous operation.</returns>
         public async Task ReportErrorAsync() {
             await this.Report(StateEntryEnum.ERROR);
         }
