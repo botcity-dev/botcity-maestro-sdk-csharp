@@ -141,6 +141,9 @@ namespace Dev.BotCity.MaestroSdk.Model.DatapoolEntry
         }
 
         public async Task<DatapoolEntry> SaveAsync(string? taskId = null) {
+            if (!this.Maestro.CheckAccessTokenAvailable()) {
+                return DatapoolEntry.FromJson("{}");
+            }
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.DatapoolLabel}/entry/{this.EntryId}";
             var data = JsonConvert.SerializeObject(this.JsonToUpdate());
             var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);

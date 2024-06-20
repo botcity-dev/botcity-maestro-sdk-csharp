@@ -54,6 +54,21 @@ public class BotMaestroSDK {
             return _login;
         }
 
+        public bool CheckAccessTokenAvailable() {
+            if (string.IsNullOrEmpty(this._accessToken)) {
+                if (this._raiseNotConnected) {
+                    throw new InvalidOperationException("Access Token not available. Make sure to invoke login first.");
+                } else {
+                    if (!this.notifiedDisconnect) {
+                        this.notifiedDisconnect = true;
+                        Console.WriteLine("** WARNING BotCity Maestro is not logged in and RAISE_NOT_CONNECTED is False. Running in Offline mode. **");
+                    }
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public bool GetVerifySSL() {
             return _verifySSLCert;
         }
@@ -114,7 +129,7 @@ public class BotMaestroSDK {
         {
             _taskId = newValue;
         }
-    
+
         public static BotMaestroSDK FromSysArgs(string defaultServer = "", string defaultLogin = "", string defaultKey = "")
         {
             string[] args = Environment.GetCommandLineArgs();
@@ -143,7 +158,7 @@ public class BotMaestroSDK {
                 verifyTaskId = this._taskId;
             }
 
-            if (string.IsNullOrEmpty(_accessToken)) {
+            if (!this.CheckAccessTokenAvailable()) {
                 return new Execution("", verifyTaskId, "", new Dictionary<string, object>{});
             }
 
@@ -371,7 +386,6 @@ public class BotMaestroSDK {
 
         public async Task<Alert> CreateAlertAsync(string taskId, string title, string message, AlertTypeEnum alertType)
         {
-            string url = $"{_server}/api/v2/alerts";
             var data = new Dictionary<string, object>
             {
                 { "taskId", taskId },
@@ -379,6 +393,11 @@ public class BotMaestroSDK {
                 { "message", message },
                 { "type", alertType }
             };            
+
+            if (!this.CheckAccessTokenAvailable()) {
+                return Alert.FromJson(JsonConvert.SerializeObject(data, Formatting.Indented));
+            }
+            string url = $"{_server}/api/v2/alerts";
 
             var content = HttpContentFactory.CreateJsonContent(data);
 
@@ -398,6 +417,9 @@ public class BotMaestroSDK {
         public async Task SendMessageAsync(List<string> emails, List<string> logins, string subject, string body, MessageTypeEnum messageType, List<string> groups = null)
         {
             string url = $"{_server}/api/v2/message";
+            if (!this.CheckAccessTokenAvailable()) {
+                return;
+            };
             var data = new Dictionary<string, object>
             {
                 { "emails", emails },
@@ -421,6 +443,9 @@ public class BotMaestroSDK {
         }
 
         public async Task<string> GetCredentialAsync(string label, string key) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return "";
+            }
             string url = $"{_server}/api/v2/credential/{label}/key/{key}";
 
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
@@ -437,6 +462,9 @@ public class BotMaestroSDK {
         }
 
         private async Task<bool> CreateCredentialByLabel(string label, string key, string value) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return true;
+            }
             string url = $"{_server}/api/v2/credential";
             Dictionary<string, object> data = new Dictionary<string, object>
             {
@@ -466,6 +494,9 @@ public class BotMaestroSDK {
         }
 
         private async Task<bool> GetCredentialByLabel(string label) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return true;
+            }
             string url = $"{_server}/api/v2/credential/{label}";
 
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
@@ -479,6 +510,9 @@ public class BotMaestroSDK {
         }
         
         public async Task CreateCredentialAsync(string label, string key, string value) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return;
+            }
             string url = $"{_server}/api/v2/credential/{label}/key";
             bool existCredential = await this.GetCredentialByLabel(label);
             if (!existCredential) {
@@ -515,6 +549,9 @@ public class BotMaestroSDK {
         }
 
         public async Task CreateErrorAsync(Exception exception, string taskId, string screenshotPath = "", Dictionary<string, object> tags = null, List<string> attachments = null) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return;
+            }
             string url = $"{_server}/api/v2/error";
             Dictionary<string, string> defaultTags = this.GetDefaultErrorTags();
             if (tags != null) {
@@ -568,6 +605,9 @@ public class BotMaestroSDK {
         }
         
         private async Task CreateScreenshotAsync(string errorId, string filepath) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return;
+            }
             string urlScreenshot = $"{_server}/api/v2/error/{errorId}/screenshot";
             filepath = Environment.ExpandEnvironmentVariables(filepath);
             filepath = Path.GetFullPath(filepath);
@@ -596,6 +636,9 @@ public class BotMaestroSDK {
         }
         
         private async Task CreateAttachment(string errorId, string filepath) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return;
+            }
             string urlScreenshot = $"{_server}/api/v2/error/{errorId}/attachments";
             filepath = Environment.ExpandEnvironmentVariables(filepath);
             filepath = Path.GetFullPath(filepath);
@@ -652,6 +695,7 @@ public class BotMaestroSDK {
         }
         
         public async Task<Log> NewLogAsync(string label, List<Column> columns) {
+            
             string url = $"{_server}/api/v2/log";
 
             var data = new Dictionary<string, object>
@@ -660,6 +704,11 @@ public class BotMaestroSDK {
                 { "columns", columns},
                 { "repositoryLabel", "DEFAULT" }
             };
+            
+            if (!this.CheckAccessTokenAvailable()) {
+                return Log.FromJson(JsonConvert.SerializeObject(data, Formatting.Indented));
+            }
+
             var content = HttpContentFactory.CreateJsonContent(data);
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
@@ -672,6 +721,9 @@ public class BotMaestroSDK {
         }
 
         public async Task NewLogEntryAsync(string label, Dictionary<string, object> values) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return;
+            }
             string url = $"{_server}/api/v2/log/{label}/entry";
 
             var content = HttpContentFactory.CreateJsonContent(values);
@@ -684,6 +736,9 @@ public class BotMaestroSDK {
         }
 
         public async Task<List<Entry>> GetLogAsync(string label, string date = null) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return new List<Entry>();
+            }
             string url = $"{_server}/api/v2/log/{label}";
             int days = 365;
             if (!string.IsNullOrEmpty(date)) {
@@ -718,6 +773,9 @@ public class BotMaestroSDK {
         }
 
         public async Task DeleteLogAsync(string label) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return;
+            }
             string url = $"{_server}/api/v2/log/{label}";
 
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
@@ -729,6 +787,9 @@ public class BotMaestroSDK {
         }
 
         public async Task PostArtifactAsync(string taskId, string name, string filepath) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return;
+            }
             string artifact_id = await this.CreateArtifactAsync(taskId, name, filepath);
             string url = $"{_server}/api/v2/artifact/log/{artifact_id}";
             filepath = Environment.ExpandEnvironmentVariables(filepath);
@@ -775,6 +836,9 @@ public class BotMaestroSDK {
                 { "name", name },
                 { "filename", filename },
             };
+            if (!this.CheckAccessTokenAvailable()) {
+                return "";
+            }
             var content = HttpContentFactory.CreateJsonContent(data);
             string artifactId = "";
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
@@ -791,7 +855,9 @@ public class BotMaestroSDK {
         
         public async Task<(string filename, byte[] fileContent)> GetArtifactAsync(string artifactId) {
             string url = $"{_server}/api/v2/artifact/{artifactId}";
-
+            if (!this.CheckAccessTokenAvailable()) {
+                return ("", new byte[0]);
+            }
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
@@ -811,6 +877,9 @@ public class BotMaestroSDK {
         }
         
         public async Task<List<Artifact>> ListArtifactAsync(int days = 7) {
+            if (!this.CheckAccessTokenAvailable()) {
+                return new List<Artifact>();
+            }
             string url = $"{_server}/api/v2/artifact?size=5&page=0&sort=dateCreation,desc&days={days}";
             var artifacts = new List<Artifact>();
             
@@ -826,6 +895,9 @@ public class BotMaestroSDK {
 
         private async Task<(List<Artifact>, int)> FetchArtifactPageAsync(string url)
         {
+            if (!this.CheckAccessTokenAvailable()) {
+                return (new List<Artifact>(), 0);
+            }
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
@@ -841,6 +913,11 @@ public class BotMaestroSDK {
 
         public async Task<Datapool> CreateDatapoolAsync(Datapool pool)
         {
+            if (!this.CheckAccessTokenAvailable()) {
+                Datapool data = Datapool.FromJson("{}");
+                data.Maestro = this;
+                return data;
+            }
             string url = $"{_server}/api/v2/datapool";
 
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
@@ -858,6 +935,11 @@ public class BotMaestroSDK {
 
         public async Task<Datapool> GetDatapoolAsync(string label)
         {
+            if (!this.CheckAccessTokenAvailable()) {
+                Datapool data = Datapool.FromJson("{}");
+                data.Maestro = this;
+                return data;
+            }
             string url = $"{_server}/api/v2/datapool/{label}";
 
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))

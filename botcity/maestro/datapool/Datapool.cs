@@ -131,10 +131,14 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
 
         private async Task<bool> ActiveAsync(bool active) {
             var data = JsonConvert.SerializeObject(this);
+            
             var dataDict = JsonConvert.DeserializeObject<Dictionary<string, object>>(data);
             dataDict["active"] = active;
             var updatedData = JsonConvert.SerializeObject(dataDict);
-
+            if (!this.Maestro.CheckAccessTokenAvailable()) {
+                UpdateFromJson(updatedData);
+                return true;
+            }
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}";
 
             using (var client = new HttpClient()) {
@@ -162,7 +166,9 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
         
         public async Task<bool> IsActiveAsync() {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}";
-
+            if (!this.Maestro.CheckAccessTokenAvailable()) {
+                return this.Active;
+            }
             using (var client = new HttpClient(Handler.Get(this.Maestro.GetVerifySSL()))) {
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
@@ -177,7 +183,9 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
 
         public async Task<Summary> GetSummaryAsync() {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/summary";
-
+            if (!this.Maestro.CheckAccessTokenAvailable()) {
+                return Summary.FromJson("{}");
+            }
             using (var client = new HttpClient(Handler.Get(this.Maestro.GetVerifySSL()))) {
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
@@ -233,9 +241,12 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             };
             return data;
         }
+
         public async Task<DatapoolEntry> NextAsync(string? taskId = null) {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/pull";
-
+            if (!this.Maestro.CheckAccessTokenAvailable()) {
+                return DatapoolEntry.FromJson("{}");
+            }
             using (var client = new HttpClient(Handler.Get(this.Maestro.GetVerifySSL()))) {
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
@@ -255,7 +266,9 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
 
         public async Task<DatapoolEntry> GetEntryAsync(string entryId) {
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/entry/{entryId}";
-
+            if (!this.Maestro.CheckAccessTokenAvailable()) {
+                return DatapoolEntry.FromJson("{}");
+            }
             using (var client = new HttpClient(Handler.Get(this.Maestro.GetVerifySSL()))) {
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
@@ -272,6 +285,9 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             }
         }
         public async Task<DatapoolEntry> CreateEntryAsync(DatapoolEntry entry) {
+            if (!this.Maestro.CheckAccessTokenAvailable()) {
+                return DatapoolEntry.FromJson("{}");
+            }
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/push";
             var data = JsonConvert.SerializeObject(entry.ToJson());
             using (var client = new HttpClient(Handler.Get(this.Maestro.GetVerifySSL()))) {
