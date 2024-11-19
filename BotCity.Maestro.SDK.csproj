@@ -35,7 +35,7 @@
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
     <PackageReference Include="RestSharp" Version="112.0.0" />
   </ItemGroup>
 
