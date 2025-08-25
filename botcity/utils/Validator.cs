@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Text;
+using System.Reflection;
 using Newtonsoft.Json;
 
 namespace Dev.BotCity.MaestroSdk.Utils {
@@ -40,8 +41,9 @@ namespace Dev.BotCity.MaestroSdk.Utils {
         public static void AddDefaultHeaders(this HttpClient client, string token, string organization, int timeout) {
             {
                 client.Timeout = new TimeSpan(0, 0, 0, timeout);
-                client.DefaultRequestHeaders.Add("token", token);
                 client.DefaultRequestHeaders.Add("organization", organization);
+                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
             }
         }
     }

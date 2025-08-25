@@ -145,7 +145,6 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}";
 
             using (var client = new HttpClient()) {
-                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
                 var content = new StringContent(updatedData, Encoding.UTF8, "application/json");
 
@@ -182,7 +181,6 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
                 return this.Active;
             }
             using (var client = new HttpClient(Handler.Get(this.Maestro.GetVerifySSL()))) {
-                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
                 var response = await client.GetAsync(url);
@@ -204,7 +202,6 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
                 return Summary.FromJson("{}");
             }
             using (var client = new HttpClient(Handler.Get(this.Maestro.GetVerifySSL()))) {
-                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
                 var response = await client.GetAsync(url);
@@ -279,7 +276,6 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
                 return DatapoolEntry.FromJson("{}");
             }
             using (var client = new HttpClient(Handler.Get(this.Maestro.GetVerifySSL()))) {
-                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
                 var response = await client.GetAsync(url);
@@ -307,7 +303,6 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
                 return DatapoolEntry.FromJson("{}");
             }
             using (var client = new HttpClient(Handler.Get(this.Maestro.GetVerifySSL()))) {
-                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
 
                 var response = await client.GetAsync(url);
@@ -335,7 +330,6 @@ namespace Dev.BotCity.MaestroSdk.Model.Datapool
             string url = $"{this.Maestro.GetServer()}/api/v2/datapool/{this.Label}/push";
             var data = JsonConvert.SerializeObject(entry.ToJson());
             using (var client = new HttpClient(Handler.Get(this.Maestro.GetVerifySSL()))) {
-                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
                 var content = new StringContent(data, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync(url, content);

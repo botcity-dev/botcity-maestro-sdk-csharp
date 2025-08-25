@@ -155,7 +155,6 @@ namespace Dev.BotCity.MaestroSdk.Model.DatapoolEntry
             var updatedData = JsonConvert.SerializeObject(dataDict);
 
             using (var client = new HttpClient(Handler.Get(this.Maestro.GetVerifySSL()))) {
-                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(this.Maestro.GetAccessToken(), this.Maestro.GetLogin(), 30);
                 var content = new StringContent(updatedData, Encoding.UTF8, "application/json");
 
