@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Reflection;
 using System.IO;
 using Dev.BotCity.MaestroSdk.Model.AutomationTask;
 using Dev.BotCity.MaestroSdk.Model.Alert;
@@ -211,8 +212,8 @@ public class BotMaestroSDK {
         public async Task LoginAsync(string server = "", string login = "", string key = "") {
             var handler = Handler.Get(this.GetVerifySSL());
             using (HttpClient client = new HttpClient(handler)) {
-                
                 try {
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                     var data = new { login = _login, key = _key };
                     HttpResponseMessage response = await client.PostAsync($"{_server}/api/v2/workspace/login", GetContent(data));
     
@@ -323,7 +324,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
-
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.PostAsync(url, content);
 
                 verifyResponse(response, "Error during create task");
@@ -344,7 +345,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
-
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.GetAsync(url);
 
                 verifyResponse(response, "Error during get task");
@@ -391,7 +392,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
-
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.PostAsync(url, content);
 
                 verifyResponse(response, "Error during finish task");
@@ -418,7 +419,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
-
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.PostAsync(url, content);
 
                 verifyResponse(response, "Error during interrupt task");
@@ -444,7 +445,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
-
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.PostAsync(url, content);
 
                 verifyResponse(response, "Error during restart task");
@@ -482,7 +483,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
-
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.PostAsync(url, content);
 
                 verifyResponse(response, "Error during create alert");
@@ -522,7 +523,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
-
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.PostAsync(url, content);
 
                 verifyResponse(response, "Error during send message");
@@ -544,7 +545,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
-
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.GetAsync(url);
 
                 verifyResponse(response, "Error during get credential");
@@ -579,7 +580,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
-
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.PostAsync(url, content);
                 verifyResponse(response, "Error in teste create credential");
                 return response.IsSuccessStatusCode;
@@ -595,7 +596,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
-
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.GetAsync(url);
 
                 return response.IsSuccessStatusCode;
@@ -626,6 +627,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.PostAsync(url, content);
                 verifyResponse(response, "Error in create credential");
                 
@@ -677,6 +679,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.PostAsync(url, content);
                 verifyResponse(response, "Error in send error credential");
                 var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -720,6 +723,7 @@ public class BotMaestroSDK {
             try
             {
                 using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                     using (var form = new MultipartFormDataContent())
                     {
                         var fileContent = new ByteArrayContent(File.ReadAllBytes(filepath));
@@ -759,6 +763,7 @@ public class BotMaestroSDK {
             try
             {
                 using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                     using (var form = new MultipartFormDataContent())
                     {
                         var fileContent = new ByteArrayContent(File.ReadAllBytes(filepath));
@@ -824,6 +829,7 @@ public class BotMaestroSDK {
             var content = HttpContentFactory.CreateJsonContent(data);
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.PostAsync(url, content);
                 verifyResponse(response, "Error in New Log credential");
@@ -846,6 +852,7 @@ public class BotMaestroSDK {
             var content = HttpContentFactory.CreateJsonContent(values);
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.PostAsync(url, content);
                 verifyResponse(response, "Error in New Log Entry");
@@ -872,6 +879,7 @@ public class BotMaestroSDK {
             var logData = new List<Dictionary<string, object>>();
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.GetAsync(url);
                 verifyResponse(response, "Error in New Log credential");
@@ -907,6 +915,7 @@ public class BotMaestroSDK {
 
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.DeleteAsync(url);
                 verifyResponse(response, "Error in New Log Entry");
@@ -930,6 +939,7 @@ public class BotMaestroSDK {
             try
             {
                 using (var client = new HttpClient(Handler.Get(this.GetVerifySSL()))) {
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                     using (var form = new MultipartFormDataContent())
                     {
                         var fileContent = new ByteArrayContent(File.ReadAllBytes(filepath));
@@ -976,6 +986,7 @@ public class BotMaestroSDK {
             string artifactId = "";
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.PostAsync(url, content);
                 verifyResponse(response, "Error in create attachment credential");
@@ -998,7 +1009,7 @@ public class BotMaestroSDK {
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
                 client.AddDefaultHeaders(_accessToken, _login, 30);
-
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 var response = await client.GetAsync(url);
                 verifyResponse(response, "Error in get artifact");
                 var jsonResponse = await response.Content.ReadAsStringAsync();
@@ -1042,6 +1053,7 @@ public class BotMaestroSDK {
             }
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.GetAsync(url);
                 var responseString = await response.Content.ReadAsStringAsync();
@@ -1069,6 +1081,7 @@ public class BotMaestroSDK {
 
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var content = HttpContentFactory.CreateJsonContent(pool.ToJson());
                 var response = await client.PostAsync(url, content);
@@ -1096,6 +1109,7 @@ public class BotMaestroSDK {
 
             using (var client = new HttpClient(Handler.Get(this.GetVerifySSL())))
             {
+                client.DefaultRequestHeaders.UserAgent.ParseAdd($"csharp-requests/{System.Environment.Version}");
                 client.AddDefaultHeaders(_accessToken, _login, 30);
                 var response = await client.GetAsync(url);
                 verifyResponse(response, "Error in get Datapool");

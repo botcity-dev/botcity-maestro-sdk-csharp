@@ -29,7 +29,6 @@ namespace Dev.BotCity.MaestroSdk.Utils {
 
             if (!ssl)
             {
-                Console.WriteLine("ENTROU AQUIIIII");
                 handler.ServerCertificateCustomValidationCallback = (sender, cert, chain, sslPolicyErrors) => true;
             }
             return handler;
